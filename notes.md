@@ -10,3 +10,6 @@ https://developers.google.com/maps/documentation/javascript/controls
 
 GMAP direction by bus => needs API key
 https://developers.google.com/maps/documentation/directions/
+
+
+I KEEP REFERENCING $('#3_words_list').val();, can I use as a variable declared on top?
