@@ -6,3 +6,7 @@ https://developers.google.com/maps/documentation/javascript/basics
 
 to choose where the map and the navigation controls will be on the page
 https://developers.google.com/maps/documentation/javascript/controls
+
+
+GMAP direction by bus => needs API key
+https://developers.google.com/maps/documentation/directions/

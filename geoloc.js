@@ -2,6 +2,9 @@
 var geo = navigator.geolocation;
 var geocoder;
 var map;
+var init_marker;
+var zoomInit = 13;
+var zoomShowLocation = 16;
 
 $(document).ready(function(){
   mapInitialize();
@@ -12,18 +15,20 @@ $(document).ready(function(){
 // Load map hardcoded with London when the page opens
 function mapInitialize() {
   console.log('initializing the map');
+
   geocoder = new google.maps.Geocoder();
   var londonLat = 51.50722;
   var londonLong = -0.12750;
   var latlng = new google.maps.LatLng(londonLat, londonLong);
   var mapOptions = {
-    zoom: 13,
+    zoom: zoomInit,
     center: latlng
   };
   // show the map
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-  // add marker
-  var marker = new google.maps.Marker({
+
+  // add the initial marker (as opposed to any potential future Additional marker)
+  init_marker = new google.maps.Marker({
     map: map,
     position: latlng,
     animation: google.maps.Animation.DROP,
@@ -31,10 +36,18 @@ function mapInitialize() {
     icon: 'http://www.agiespana.es/_portal/_widgets/googlemaps/red_marker.png',
     title: 'Move me around!'
   });
-  // listener on when the marker is dragged
-  google.maps.event.addListener(marker, 'dragend', updateAfterMarkerDragged);
+
+  // listener to update location and 3 words when the marker is dragged
+  google.maps.event.addListener(init_marker, 'dragend', function(event){
+    position = this.position.A + ', ' + this.position.F;
+    displayThreeWords(position);
+    displayLocation(position);
+  });
+
   // show the 3 words
   displayThreeWords(londonLat + ', ' + londonLong);
+
+  // LATER add infowindow to the marker with 3 words and location
 }
 
 
@@ -43,23 +56,18 @@ function codeAddressAndWords() {
   event.preventDefault();
   var address = $('#address_input').val();
 
-  // get a pin on the map with the address input
+  // get the coordinates of the location typed
   geocoder.geocode( {'address': address}, function(results, status) {
     console.log('results', results);
     console.log('status', status);
 
     if (status == google.maps.GeocoderStatus.OK) {
-      map.setCenter(results[0].geometry.location);
-      map.setZoom(16);
-      var marker = new google.maps.Marker({
-        map: map,
-        position: results[0].geometry.location,
-        animation: google.maps.Animation.DROP,
-        draggable: true
-      });
+
+      var location = results[0].geometry.location;
+      // reposition the marker and center the map
+      centerOnUpdatedMarker(location);
       // fetch the 3 words
-      var position = results[0].geometry.location.A + ', ' + results[0].geometry.location.F;
-      displayThreeWords(position);
+      displayThreeWords(location.A + ', ' + location.F);
 
     } else {
       alert('Geocode was not successful for the following reason: ' + status);
@@ -68,10 +76,10 @@ function codeAddressAndWords() {
 }
 
 
-// get W3W to return the words for the current position
+// update the map with current location + show on page + get W3W to return the words
 function get_words_current_pos() {
   var p1 = new Promise(function(resolve, reject) {
-    // return your location using html5 native geolocation
+    // get location using html5 native geolocation
     if(!!geo) {
       console.log('your brower supports geoloc');
       var wpid = geo.getCurrentPosition(resolve, reject, {enableHighAccuracy:true, maximumAge:30000, timeout:27000});
@@ -80,13 +88,37 @@ function get_words_current_pos() {
     }
   });
 
-  // once location is grabbed, get the 3 words from w3w
+  // once location is grabbed, update the map and the words
   p1.then(function(val) {
+    // update the w3w
     var position = val.coords.latitude + ', ' + val.coords.longitude;
     displayThreeWords(position);
 
+    // reposition the marker and center the map
+    var location = new google.maps.LatLng(val.coords.latitude, val.coords.longitude)
+    centerOnUpdatedMarker(location);
+
+    // update text on page
+
+
   }).catch(function() {
     console.log('promise was rejected');
+  })
+}
+
+function centerOnUpdatedMarker(location) {
+  map.setCenter(location);
+  map.setZoom(zoomShowLocation);
+  init_marker.setPosition(location);
+}
+
+// Display the location (based on coordinates) on the input box
+function displayLocation(location) {
+  $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position, 
+    function(result) {
+      var text = result.results[0].address_components[0].long_name + ' ' + result.results[0].address_components[1].long_name;
+      $('#address_input').val(text);
+      console.log(text);
   })
 }
 
@@ -102,18 +134,5 @@ function displayThreeWords(position){
     console.log(response.words.join(' '));
     $('#3_words_list').text('Your 3 words: ' + response.words.join(' '));
   });
-}
-
-// when marker is dragged, update the location and update the three words
-function updateAfterMarkerDragged(){
-  position = this.position.A + ', ' + this.position.F;
-
-  displayThreeWords(position);
-
-  $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position, function(result) {
-    var text = result.results[0].address_components[0].long_name + ' ' + result.results[0].address_components[1].long_name;
-    $('#address_input').val(text);
-    console.log(text);
-  })
 }
     

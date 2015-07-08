@@ -12,17 +12,20 @@
 </head>
 <body>
 
-  <h4 id="3_words_list">Your 3 words: </h4>
+  <div id="container">
 
-  <div id="google_maps_panel">
-    <button id="where_am_i">Where am I ?</button>
-    <form action="" id="submit_location">
-      <input id="address_input" type="textbox" value="London, UK">
-      <input type="submit" value="Find location" id="geocode_button">
-    </form>
+    <div id="location_info">
+      <h4 id="3_words_list">Your 3 words: </h4>
+      <button id="where_am_i" class="ib">Where am I ?</button>
+      <form action="" id="submit_location" class="ib">
+        <input id="address_input" type="textbox" value="London, UK">
+        <input type="submit" value="Find location" id="geocode_button">
+      </form>
+    </div>
+
     <div id="map-canvas"></div>
-  </div>
 
+  </div>
 
   
 </body>
