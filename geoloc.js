@@ -66,22 +66,23 @@ function mapInitialize() {
   // Instantiate an info window to hold info for the markers 
   markerInfo = new google.maps.InfoWindow();
 
-  // **
-  // listeners on markers
-  // **
-  // when marker is dragged: update location and 3 words 
-  google.maps.event.addListener(init_marker, 'dragend', function(event){
-    position = this.position.A + ', ' + this.position.F;
-    displayThreeWords(position);
-    displayLocation(position, origin);
-  });
-  // when click on marker: show location and 3 words
+  // set listeners on markers
+  google.maps.event.addListener(init_marker, 'dragend', dragMaker);
   attachToMarker(init_marker, "testing the marker");
-
 }
 
+// ******************************************
+// Listeners on markers
+// ******************************************
 
-// On click on a marker, it will show info 
+// when marker is dragged: update location and 3 words
+function dragMaker(e){
+  position = this.position.A + ', ' + this.position.F;
+  displayThreeWords(position);
+  displayLocation(position, 'origin');
+}
+
+// On click on a marker, it will show info (location and 3 words)
 function attachToMarker(marker, text) {
   google.maps.event.addListener(marker, 'click', function() {
     markerInfo.setContent(text);
