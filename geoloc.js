@@ -25,8 +25,14 @@ function mapInitialize() {
   // add marker
   var marker = new google.maps.Marker({
     map: map,
-    position: latlng
+    position: latlng,
+    animation: google.maps.Animation.DROP,
+    draggable: true,
+    icon: 'http://www.agiespana.es/_portal/_widgets/googlemaps/red_marker.png',
+    title: 'Move me around!'
   });
+  // listener on when the marker is dragged
+  google.maps.event.addListener(marker, 'dragend', updateAfterMarkerDragged);
   // show the 3 words
   displayThreeWords(londonLat + ', ' + londonLong);
 }
@@ -46,8 +52,10 @@ function codeAddressAndWords() {
       map.setCenter(results[0].geometry.location);
       map.setZoom(16);
       var marker = new google.maps.Marker({
-          map: map,
-          position: results[0].geometry.location
+        map: map,
+        position: results[0].geometry.location,
+        animation: google.maps.Animation.DROP,
+        draggable: true
       });
       // fetch the 3 words
       var position = results[0].geometry.location.A + ', ' + results[0].geometry.location.F;
@@ -94,5 +102,18 @@ function displayThreeWords(position){
     console.log(response.words.join(' '));
     $('#3_words_list').text('Your 3 words: ' + response.words.join(' '));
   });
+}
+
+// when marker is dragged, update the location and update the three words
+function updateAfterMarkerDragged(){
+  position = this.position.A + ', ' + this.position.F;
+
+  displayThreeWords(position);
+
+  $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position, function(result) {
+    var text = result.results[0].address_components[0].long_name + ' ' + result.results[0].address_components[1].long_name;
+    $('#address_input').val(text);
+    console.log(text);
+  })
 }
     
