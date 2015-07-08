@@ -4,13 +4,13 @@ var geocoder;
 var map;
 
 $(document).ready(function(){
-  mapInitialize();
-  $('#submit_location').on('submit', codeAddressAndWords);
+  map_initialize();
+  $('#submit_location').on('submit', codeAddress);
   $('#where_am_i').on('click', get_words_current_pos)
 })
 
 // Load map hardcoded with London when the page opens
-function mapInitialize() {
+function map_initialize() {
   console.log('initializing the map');
   geocoder = new google.maps.Geocoder();
   var latlng = new google.maps.LatLng(51.50722, -0.12750);
@@ -21,9 +21,8 @@ function mapInitialize() {
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 }
 
-
-// User wrote an address => pin on the map and 3 words
-function codeAddressAndWords() {
+// Set pin on the map based on user input
+function codeAddress() {
   event.preventDefault();
   var address = $('#address_input').val();
 
@@ -31,7 +30,6 @@ function codeAddressAndWords() {
   geocoder.geocode( {'address': address}, function(results, status) {
     console.log('results', results);
     console.log('status', status);
-
     if (status == google.maps.GeocoderStatus.OK) {
       map.setCenter(results[0].geometry.location);
       map.setZoom(16);
@@ -39,7 +37,6 @@ function codeAddressAndWords() {
           map: map,
           position: results[0].geometry.location
       });
-
     } else {
       alert('Geocode was not successful for the following reason: ' + status);
     }
@@ -49,7 +46,9 @@ function codeAddressAndWords() {
 
 // get W3W to return the words for the current position
 function get_words_current_pos() {
+
   var p1 = new Promise(function(resolve, reject) {
+
     // return your location using html5 native geolocation
     if(!!geo) {
       console.log('your brower supports geoloc');
@@ -61,25 +60,30 @@ function get_words_current_pos() {
 
   // once location is grabbed, get the 3 words from w3w
   p1.then(function(val) {
-    var position = val.coords.latitude + ', ' + val.coords.longitude;
-    displayThreeWords(position);
+    console.log('promise finishd return position', val);
+    // Convert position into W3W words
+    var data = {
+      'key': 'LCJKHHV2', // var key = process.env.W3W_KEY;
+      'position': val.coords.latitude + ', ' + val.coords.longitude,
+      'lang': 'en'
+    };
+
+    $.get("https://api.what3words.com/position", data, function(response){
+      console.log(response.words.join(' '));
+      $('#1').text(response.words[0]);
+      $('#2').text(response.words[1]);
+      $('#3').text(response.words[2]);
+    });
+
+    // // get the available languages
+    // $.get('https://api.what3words.com/get-languages?key='+ data.key, function(response) {
+    //   console.log(response);
+    // });
 
   }).catch(function() {
+    $('#2').text('promise rejected!')
     console.log('promise was rejected');
   })
 }
 
-// Display the 3 words on the #3_words_list
-function displayThreeWords(position){
-  var data = {
-    'key': 'LCJKHHV2', // var key = process.env.W3W_KEY;
-    'position': position,
-    'lang': 'en'
-  };
 
-  $.get("https://api.what3words.com/position", data, function(response){
-    console.log(response.words.join(' '));
-    $('#3_words_list').text('Your 3 words: ' + response.words.join(' '));
-  });
-}
-    
