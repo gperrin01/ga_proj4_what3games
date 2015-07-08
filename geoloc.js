@@ -13,6 +13,8 @@ var directionsDisplay;
 var directionsService = new google.maps.DirectionsService();
 var selectedMode = 'WALKING';
 // markers
+var stepMarkerArray = [];
+var markerInfo;
 var init_marker;
 var init_marker_icon = 'http://www.agiespana.es/_portal/_widgets/googlemaps/red_marker.png';
 var destination_marker;
@@ -34,6 +36,9 @@ $(document).ready(function(){
 
 function mapInitialize() {
   console.log('initializing the map');
+
+  // show the 3 words
+  var words = displayThreeWords(londonLat + ', ' + londonLong);
 
   // prepare the map
   geocoder = new google.maps.Geocoder();
@@ -57,19 +62,31 @@ function mapInitialize() {
     icon: init_marker_icon,
     title: 'Move me around!'
   });
+
+  // Instantiate an info window to hold info for the markers 
+  markerInfo = new google.maps.InfoWindow();
+
   // **
-  // listener to update location and 3 words when the marker is dragged
+  // listeners on markers
   // **
+  // when marker is dragged: update location and 3 words 
   google.maps.event.addListener(init_marker, 'dragend', function(event){
     position = this.position.A + ', ' + this.position.F;
     displayThreeWords(position);
     displayLocation(position, origin);
   });
+  // when click on marker: show location and 3 words
+  attachToMarker(init_marker, "testing the marker");
 
-  // show the 3 words
-  displayThreeWords(londonLat + ', ' + londonLong);
-  // LATER add infowindow to the marker with 3 words and location
+}
 
+
+// On click on a marker, it will show info 
+function attachToMarker(marker, text) {
+  google.maps.event.addListener(marker, 'click', function() {
+    markerInfo.setContent(text);
+    markerInfo.open(map, marker);
+  });
 }
 
 // ******************************************
@@ -127,15 +144,21 @@ function geoloc_error(val){
 }
 
 // ******************************************
-// When submitting a destination
+// When submitting a destination: show journey including steps
 // ******************************************
 
 function showJourney(){
   event.preventDefault();
 
+  // First, clear out any existing markerArray from previous calculations.
+  for (i = 0; i < stepMarkerArray.length; i++) {
+    stepMarkerArray[i].setMap(null);
+  }
+  init_marker.setMap(null);
+
+  // create the Google direction request for the route
   var origin = $('#address_input').val();
   var destination = $('#destination_input').val();
-  console.log(origin); console.log(destination);
   var request = {
       origin: origin,
       destination: destination,
@@ -144,10 +167,33 @@ function showJourney(){
 
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
+      // this creates the line from A to B
       directionsDisplay.setDirections(response);
+      console.log(response);
+      showSteps(response);
+
     }  else alert('Google Route error: ' + status);
   });
 }
+
+// this adds markers at each steps along the way
+function showSteps(directionResult){
+  var myRoute = directionResult.routes[0].legs[0];
+
+  for (var i = 0; i < myRoute.steps.length; i++){
+    var step_marker = new google.maps.Marker({
+        position: myRoute.steps[i].start_point,
+        map: map
+      });
+    stepMarkerArray[i] = step_marker;
+    // create the info windos which will popup on click on marker
+    attachToMarker(step_marker, myRoute.steps[i].instructions);
+  }
+  // replace icon on the origin and destination markers
+  stepMarkerArray[0].setIcon(init_marker_icon);
+  // stepMarkerArray[stepMarkerArray.length - 1].setIcon(destination_marker_icon);
+}
+
 
 
 // ******************************************
@@ -179,8 +225,10 @@ function displayThreeWords(position){
     'lang': 'en'
   };
   $.get("https://api.what3words.com/position", data, function(response){
-    console.log(response.words.join(' '));
-    $('#3_words_list').text('Your 3 words: ' + response.words.join(' '));
+    var words = response.words.join(' ');
+    console.log(words);
+    $('#3_words_list').text('Your 3 words: ' + words);
+    return words
   });
 }
     
