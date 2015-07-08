@@ -3,10 +3,16 @@
 var geo = navigator.geolocation;
 var geocoder;
 var map;
-
+// where the map will be centered on page load
+var londonLat = 51.50722;
+var londonLong = -0.12750;
 var zoomInit = 13;
 var zoomShowLocation = 16;
-
+// set the directions API
+var directionsDisplay;
+var directionsService = new google.maps.DirectionsService();
+var selectedMode = 'WALKING';
+// markers
 var init_marker;
 var init_marker_icon = 'http://www.agiespana.es/_portal/_widgets/googlemaps/red_marker.png';
 var destination_marker;
@@ -29,16 +35,18 @@ $(document).ready(function(){
 function mapInitialize() {
   console.log('initializing the map');
 
+  // prepare the map
   geocoder = new google.maps.Geocoder();
-  var londonLat = 51.50722;
-  var londonLong = -0.12750;
   var latlng = new google.maps.LatLng(londonLat, londonLong);
   var mapOptions = {
     zoom: zoomInit,
     center: latlng
   };
-  // show the map
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+  // prepare the Google directions API
+  directionsDisplay = new google.maps.DirectionsRenderer();
+  directionsDisplay.setMap(map);
 
   // add the initial marker (as opposed to any potential future Additional marker)
   init_marker = new google.maps.Marker({
@@ -61,6 +69,7 @@ function mapInitialize() {
   // show the 3 words
   displayThreeWords(londonLat + ', ' + londonLong);
   // LATER add infowindow to the marker with 3 words and location
+
 }
 
 // ******************************************
@@ -123,20 +132,21 @@ function geoloc_error(val){
 
 function showJourney(){
   event.preventDefault();
+
   var origin = $('#address_input').val();
   var destination = $('#destination_input').val();
-  console.log(origin);
-  console.log(destination);
-  // debugger
-  var url = "https://maps.googleapis.com/maps/api/directions/json?origin=" +origin+ "&destination=" +destination;
-  $.get(url, function(result){
-    console.log('result ', result);
-  })
+  console.log(origin); console.log(destination);
+  var request = {
+      origin: origin,
+      destination: destination,
+      travelMode: google.maps.TravelMode[selectedMode]
+  };
 
-// origin=Chicago,IL&destination=Los+Angeles,CA
-// &waypoints=Joplin,MO|Oklahoma+City,OK&key=API_KEY
-
-  console.log(this);
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+    }  else alert('Google Route error: ' + status);
+  });
 }
 
 
