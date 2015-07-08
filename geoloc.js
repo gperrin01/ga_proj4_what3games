@@ -39,6 +39,9 @@ function codeAddressAndWords() {
           map: map,
           position: results[0].geometry.location
       });
+      // fetch the 3 words
+      var position = results[0].geometry.location.A + ', ' + results[0].geometry.location.F;
+      displayThreeWords(position);
 
     } else {
       alert('Geocode was not successful for the following reason: ' + status);
