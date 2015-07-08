@@ -13,12 +13,22 @@ $(document).ready(function(){
 function mapInitialize() {
   console.log('initializing the map');
   geocoder = new google.maps.Geocoder();
-  var latlng = new google.maps.LatLng(51.50722, -0.12750);
+  var londonLat = 51.50722;
+  var londonLong = -0.12750;
+  var latlng = new google.maps.LatLng(londonLat, londonLong);
   var mapOptions = {
-    zoom: 12,
+    zoom: 13,
     center: latlng
   };
+  // show the map
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  // add marker
+  var marker = new google.maps.Marker({
+    map: map,
+    position: latlng
+  });
+  // show the 3 words
+  displayThreeWords(londonLat + ', ' + londonLong);
 }
 
 
