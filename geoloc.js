@@ -103,9 +103,6 @@ function setMapToLocation() {
     console.log('status', status);
 
     if (status == google.maps.GeocoderStatus.OK) {
-
-      // remove all pins if a journey was already shown on the page + show the location pin
-      clearStepMarkerArray();
       
       // reposition marker + center map + show location + show words
       var ggl_coords = results[0].geometry.location;
@@ -122,10 +119,6 @@ function setMapToLocation() {
 // ******************************************
 
 function setMapToWhereAmI() {
-
-  // remove all pins if a journey was already shown on the page
-  clearStepMarkerArray();
-
   // get location using html5 native geolocation and wait for success
   if(!!geo) {
     console.log('your brower supports geoloc');
@@ -158,7 +151,8 @@ function geoloc_error(val){
 function showJourney(){
   event.preventDefault();
 
-  // First, clear out any existing markerArray from previous calculations.
+  // ensure direction display is on and clear out any existing markerArray from previous calculations
+  directionsDisplay.setMap(map);
   clearStepMarkerArray();
   init_marker.setMap(null);
 
@@ -219,6 +213,10 @@ function centerOnUpdatedMarker(ggl_coords, marker) {
   map.setZoom(zoomShowLocation);
   marker.setPosition(ggl_coords);
   marker.setMap(map);
+
+  // finally, clear map of any pins and directions, as we now search for one direction
+  clearStepMarkerArray();
+  directionsDisplay.setMap(null);
 }
 
 // Display the location (based on coordinates) on the input box
