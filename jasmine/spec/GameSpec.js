@@ -17,25 +17,23 @@ describe("Answer returned by the user", function() {
   // For each test, pass a new value of answer into the function and ensure the test passes
 
   it("cannot be less than 3 characters", function() {
-    expect(Answer.isValid('parts')).toBe(true);
+    expect(Answer.isValid('p')).toBe(false);
   });
 
   it("cannot be one of the 3 words", function(){
-    answer = 'parts';
-    expect(Answer.isNotOneOfThree(answer)).toBe(false);
+    expect(Answer.isValid('parts')).toBe(false);
   });
+
   it("cannot be the basic plural of either of the 3 words", function(){
-    answer = 'belts';
-    expect(Answer.isNotBasicPlural(answer)).toBe(false);
+    expect(Answer.isValid('belts')).toBe(false);
   });
+
   it("cannot be the basic singular of either of the 3 words", function(){
-    answer = 'part';
-    expect(Answer.isNotBasicSingular(answer)).toBe(false);
+    expect(Answer.isValid('part')).toBe(false);
   });
 
   it("can only use letters present in the 3 words", function(){
-    answer = 'belly';
-    expect(Answer.hasValidLetters(answer)).toBe(false);
+    expect(Answer.isValid('belly')).toBe(false);
   })
 
 

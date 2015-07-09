@@ -14,8 +14,29 @@ Answer = {
 
   // // Return true if all checks pass, return error msg at first error
   isValid: function(answer) {
-    return ( Answer.isLongEnough(answer) ) ? true : alert('Invalid, answer must be three or more characters')
 
+    if (!Answer.isLongEnough(answer)) {
+     alert('Invalid, answer must be three or more characters');
+     return false
+    }
+    else if (!Answer.isNotOneOfThree(answer)) {
+      alert('Invalid, answer cannot be one of the three words');
+      return false
+    }
+    else if (!Answer.isNotBasicPlural(answer)) {
+      alert('Invalid, answer cannot be the basic plural of one of the three words');
+      return false
+    }
+    else if (!Answer.isNotBasicSingular(answer)) {
+      alert('Invalid, answer cannot be the basic singular of one of the three words');
+      return false
+    }   
+    else if (!Answer.hasValidLetters(answer)) {
+      alert('Invalid, answer can only use letters from the three words');
+      return false
+    }
+
+    return true;
   },
 
   // answer must be three or more characters
