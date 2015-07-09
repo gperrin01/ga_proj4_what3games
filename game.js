@@ -1,8 +1,10 @@
-$(document).ready(function(){
+// $(document).ready(function(){
 
-  // event listeners
-  $('#submit_answer').on('click', submitAnswer)
-})
+//   // event listeners
+//   $('#submit_answer').on('click', submitAnswer)
+// })
+
+// 
 
 function submitAnswer(){
   event.preventDefault();
@@ -11,7 +13,7 @@ function submitAnswer(){
 
   // check words only has letters from the three words, and in the allowed amount
 
-  
+
   console.log(event);
   console.log(this);
   console.log('submitting answer');

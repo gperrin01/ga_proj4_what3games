@@ -16,4 +16,8 @@ QUESTIONS
 
 
 I KEEP REFERENCING $('#3_words_list').val();, can I use as a variable declared on top?
-// VERY STRANGE, GOOGLE RETURNS NO RESULTS IF I DONT PASS UK, ALTHOUGH I HAVE region=GB in the script
+
+
+IF USING RAILS DB
+for joint table based on 2 existing models
+rails generate migration CreateJoinTableStudentTeacher student teacher
