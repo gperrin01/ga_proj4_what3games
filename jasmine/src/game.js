@@ -15,6 +15,7 @@ Answer = {
   isLongEnough: function(answer) {
     return answer.length > 2;
   },
+
   // true if answer NOT inside of Answer.compareWith
   isNotOneOfThree: function(answer) {
     return Answer.compareWith.indexOf(answer) === -1;
@@ -26,6 +27,16 @@ Answer = {
   // add a final 's' to word and check result isn't of the 3 words
   isNotBasicSingular: function(answer) {
     return Answer.isNotOneOfThree(answer + 's');
+  },
+
+  // All letters in the word must be in one of the 3 words
+  hasValidLetters: function(answer) {
+    for (var i = 0; i < answer.length; i++){
+      if (Answer.compareWith.indexOf( answer.charAt(i) ) === -1) {
+        return false;
+      }
+    }
+    return true;
   }
 
 }

@@ -5,9 +5,9 @@
 // cannot be the singular of any wordnor the singular of them
 // nor the basic plural +s
 
-// 1 - Word must be a real word, checked by an API
 // 2 - Word cannot use a letter which is not in the 3 words
 // 4 - Count of letter in the Word cannot be higher than cumulated count of same letter in the 3 words
+// 1 - Word must be a real word, checked by an API
 
 describe("Answer returned by the user", function() {
 
@@ -35,5 +35,15 @@ describe("Answer returned by the user", function() {
     answer = 'part';
     expect(Answer.isNotBasicSingular(answer)).toBe(false);
   });
+
+  it("can only use letters present in the 3 words", function(){
+    answer = 'belly';
+    expect(Answer.hasValidLetters(answer)).toBe(false);
+  })
+
+
+
+
+
 
 });
