@@ -1,19 +1,11 @@
 // GEOLOC WILL NOT WORK FROM A FILE - NEEDS TO BE A SERVER
 
-// store values in this object
+// store values in these objects
 var Map = Map || {};
 var Journey = Journey || {};
-var Display = Display || {};
-
-// prepare for the markers
 var Marker = Marker || {};
-var stepMarkerArray = [];
-var markerInfo;
-var init_marker;
-var init_marker_icon = 'http://www.agiespana.es/_portal/_widgets/googlemaps/red_marker.png';
-var destination_marker;
-var destination_marker_icon = "http://www.veryicon.com/icon/ico/Object/Vista%20Map%20Markers/Map%20Marker%20Chequered%20Flag%20Right%20Chartreuse.ico";
-
+var Display = Display || {};
+var Word = Word || {};
 
 $(document).ready(function(){
   Map.initialize();
@@ -58,23 +50,23 @@ Map = {
     Journey.directionsDisplay.setMap(Map.map);
 
     // add the initial marker (as opposed to any potential Additional marker)
-    init_marker = new google.maps.Marker({
+    Marker.init = new google.maps.Marker({
       map: Map.map,
       position: latlng,
       animation: google.maps.Animation.DROP,
       draggable: true,
-      icon: init_marker_icon,
+      icon: Marker.init_icon,
       title: 'Move me around!'
     });
-    // set listeners on init_marker
-    google.maps.event.addListener(init_marker, 'dragend', dragMaker);
-    attachToMarker(init_marker, "testing the marker");
+    // set listeners on Marker.init
+    google.maps.event.addListener(Marker.init, 'dragend', Marker.drag);
+    Marker.attachInfo(Marker.init, "testing the marker");
 
     // Instantiate an info window to hold info for the markers 
-    markerInfo = new google.maps.InfoWindow();
+    Marker.markerInfo = new google.maps.InfoWindow();
 
     // show the 3 words on the page and on the marker infowindow
-    var words = Display.threeWords(Map.londonLat + ', ' + Map.londonLong, init_marker);
+    Word.words = Display.threeWords(Map.londonLat + ', ' + Map.londonLong, Marker.init);
   },
 
   // ******************************************
@@ -91,11 +83,11 @@ Map = {
 
       if (status == google.maps.GeocoderStatus.OK) {
         
-        // reposition init_marker + center map + show location + show words
+        // reposition Marker.init + center map + show location + show words
         var ggl_coords = results[0].geometry.location;
-        centerOnUpdatedMarker(ggl_coords, init_marker);
-        Display.threeWords(ggl_coords.A + ', ' + ggl_coords.F, init_marker);
-        displayLocation(ggl_coords.A + ', ' + ggl_coords.F)
+        Display.centerOnUpdatedMarker(ggl_coords, Marker.init);
+        Word.words = Display.threeWords(ggl_coords.A + ', ' + ggl_coords.F, Marker.init);
+        Display.location(ggl_coords.A + ', ' + ggl_coords.F)
 
       } else alert('Geocode was not successful for the following reason: ' + status);
     });
@@ -120,11 +112,11 @@ Map = {
   geoloc_success: function(val) {
     // once location is grabbed: show 3 words + show location + updater marker + center map
     var coords = val.coords.latitude + ', ' + val.coords.longitude;
-    Display.threeWords(coords, init_marker);
-    displayLocation(coords);
+    Word.words = Display.threeWords(coords, Marker.init);
+    Display.location(coords);
 
     var ggl_coords = new google.maps.LatLng(val.coords.latitude, val.coords.longitude)
-    centerOnUpdatedMarker(ggl_coords, init_marker);
+    Display.centerOnUpdatedMarker(ggl_coords, Marker.init);
   },
   geoloc_error: function(val) {
     console.log('could not get your current location');
@@ -155,8 +147,8 @@ Journey = {
 
     // ensure direction display is on and clear out any existing markerArray from previous calculations
     Journey.directionsDisplay.setMap(Map.map);
-    clearStepMarkerArray();
-    init_marker.setMap(null);
+    Marker.clearStepArray();
+    Marker.init.setMap(null);
 
     // create the Google direction request for the route
     var origin = $('#address_input').val();
@@ -188,76 +180,58 @@ Journey = {
           position: Journey.myRoute.steps[i].start_point,
           map: Map.map
         });
-      stepMarkerArray[i] = step_marker;
+      Marker.stepMarkerArray[i] = step_marker;
       // create the info window which will popup on click on marker
-      attachToMarker(step_marker, Journey.myRoute.steps[i].instructions);
+      Marker.attachInfo(step_marker, Journey.myRoute.steps[i].instructions);
     }
 
     // replace icon on the origin and destination markers
-    stepMarkerArray[0].setIcon(init_marker_icon);
-    // stepMarkerArray[stepMarkerArray.length - 1].setIcon(destination_marker_icon);
+    // Marker.stepMarkerArray[0].setIcon(Marker.init_icon);
+    // Marker.stepMarkerArray[stepMarkerArray.length - 1].setIcon(Marker.destination_icon);
   }
 
-} // End Journey Object
-
-
+}; // End Journey Object
 
 
 // ******************************************
 // Listeners on markers
 // ******************************************
 
-// when marker is dragged: update location and 3 words
-function dragMaker(e){
-  coords = this.position.A + ', ' + this.position.F;
-  Display.threeWords(coords, this);
-  displayLocation(coords);
-}
+Marker = {
 
-// On click on a marker, it will show info (location and 3 words)
-function attachToMarker(marker, text) {
-  google.maps.event.addListener(marker, 'click', function() {
-    markerInfo.setContent(text);
-    markerInfo.open(Map.map, marker);
-  });
-}
+  stepMarkerArray: [],
+  init: '',
+  init_icon: 'http://www.agiespana.es/_portal/_widgets/googlemaps/red_marker.png',
+  destination: '',
+  destination_icon: "http://www.veryicon.com/icon/ico/Object/Vista%20Map%20Markers/Map%20Marker%20Chequered%20Flag%20Right%20Chartreuse.ico",
 
-// ******************************************
-// Functions to update the look on the page
-// ******************************************
+  // when marker is dragged: update location and 3 words
+  drag: function(){
+    coords = this.position.A + ', ' + this.position.F;
+    Word.words = Display.threeWords(coords, this);
+    Display.location(coords);
+  },
 
-// clear the stepmarkerarray = remove pins used to show a journey
-function clearStepMarkerArray(){
-  for (i = 0; i < stepMarkerArray.length; i++) {
-    stepMarkerArray[i].setMap(null);
+  // On click on a marker, it will show info (location and 3 words)
+  attachInfo: function(marker, text) {
+    google.maps.event.addListener(marker, 'click', function() {
+      Marker.markerInfo.setContent(text);
+     Marker.markerInfo.open(Map.map, marker);
+    });
+  },
+
+  // clear the stepmarkerarray = remove pins used to show a journey
+  clearStepArray: function() {
+    for (i = 0; i < Marker.stepMarkerArray.length; i++) {
+      Marker.stepMarkerArray[i].setMap(null);
+    }
   }
-}
 
-// Update marker position to new location + show marker + center map + ensure zoom close
-function centerOnUpdatedMarker(ggl_coords, marker) {
-  marker.setMap(Map.map);
-  marker.setPosition(ggl_coords);
-  Map.map.setCenter(ggl_coords);
-  Map.map.setZoom(Map.zoomShowLocation);
-
-  // finally, clear map of any pins and directions, as we now search for one direction
-  clearStepMarkerArray();
-  Journey.directionsDisplay.setMap(null);
-}
-
-// Display the location (based on coordinates) on the input box
-// update either the 'origin' box (moving on the map) or the destination box (submitting destination)
-function displayLocation(coords) {
-  $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coords, 
-    function(result) {
-      var text = result.results[0].address_components[0].long_name + ' ' + result.results[0].address_components[1].long_name;
-      $('#address_input').val(text);
-  })
-};
+};  // End Marker Object
 
 
 // ******************************************
-// DISPLAY PROPERTIES AND FUNCTIONS
+// PAGE DISPLAY PROPERTIES AND FUNCTIONS
 // ******************************************
 
 Display = {
@@ -274,13 +248,38 @@ Display = {
       var words = response.words.join(' ');
       console.log(words);
       $('#three_words_list').text('Your 3 words: ' + words);
-      attachToMarker(marker, words);
+      Marker.attachInfo(marker, words);
       return words
     });
-    }
+  },
 
-}
+  // Display the location (based on coordinates) on the input box
+  location: function(coords) {
+    $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coords, 
+      function(result) {
+        var text = result.results[0].address_components[0].long_name + ' ' + result.results[0].address_components[1].long_name;
+        $('#address_input').val(text);
+    })
+  },
 
+  // Update marker position to new location + show marker + center map + ensure zoom close
+  centerOnUpdatedMarker: function(ggl_coords, marker) {
+    marker.setMap(Map.map);
+    marker.setPosition(ggl_coords);
+    Map.map.setCenter(ggl_coords);
+    Map.map.setZoom(Map.zoomShowLocation);
+
+    // finally, clear map of any pins and directions, as we now search for one direction
+    Marker.clearStepArray();
+    Journey.directionsDisplay.setMap(null);
+  }
+
+}; // End Display Object
+
+
+// ******************************************
+// Storing the word on the page
+// ******************************************
 
 
     
