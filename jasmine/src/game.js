@@ -10,7 +10,12 @@ var Word = Word || {};
 
 Word = {
 
-  // check if word is a real world (need API)
+  testWords: "belt parts remain",
+
+  isLongEnough: function(answer) {
+    return answer.length > 1;
+  }
+
 }
 
 function submitAnswer(){
@@ -26,7 +31,7 @@ function submitAnswer(){
   console.log('submitting answer');
 }
 
-function isValid
+
 
 
 
