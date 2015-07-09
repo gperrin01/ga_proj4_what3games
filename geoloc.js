@@ -1,5 +1,8 @@
 // GEOLOC WILL NOT WORK FROM A FILE - NEEDS TO BE A SERVER
 
+// store values in this object
+var Map = Map || {};
+
 var geo = navigator.geolocation;
 var geocoder;
 var map;
@@ -32,12 +35,15 @@ $(document).ready(function(){
   $('#submit_destination').on('submit', showJourney);
 })
 
+
+
+
+
 // ******************************************
 // On page load: map centered in London
 // ******************************************
 
 function mapInitialize() {
-  console.log('initializing the map');
 
   // prepare the map
   geocoder = new google.maps.Geocoder();
@@ -102,7 +108,6 @@ function setMapToLocation() {
   var address = $('#address_input').val();
   geocoder.geocode( {'address': address}, function(results, status) {
     console.log('results', results);
-    console.log('status', status);
 
     if (status == google.maps.GeocoderStatus.OK) {
       
@@ -124,10 +129,10 @@ function setMapToWhereAmI() {
   // get location using html5 native geolocation and wait for success
   if(!!geo) {
     console.log('your brower supports geoloc');
-    $('#3_words_list').text("Just a second while we get your words");
+    $('#three_words_list').text("Just a second while we get your words");
     var wpid = geo.getCurrentPosition(geoloc_success, geoloc_error, {enableHighAccuracy:true, maximumAge:30000, timeout:27000});
   } else {
-    console.log("ERROR: Your Browser doesnt support the Geo Location API");
+    alert("ERROR: Your Browser doesnt support the Html5 Geo Location API");
   }
 }
 
@@ -139,7 +144,6 @@ function geoloc_success(val){
   displayLocation(coords);
 
   var ggl_coords = new google.maps.LatLng(val.coords.latitude, val.coords.longitude)
-  console.log('google lt ln', ggl_coords);
   centerOnUpdatedMarker(ggl_coords, init_marker);
 }
 function geoloc_error(val){
@@ -168,14 +172,11 @@ function showJourney(){
       region: region
   };
 
-  console.log(request);
-
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       // this creates the line from A to B
-      console.log('RESPONSE ROUTE', response);
+      console.log('Google route:', response);
       directionsDisplay.setDirections(response);
-      console.log(response);
       showSteps(response);
 
     }  else alert('Google Route error: ' + status);
@@ -200,7 +201,6 @@ function showSteps(directionResult){
   stepMarkerArray[0].setIcon(init_marker_icon);
   // stepMarkerArray[stepMarkerArray.length - 1].setIcon(destination_marker_icon);
 }
-
 
 
 // ******************************************
@@ -236,7 +236,7 @@ function displayLocation(coords) {
   })
 }
 
-// Display the 3 words on the #3_words_list and on the infowindow of a marker
+// Display the 3 words on the #three_words_list and on the infowindow of a marker
 function displayThreeWords(coords, marker){
   var data = {
     'key': 'LCJKHHV2', // var key = process.env.W3W_KEY;
@@ -247,7 +247,7 @@ function displayThreeWords(coords, marker){
   $.get("https://api.what3words.com/position", data, function(response){
     var words = response.words.join(' ');
     console.log(words);
-    $('#3_words_list').text('Your 3 words: ' + words);
+    $('#three_words_list').text('Your 3 words: ' + words);
     attachToMarker(marker, words);
     return words
   });
