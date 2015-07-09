@@ -12,14 +12,22 @@ Answer = {
 
   compareWith: "belt parts remain",
 
+  // // Return true if all checks pass, return error msg at first error
+  isValid: function(answer) {
+    return ( Answer.isLongEnough(answer) ) ? true : alert('Invalid, answer must be three or more characters')
+
+  },
+
+  // answer must be three or more characters
   isLongEnough: function(answer) {
-    return answer.length > 2;
+    return (answer.length > 2)
   },
 
   // true if answer NOT inside of Answer.compareWith
   isNotOneOfThree: function(answer) {
-    return Answer.compareWith.indexOf(answer) === -1;
+    return Answer.compareWith.indexOf(answer) === -1
   },
+
   // remove last letter from answer and check result isn't one of the 3 words
   isNotBasicPlural: function(answer) {
     return Answer.isNotOneOfThree( answer.slice(0,-1) );

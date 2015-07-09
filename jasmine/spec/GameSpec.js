@@ -17,10 +17,7 @@ describe("Answer returned by the user", function() {
   // For each test, pass a new value of answer into the function and ensure the test passes
 
   it("cannot be less than 3 characters", function() {
-    expect(Answer.isLongEnough('qz')).toBe(false);
-  });
-  it("passes if more than 3 characters", function() {
-    expect(Answer.isLongEnough('qzq')).toBe(true);
+    expect(Answer.isValid('parts')).toBe(true);
   });
 
   it("cannot be one of the 3 words", function(){
