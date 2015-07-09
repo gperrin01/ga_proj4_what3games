@@ -6,17 +6,25 @@
 
 
 
-var Word = Word || {};
+var Answer = Answer || {};
 
-Word = {
+Answer = {
 
-  testWords: "belt parts remain",
+  compareWith: "belt parts remain",
 
   isLongEnough: function(answer) {
-    return answer.length > 1;
+    return answer.length > 2;
+  },
+  isNotOneOfThree: function(answer) {
+    // true if answer NOT inside of Answer.compareWith
+    return Answer.compareWith.indexOf(answer) === -1
   }
 
 }
+
+
+
+
 
 function submitAnswer(){
   event.preventDefault();
