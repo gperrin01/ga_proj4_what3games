@@ -6,13 +6,15 @@ var map;
 // where the map will be centered on page load
 var londonLat = 51.50722;
 var londonLong = -0.12750;
+// GOOGLE often returns no_results if i don't specify UK, although i have region=GB in the script
+var region = "GB";
 var zoomInit = 13;
 var zoomShowLocation = 16;
 // set the directions API
 var directionsDisplay;
 var directionsService = new google.maps.DirectionsService();
 var selectedMode = 'WALKING';
-// markers
+// prepare for the markers
 var stepMarkerArray = [];
 var markerInfo;
 var init_marker;
@@ -77,8 +79,8 @@ function mapInitialize() {
 // when marker is dragged: update location and 3 words
 function dragMaker(e){
   coords = this.position.A + ', ' + this.position.F;
-  displayThreeWords(coords);
-  displayLocation(coords, 'origin');
+  displayThreeWords(coords, this);
+  displayLocation(coords);
 }
 
 // On click on a marker, it will show info (location and 3 words)
@@ -104,11 +106,11 @@ function setMapToLocation() {
 
     if (status == google.maps.GeocoderStatus.OK) {
       
-      // reposition marker + center map + show location + show words
+      // reposition init_marker + center map + show location + show words
       var ggl_coords = results[0].geometry.location;
       centerOnUpdatedMarker(ggl_coords, init_marker);
-      displayThreeWords(ggl_coords.A + ', ' + ggl_coords.F);
-      displayLocation(ggl_coords.A + ', ' + ggl_coords.F, 'origin')
+      displayThreeWords(ggl_coords.A + ', ' + ggl_coords.F, init_marker);
+      displayLocation(ggl_coords.A + ', ' + ggl_coords.F)
 
     } else alert('Geocode was not successful for the following reason: ' + status);
   });
@@ -133,8 +135,8 @@ function setMapToWhereAmI() {
 function geoloc_success(val){
   // once location is grabbed: show 3 words + show location + updater marker + center map
   var coords = val.coords.latitude + ', ' + val.coords.longitude;
-  displayThreeWords(coords, 'origin');
-  displayLocation(coords, 'origin');
+  displayThreeWords(coords, init_marker);
+  displayLocation(coords);
 
   var ggl_coords = new google.maps.LatLng(val.coords.latitude, val.coords.longitude)
   console.log('google lt ln', ggl_coords);
@@ -162,12 +164,16 @@ function showJourney(){
   var request = {
       origin: origin,
       destination: destination,
-      travelMode: google.maps.TravelMode[selectedMode]
+      travelMode: google.maps.TravelMode[selectedMode],
+      region: region
   };
+
+  console.log(request);
 
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       // this creates the line from A to B
+      console.log('RESPONSE ROUTE', response);
       directionsDisplay.setDirections(response);
       console.log(response);
       showSteps(response);
@@ -186,9 +192,10 @@ function showSteps(directionResult){
         map: map
       });
     stepMarkerArray[i] = step_marker;
-    // create the info windos which will popup on click on marker
+    // create the info window which will popup on click on marker
     attachToMarker(step_marker, myRoute.steps[i].instructions);
   }
+
   // replace icon on the origin and destination markers
   stepMarkerArray[0].setIcon(init_marker_icon);
   // stepMarkerArray[stepMarkerArray.length - 1].setIcon(destination_marker_icon);
@@ -209,10 +216,10 @@ function clearStepMarkerArray(){
 
 // Update marker position to new location + show marker + center map + ensure zoom close
 function centerOnUpdatedMarker(ggl_coords, marker) {
+  marker.setMap(map);
+  marker.setPosition(ggl_coords);
   map.setCenter(ggl_coords);
   map.setZoom(zoomShowLocation);
-  marker.setPosition(ggl_coords);
-  marker.setMap(map);
 
   // finally, clear map of any pins and directions, as we now search for one direction
   clearStepMarkerArray();
@@ -221,11 +228,11 @@ function centerOnUpdatedMarker(ggl_coords, marker) {
 
 // Display the location (based on coordinates) on the input box
 // update either the 'origin' box (moving on the map) or the destination box (submitting destination)
-function displayLocation(coords, type) {
+function displayLocation(coords) {
   $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coords, 
     function(result) {
       var text = result.results[0].address_components[0].long_name + ' ' + result.results[0].address_components[1].long_name;
-      (type === 'destination') ? $('#destination_input').val(text) : $('#address_input').val(text);
+      $('#address_input').val(text);
   })
 }
 
