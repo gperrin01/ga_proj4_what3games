@@ -4,8 +4,9 @@
 // 3 - Word cannot be any of the 3 words, 
 // cannot be the singular of any wordnor the singular of them
 // nor the basic plural +s
-
 // 2 - Word cannot use a letter which is not in the 3 words
+
+// TO DO
 // 4 - Count of letter in the Word cannot be higher than cumulated count of same letter in the 3 words
 // 1 - Word must be a real word, checked by an API
 
@@ -36,6 +37,9 @@ describe("Answer returned by the user", function() {
     expect(Answer.isValid('belly')).toBe(false);
   })
 
+  it(", each letter can only be used multiple times if it present multiple times in the three words", function(){
+    expect(Answer.isValid('beeeeeeeellll')).toBe(false);
+  })
 
 
 
