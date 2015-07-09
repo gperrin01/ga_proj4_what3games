@@ -37,9 +37,6 @@ $(document).ready(function(){
 function mapInitialize() {
   console.log('initializing the map');
 
-  // show the 3 words
-  var words = displayThreeWords(londonLat + ', ' + londonLong);
-
   // prepare the map
   geocoder = new google.maps.Geocoder();
   var latlng = new google.maps.LatLng(londonLat, londonLong);
@@ -53,7 +50,7 @@ function mapInitialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
   directionsDisplay.setMap(map);
 
-  // add the initial marker (as opposed to any potential future Additional marker)
+  // add the initial marker (as opposed to any potential Additional marker)
   init_marker = new google.maps.Marker({
     map: map,
     position: latlng,
@@ -62,13 +59,15 @@ function mapInitialize() {
     icon: init_marker_icon,
     title: 'Move me around!'
   });
+  // set listeners on init_marker
+  google.maps.event.addListener(init_marker, 'dragend', dragMaker);
+  attachToMarker(init_marker, "testing the marker");
 
   // Instantiate an info window to hold info for the markers 
   markerInfo = new google.maps.InfoWindow();
 
-  // set listeners on markers
-  google.maps.event.addListener(init_marker, 'dragend', dragMaker);
-  attachToMarker(init_marker, "testing the marker");
+  // show the 3 words on the page and on the marker infowindow
+  var words = displayThreeWords(londonLat + ', ' + londonLong, init_marker);
 }
 
 // ******************************************
@@ -77,9 +76,9 @@ function mapInitialize() {
 
 // when marker is dragged: update location and 3 words
 function dragMaker(e){
-  position = this.position.A + ', ' + this.position.F;
-  displayThreeWords(position);
-  displayLocation(position, 'origin');
+  coords = this.position.A + ', ' + this.position.F;
+  displayThreeWords(coords);
+  displayLocation(coords, 'origin');
 }
 
 // On click on a marker, it will show info (location and 3 words)
@@ -105,11 +104,14 @@ function setMapToLocation() {
 
     if (status == google.maps.GeocoderStatus.OK) {
 
-      var location = results[0].geometry.location;
+      // remove all pins if a journey was already shown on the page + show the location pin
+      clearStepMarkerArray();
+      
       // reposition marker + center map + show location + show words
-      centerOnUpdatedMarker(location);
-      displayThreeWords(location.A + ', ' + location.F);
-      displayLocation(location.A + ', ' + location.F, 'origin')
+      var ggl_coords = results[0].geometry.location;
+      centerOnUpdatedMarker(ggl_coords, init_marker);
+      displayThreeWords(ggl_coords.A + ', ' + ggl_coords.F);
+      displayLocation(ggl_coords.A + ', ' + ggl_coords.F, 'origin')
 
     } else alert('Geocode was not successful for the following reason: ' + status);
   });
@@ -120,6 +122,10 @@ function setMapToLocation() {
 // ******************************************
 
 function setMapToWhereAmI() {
+
+  // remove all pins if a journey was already shown on the page
+  clearStepMarkerArray();
+
   // get location using html5 native geolocation and wait for success
   if(!!geo) {
     console.log('your brower supports geoloc');
@@ -133,12 +139,13 @@ function setMapToWhereAmI() {
 // the 2 callback functions from setMapToWhereAmI
 function geoloc_success(val){
   // once location is grabbed: show 3 words + show location + updater marker + center map
-  var position = val.coords.latitude + ', ' + val.coords.longitude;
-  displayThreeWords(position, 'origin');
-  displayLocation(position, 'origin');
+  var coords = val.coords.latitude + ', ' + val.coords.longitude;
+  displayThreeWords(coords, 'origin');
+  displayLocation(coords, 'origin');
 
-  var location = new google.maps.LatLng(val.coords.latitude, val.coords.longitude)
-  centerOnUpdatedMarker(location);
+  var ggl_coords = new google.maps.LatLng(val.coords.latitude, val.coords.longitude)
+  console.log('google lt ln', ggl_coords);
+  centerOnUpdatedMarker(ggl_coords, init_marker);
 }
 function geoloc_error(val){
   console.log('could not get your current location');
@@ -152,9 +159,7 @@ function showJourney(){
   event.preventDefault();
 
   // First, clear out any existing markerArray from previous calculations.
-  for (i = 0; i < stepMarkerArray.length; i++) {
-    stepMarkerArray[i].setMap(null);
-  }
+  clearStepMarkerArray();
   init_marker.setMap(null);
 
   // create the Google direction request for the route
@@ -201,34 +206,44 @@ function showSteps(directionResult){
 // Functions to update the look on the page
 // ******************************************
 
-// Update marker position to new location and center the map and ensure zoon close
-function centerOnUpdatedMarker(location) {
-  map.setCenter(location);
+// clear the stepmarkerarray = remove pins used to show a journey
+function clearStepMarkerArray(){
+  for (i = 0; i < stepMarkerArray.length; i++) {
+    stepMarkerArray[i].setMap(null);
+  }
+}
+
+// Update marker position to new location + show marker + center map + ensure zoom close
+function centerOnUpdatedMarker(ggl_coords, marker) {
+  map.setCenter(ggl_coords);
   map.setZoom(zoomShowLocation);
-  init_marker.setPosition(location);
+  marker.setPosition(ggl_coords);
+  marker.setMap(map);
 }
 
 // Display the location (based on coordinates) on the input box
-function displayLocation(location, type) {
-  $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + location, 
+// update either the 'origin' box (moving on the map) or the destination box (submitting destination)
+function displayLocation(coords, type) {
+  $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coords, 
     function(result) {
       var text = result.results[0].address_components[0].long_name + ' ' + result.results[0].address_components[1].long_name;
-      // update the 'origin' box (moving on the map) or the destination box (submitting destination)
       (type === 'destination') ? $('#destination_input').val(text) : $('#address_input').val(text);
   })
 }
 
-// Display the 3 words on the #3_words_list
-function displayThreeWords(position){
+// Display the 3 words on the #3_words_list and on the infowindow of a marker
+function displayThreeWords(coords, marker){
   var data = {
     'key': 'LCJKHHV2', // var key = process.env.W3W_KEY;
-    'position': position,
+    'position': coords,
     'lang': 'en'
   };
+
   $.get("https://api.what3words.com/position", data, function(response){
     var words = response.words.join(' ');
     console.log(words);
     $('#3_words_list').text('Your 3 words: ' + words);
+    attachToMarker(marker, words);
     return words
   });
 }
