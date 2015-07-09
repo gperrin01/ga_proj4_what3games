@@ -3,6 +3,7 @@
 // store values in this object
 var Map = Map || {};
 var Journey = Journey || {};
+var Display = Display || {};
 
 // prepare for the markers
 var Marker = Marker || {};
@@ -20,7 +21,7 @@ $(document).ready(function(){
   // Event Listeners
   $('#where_am_i').on('click', Map.setToWhereAmI)
   $('#submit_location').on('submit', Map.setToLocation);
-  $('#submit_destination').on('submit', showJourney);
+  $('#submit_destination').on('submit', Journey.show);
 })
 
 
@@ -53,8 +54,8 @@ Map = {
     Map.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
     // prepare the Google directions API
-    directionsDisplay = new google.maps.DirectionsRenderer();
-    directionsDisplay.setMap(Map.map);
+    Journey.directionsDisplay = new google.maps.DirectionsRenderer();
+    Journey.directionsDisplay.setMap(Map.map);
 
     // add the initial marker (as opposed to any potential Additional marker)
     init_marker = new google.maps.Marker({
@@ -73,7 +74,7 @@ Map = {
     markerInfo = new google.maps.InfoWindow();
 
     // show the 3 words on the page and on the marker infowindow
-    var words = displayThreeWords(Map.londonLat + ', ' + Map.londonLong, init_marker);
+    var words = Display.threeWords(Map.londonLat + ', ' + Map.londonLong, init_marker);
   },
 
   // ******************************************
@@ -93,7 +94,7 @@ Map = {
         // reposition init_marker + center map + show location + show words
         var ggl_coords = results[0].geometry.location;
         centerOnUpdatedMarker(ggl_coords, init_marker);
-        displayThreeWords(ggl_coords.A + ', ' + ggl_coords.F, init_marker);
+        Display.threeWords(ggl_coords.A + ', ' + ggl_coords.F, init_marker);
         displayLocation(ggl_coords.A + ', ' + ggl_coords.F)
 
       } else alert('Geocode was not successful for the following reason: ' + status);
@@ -119,7 +120,7 @@ Map = {
   geoloc_success: function(val) {
     // once location is grabbed: show 3 words + show location + updater marker + center map
     var coords = val.coords.latitude + ', ' + val.coords.longitude;
-    displayThreeWords(coords, init_marker);
+    Display.threeWords(coords, init_marker);
     displayLocation(coords);
 
     var ggl_coords = new google.maps.LatLng(val.coords.latitude, val.coords.longitude)
@@ -167,29 +168,29 @@ Journey = {
         region: Journey.region
     };
 
-    directionsService.route(request, function(response, status) {
+    Journey.directionsService.route(request, function(response, status) {
       if (status == google.maps.DirectionsStatus.OK) {
         // this creates the line from A to B
         console.log('Google route:', response);
-        directionsDisplay.setDirections(response);
-        showSteps(response);
+        Journey.directionsDisplay.setDirections(response);
+        Journey.showSteps(response);
 
       }  else alert('Google Route error: ' + status);
     });
-  }
+  },
 
   // this adds markers at each steps along the way
-  function showSteps(directionResult){
-    var myRoute = directionResult.routes[0].legs[0];
+  showSteps: function(directionResult) {
+    Journey.myRoute = directionResult.routes[0].legs[0];
 
-    for (var i = 0; i < myRoute.steps.length; i++){
+    for (var i = 0; i < Journey.myRoute.steps.length; i++){
       var step_marker = new google.maps.Marker({
-          position: myRoute.steps[i].start_point,
+          position: Journey.myRoute.steps[i].start_point,
           map: Map.map
         });
       stepMarkerArray[i] = step_marker;
       // create the info window which will popup on click on marker
-      attachToMarker(step_marker, myRoute.steps[i].instructions);
+      attachToMarker(step_marker, Journey.myRoute.steps[i].instructions);
     }
 
     // replace icon on the origin and destination markers
@@ -200,6 +201,8 @@ Journey = {
 } // End Journey Object
 
 
+
+
 // ******************************************
 // Listeners on markers
 // ******************************************
@@ -207,7 +210,7 @@ Journey = {
 // when marker is dragged: update location and 3 words
 function dragMaker(e){
   coords = this.position.A + ', ' + this.position.F;
-  displayThreeWords(coords, this);
+  Display.threeWords(coords, this);
   displayLocation(coords);
 }
 
@@ -239,7 +242,7 @@ function centerOnUpdatedMarker(ggl_coords, marker) {
 
   // finally, clear map of any pins and directions, as we now search for one direction
   clearStepMarkerArray();
-  directionsDisplay.setMap(null);
+  Journey.directionsDisplay.setMap(null);
 }
 
 // Display the location (based on coordinates) on the input box
@@ -250,22 +253,34 @@ function displayLocation(coords) {
       var text = result.results[0].address_components[0].long_name + ' ' + result.results[0].address_components[1].long_name;
       $('#address_input').val(text);
   })
+};
+
+
+// ******************************************
+// DISPLAY PROPERTIES AND FUNCTIONS
+// ******************************************
+
+Display = {
+
+  // Display the 3 words on the #three_words_list and on the infowindow of a marker
+  threeWords: function(coords, marker){
+    var data = {
+      'key': 'LCJKHHV2', // var key = process.env.W3W_KEY;
+      'position': coords,
+      'lang': 'en'
+    };
+
+    $.get("https://api.what3words.com/position", data, function(response){
+      var words = response.words.join(' ');
+      console.log(words);
+      $('#three_words_list').text('Your 3 words: ' + words);
+      attachToMarker(marker, words);
+      return words
+    });
+    }
+
 }
 
-// Display the 3 words on the #three_words_list and on the infowindow of a marker
-function displayThreeWords(coords, marker){
-  var data = {
-    'key': 'LCJKHHV2', // var key = process.env.W3W_KEY;
-    'position': coords,
-    'lang': 'en'
-  };
 
-  $.get("https://api.what3words.com/position", data, function(response){
-    var words = response.words.join(' ');
-    console.log(words);
-    $('#three_words_list').text('Your 3 words: ' + words);
-    attachToMarker(marker, words);
-    return words
-  });
-}
+
     
