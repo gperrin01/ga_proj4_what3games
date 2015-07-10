@@ -1,9 +1,20 @@
-// $(document).ready(function(){
+$(document).ready(function(){
+  $('#submit_answer').on('submit', submitAnswer)
+})
 
-//   // event listeners
-//   $('#submit_answer').on('click', submitAnswer)
-// })
+function submitAnswer(){
+  event.preventDefault();
 
+  console.log('this is', this);
+  var answer = $('#answer_input').val();
+
+  $.get("", function(result){
+    console.log('in dic', result);
+  })
+
+
+
+}
 
 
 var Answer = Answer || {};
@@ -41,6 +52,14 @@ Answer = {
     }
 
     return true;
+  },
+
+  // is in the dictionary?
+  isInDictionary: function(answer){
+    console.log('before ajax');
+    $.get("https://www.google.com/#q=define+" + answer, function(result){
+      console.log('in dic', result);
+    })
   },
 
   // answer must be three or more characters
@@ -99,18 +118,7 @@ Answer = {
 
 
 
-function submitAnswer(){
-  event.preventDefault();
 
-  // get dictionnary API to ensure the word exists
-
-  // check words only has letters from the three words, and in the allowed amount
-
-
-  console.log(event);
-  console.log(this);
-  console.log('submitting answer');
-}
 
 
 
