@@ -58,13 +58,10 @@ Map = {
       icon: Marker.init_icon,
       title: 'Move me around!'
     });
-    // set listeners on Marker.init
+    // listener for when marker being dragged
     google.maps.event.addListener(Marker.init, 'dragend', Marker.drag);
-    Marker.attachInfo(Marker.init, "testing the marker");
-
     // Instantiate an info window to hold info for the markers 
     Marker.markerInfo = new google.maps.InfoWindow();
-
     // show the 3 words on the page and on the marker infowindow
     Display.threeWords(Map.londonLat + ', ' + Map.londonLong, Marker.init);
   },
@@ -206,6 +203,7 @@ Marker = {
   destination_icon: "http://www.veryicon.com/icon/ico/Object/Vista%20Map%20Markers/Map%20Marker%20Chequered%20Flag%20Right%20Chartreuse.ico",
 
   // when marker is dragged: update location and 3 words
+  // also update the infoWindow
   drag: function(){
     coords = this.position.A + ', ' + this.position.F;
     Display.threeWords(coords, this);
@@ -216,7 +214,7 @@ Marker = {
   attachInfo: function(marker, text) {
     google.maps.event.addListener(marker, 'click', function() {
       Marker.markerInfo.setContent(text);
-     Marker.markerInfo.open(Map.map, marker);
+      Marker.markerInfo.open(Map.map, marker);
     });
   },
 
@@ -245,13 +243,16 @@ Display = {
     };
 
     $.get("https://api.what3words.com/position", data, function(response){
-      var words = response.words.join(' ');
       // store the words so they can be used in the Games
+      var words = response.words.join(' ');
       Words.theThreeWords = words;
-      
       console.log(words);
+      
       $('#three_words_list').text('Your 3 words: ' + words);
-      Marker.attachInfo(marker, words);
+      // show the marker infowindow filled with the 3 words at all time
+      Marker.markerInfo.setContent(words);
+      Marker.markerInfo.open(Map.map, marker);
+
       return words
     });
   },
