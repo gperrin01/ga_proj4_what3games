@@ -5,7 +5,7 @@ var Map = Map || {};
 var Journey = Journey || {};
 var Marker = Marker || {};
 var Display = Display || {};
-var Word = Word || {};
+var Words = Words || {};
 
 $(document).ready(function(){
   Map.initialize();
@@ -66,7 +66,7 @@ Map = {
     Marker.markerInfo = new google.maps.InfoWindow();
 
     // show the 3 words on the page and on the marker infowindow
-    Word.words = Display.threeWords(Map.londonLat + ', ' + Map.londonLong, Marker.init);
+    Display.threeWords(Map.londonLat + ', ' + Map.londonLong, Marker.init);
   },
 
   // ******************************************
@@ -86,7 +86,7 @@ Map = {
         // reposition Marker.init + center map + show location + show words
         var ggl_coords = results[0].geometry.location;
         Display.centerOnUpdatedMarker(ggl_coords, Marker.init);
-        Word.words = Display.threeWords(ggl_coords.A + ', ' + ggl_coords.F, Marker.init);
+        Display.threeWords(ggl_coords.A + ', ' + ggl_coords.F, Marker.init);
         Display.location(ggl_coords.A + ', ' + ggl_coords.F)
 
       } else alert('Geocode was not successful for the following reason: ' + status);
@@ -112,7 +112,7 @@ Map = {
   geoloc_success: function(val) {
     // once location is grabbed: show 3 words + show location + updater marker + center map
     var coords = val.coords.latitude + ', ' + val.coords.longitude;
-    Word.words = Display.threeWords(coords, Marker.init);
+    Display.threeWords(coords, Marker.init);
     Display.location(coords);
 
     var ggl_coords = new google.maps.LatLng(val.coords.latitude, val.coords.longitude)
@@ -208,7 +208,7 @@ Marker = {
   // when marker is dragged: update location and 3 words
   drag: function(){
     coords = this.position.A + ', ' + this.position.F;
-    Word.words = Display.threeWords(coords, this);
+    Display.threeWords(coords, this);
     Display.location(coords);
   },
 
@@ -246,6 +246,9 @@ Display = {
 
     $.get("https://api.what3words.com/position", data, function(response){
       var words = response.words.join(' ');
+      // store the words so they can be used in the Games
+      Words.theThreeWords = words;
+      
       console.log(words);
       $('#three_words_list').text('Your 3 words: ' + words);
       Marker.attachInfo(marker, words);
