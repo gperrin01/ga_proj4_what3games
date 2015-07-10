@@ -1,3 +1,12 @@
+
+QUESTIONS
+What do i use for the server?????  Is it Rails, plus routes in rails which trigger _Rendering from client folder?
+where do i put my stylesheets and views and stuff?
+Will devise create views and i'm screwed cause my views are not in rails?
+
+
+
+
 Set multiple markers: use setTimeout so they dont drop all at the same time
 https://developers.google.com/maps/documentation/javascript/examples/marker-animations-iteration
 
@@ -16,10 +25,6 @@ https://developers.google.com/maps/documentation/directions/
 
 REALLY improve the game: http://wordnet.princeton.edu/ for Synonyms and relations between words
 
-QUESTIONS
-
-
-I KEEP REFERENCING $('#3_words_list').val();, can I use as a variable declared on top?
 
 
 IF USING RAILS DB

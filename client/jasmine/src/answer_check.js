@@ -1,13 +1,7 @@
 $(document).ready(function(){
-  $('#submit_answer').on('submit', submitAnswer)
+  $('#submit_answer').on('submit', Answer.submitAnswer)
 })
 
-function submitAnswer(){
-  event.preventDefault();
-
-  var answer = $('#answer_input').val();
-  return Answer.isValid(answer)
-}
 
 
 var Answer = Answer || {};
@@ -21,6 +15,12 @@ Answer = {
    'Italian': { short: "it", full: 'Italian' },
    'German': { short: "de", full: 'German' },
    genre: {'m': 'masculine', 'f': 'feminine', 'n': 'neutral'}
+  },
+
+  submitAnswer: function(){
+  event.preventDefault();
+  var answer = $('#answer_input').val();
+  return Answer.isValid(answer)
   },
 
   // Run all logic tests first & if the pass run the Dictionnary test
