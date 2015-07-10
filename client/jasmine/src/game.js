@@ -70,6 +70,7 @@ Answer = {
     $.get("https://dictionary.yandex.net/api/v1/dicservice.json/lookup?", data, function(result){
 
       if (result.def.length > 0) {
+        console.log(result.def[0]);
         var answer = result.def[0].text;
         var traduction = result.def[0].tr[0];
         var tradText = 'In ' + Answer.langTranslate['Italian'].full + ' it is "';

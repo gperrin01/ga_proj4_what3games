@@ -20,7 +20,7 @@ describe("Answer returned by the user", function() {
   });
 
   it("cannot be less than 3 characters", function() {
-    expect(Answer.isValid('p')).toBe(false);
+    expect(Answer.isValid('te')).toBe(false);
   });
 
   it("cannot be one of the 3 words", function(){
