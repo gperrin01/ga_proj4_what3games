@@ -10,10 +10,7 @@ var Words = Words || {};
 $(document).ready(function(){
   Map.initialize();
 
-  // Event Listeners
-  $('#where_am_i').on('click', Map.setToWhereAmI)
-  $('#submit_location').on('submit', Map.setToLocation);
-  $('#submit_destination').on('submit', Journey.show);
+  Display.justBrowsingListeners();
 })
 
 
@@ -233,6 +230,41 @@ Marker = {
 // ******************************************
 
 Display = {
+
+  justBrowsingListeners: function(){
+    $('#where_am_i').on('click', Map.setToWhereAmI)
+    $('#submit_location').on('submit', Map.setToLocation);
+    $('#submit_destination').on('submit', Journey.show);
+
+    //disable journeyChallenge
+    $('#submit_destination').off('submit', Game.journeyChallenge);
+    $('#destination_button').off('click', Game.journeyChallenge);
+
+    // Update the buttons to reflect we are just browsing through the map
+    $('#where_am_i').show();
+    $('#geocode_button').show();
+    $('#destination_button').val('Show Journey')
+    $('#play_button').text('Start Playing!');
+    $('#game_msg').text("Click Above to Start Playing and Count Your Score!");
+
+    if (Marker.init) {Marker.init.setOptions({draggable: true});}
+  },
+
+  gameStartedListeners: function(){
+    // $('#where_am_i').off('click', Map.setToWhereAmI)
+    // $('#submit_location').off('submit', Map.setToLocation);
+    // hiding seems the best, let's see if it screws up the styling
+    $('#where_am_i').hide();
+    $('#geocode_button').hide();
+    $('#submit_destination').off('submit', Journey.show);
+
+    // Update the buttons to reflect we are Playing
+    $('#play_button').text('Start again');
+    $('#destination_button').val('Start Journey Challenge!');
+    $('#game_msg').text("Easy Walk Challenge! Get your answer right to be able to browse the map again!");
+
+    if (Marker.init) {Marker.init.setOptions({draggable: false});}
+  },
 
   // Display the 3 words on the #three_words_list and on the infowindow of a marker
   threeWords: function(coords, marker){
