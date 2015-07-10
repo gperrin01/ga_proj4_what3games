@@ -1,0 +1,19 @@
+#map-canvas{
+  width:100%; 
+  height:450px;
+}
+
+.ib {
+  display: inline-block;
+}
+
+#game_name {
+  margin-bottom: 0px;
+}
+#three_words_list {
+  margin: 10px 0px 10px 0px;
+}
+#submit_answer, #answer_validity {
+  margin-bottom: 10px;
+  margin-top: 0px;
+}
