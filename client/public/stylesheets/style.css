@@ -6,6 +6,9 @@
 .ib {
   display: inline-block;
 }
+.hidden{
+  display: none;
+}
 
 #game_name {
   margin-bottom: 0px;

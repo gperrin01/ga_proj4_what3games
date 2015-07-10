@@ -38,10 +38,10 @@ Map = {
 
     // prepare the map
     Map.geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(Map.londonLat, Map.londonLong);
+    Map.latlng = new google.maps.LatLng(Map.londonLat, Map.londonLong);
     var mapOptions = {
       zoom: Map.zoomInit,
-      center: latlng
+      center: Map.latlng
     };
     Map.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
@@ -52,7 +52,7 @@ Map = {
     // add the initial marker (as opposed to any potential Additional marker)
     Marker.init = new google.maps.Marker({
       map: Map.map,
-      position: latlng,
+      position: Map.latlng,
       animation: google.maps.Animation.DROP,
       draggable: true,
       icon: Marker.init_icon,
@@ -82,7 +82,7 @@ Map = {
         
         // reposition Marker.init + center map + show location + show words
         var ggl_coords = results[0].geometry.location;
-        Display.centerOnUpdatedMarker(ggl_coords, Marker.init);
+        Display.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
         Display.threeWords(ggl_coords.A + ', ' + ggl_coords.F, Marker.init);
         Display.location(ggl_coords.A + ', ' + ggl_coords.F)
 
@@ -113,7 +113,7 @@ Map = {
     Display.location(coords);
 
     var ggl_coords = new google.maps.LatLng(val.coords.latitude, val.coords.longitude)
-    Display.centerOnUpdatedMarker(ggl_coords, Marker.init);
+    Display.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
   },
   geoloc_error: function(val) {
     console.log('could not get your current location');
@@ -237,7 +237,7 @@ Display = {
   // Display the 3 words on the #three_words_list and on the infowindow of a marker
   threeWords: function(coords, marker){
     var data = {
-      'key': 'LCJKHHV2', // var key = process.env.W3W_KEY;
+      'key': Keys.w3w_api, // var key = process.env.W3W_KEY;
       'position': coords,
       'lang': 'en'
     };
@@ -247,7 +247,7 @@ Display = {
       var words = response.words.join(' ');
       Words.theThreeWords = words;
       console.log(words);
-      
+
       $('#three_words_list').text('Your 3 words: ' + words);
       // show the marker infowindow filled with the 3 words at all time
       Marker.markerInfo.setContent(words);
@@ -267,11 +267,11 @@ Display = {
   },
 
   // Update marker position to new location + show marker + center map + ensure zoom close
-  centerOnUpdatedMarker: function(ggl_coords, marker) {
+  centerOnUpdatedMarker: function(ggl_coords, marker, zoom) {
     marker.setMap(Map.map);
     marker.setPosition(ggl_coords);
     Map.map.setCenter(ggl_coords);
-    Map.map.setZoom(Map.zoomShowLocation);
+    Map.map.setZoom(zoom);
 
     // finally, clear map of any pins and directions, as we now search for one direction
     Marker.clearStepArray();

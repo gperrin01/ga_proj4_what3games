@@ -1,13 +1,13 @@
-$(document).ready(function(){
-  $('#submit_answer').on('submit', Answer.submitAnswer)
-})
 
-
+//***********************************
+// LOGIC TO CHECK IF AN ANSWER IS VALID
+//***********************************
 
 var Answer = Answer || {};
 
 Answer = {
 
+  // options for the word lookup and translatin
   // hardcode French translation for the moment
   langTranslate: {
    'French': { short: "fr", full: 'French' },
