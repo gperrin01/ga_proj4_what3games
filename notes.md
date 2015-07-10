@@ -11,6 +11,18 @@ https://developers.google.com/maps/documentation/javascript/controls
 GMAP direction by bus => needs API key
 https://developers.google.com/maps/documentation/directions/
 
+DICTIONNARY API
+http://dictionary.cambridge.org/learnenglish/results.asp?searchword=SEARCH_PHRASE&dict=L
+https://www.google.com/#q=define+love
+equest URL:http://google-dictionary.so8848.com/meaning?word=seriously
+Request Method:GET
+free need key https://tech.yandex.com/dictionary/
+
+The Merriam-Webster Dictionary API is free as long as it is for non-commercial use, usage does not exceed 1000 queries per day per API key, and use is limited to two reference APIs.
+http://www.dictionaryapi.com/
+
+
+REALLY improve the game: http://wordnet.princeton.edu/ for Synonyms and relations between words
 
 QUESTIONS
 
