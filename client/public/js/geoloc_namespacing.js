@@ -275,7 +275,15 @@ Display = {
     // finally, clear map of any pins and directions, as we now search for one direction
     Marker.clearStepArray();
     Journey.directionsDisplay.setMap(null);
-  }
+  },
+
+  // updates view with the appropriate message &&&
+  updateView: function(message, $view, valid) {
+    $view.text(message);
+    if (valid) {
+      $('#answer_input').val('');
+    }
+  },
 
 }; // End Display Object
 

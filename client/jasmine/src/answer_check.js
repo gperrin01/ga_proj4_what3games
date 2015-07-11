@@ -56,21 +56,17 @@ Answer = {
     }
 
     // if valid is false, display relevant message and return FALSE to isValid
-    if (valid === false) { return Answer.updateView(valid, message);} 
+    if (valid === false) { 
+      var $view = $('#answer_validity');
+      return Display.updateView(message, $view, valid);
+    } 
     // else (valid still undefined) run the isInDico WITH CALLBACK
     else {  return callbackOne(answer, callbackForInDico)  }
   },
 
-  // KEY CALLBACK FUNCTION HERE!!
-  // updates view with the appropriate message &&&
-  // RETURNS TRUE OR FALSE to isValid
-  updateView: function(valid, message) {
-    $('#answer_validity').text(message);
-    console.log('valid?', valid);
-    return valid;
-  },
-
   isInDictionary: function(answer, callback){
+
+    var $view = $('#answer_validity');
 
     var data = {
       key: Keys.yandex_dic,
@@ -81,22 +77,24 @@ Answer = {
     $.get("https://dictionary.yandex.net/api/v1/dicservice.json/lookup?", data, function(result){
 
       if (result.def.length === 0) {
-        Answer.updateView(false, "Try again, this word is not in our dictionary!");
+        Display.updateView("Try again, this word is not in our dictionary!", $view, false);
+        // this is the callback enabling the Game to know the result is FALSE
         if (callback) {callback(false);}
       }
       else {
         console.log(result.def[0]);
         var answer = result.def[0].text;
         var traduction = result.def[0].tr[0];
-        var tradText = 'In ' + Answer.langTranslate['Italian'].full + ' it is "';
+        var tradText = 'In ' + Answer.langTranslate['Italian'].full + ', "'+answer+ ' is "';
         var genre = (traduction.gen) ? (', ' + Answer.langTranslate.genre[traduction.gen] + ')' ) : (')');
         tradText += traduction.text + '" (' + traduction.pos + genre;
 
-        $('#answer_validity').text('Well done! ' + tradText);
-
+        // $('#answer_validity').text('Well done! ' + tradText + '<br> Move the pin to go to the next challenge!');
         // add how many points??
         var points = answer.length;
-        Answer.updateView(true, 'Well done! ' + tradText)
+        Display.updateView('Well done! ' + tradText + " -> Move on the map to go the next challenge!", $view, true)
+
+        // this is the callback enabling the Game to know the result is TRUE
         if (callback) {callback(true);}
       }
     });

@@ -24,9 +24,13 @@
 var Game = Game || {};
 var Listeners = Listeners || {};
 
+var $game_msg = $('#game_msg');
+var $rules_display = $('#rules_display');
+
+
 $(document).ready(function(){
   $('#play_button').on('click', function(){
-    Game.browsingChallenge;
+    Game.browsingChallenge();
     // show marker and center map on it + ensure shows info + remvoe any journey shown
     Display.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
     Marker.drag(Marker.init);
@@ -51,12 +55,13 @@ Game = {
     // turn on .journeyChallenge
     $('#submit_destination').on('submit', Game.journeyChallenge);
     $('#destination_button').on('click', Game.journeyChallenge)
-    // finally let the stop button end the game
-    $('#stop_button').on('click', Game.stop);
 
     // Submitting an answer: checks answer PLUS 
     $('#submit_answer').off('submit', Answer.submit);
     $('#submit_answer').on('submit', Game.browsingNextStep);
+
+    // finally let the stop button end the game
+    $('#stop_button').on('click', Game.stop);
 
     // COUNT SCORE!!!!! WILL HAVE TO BE HOOKED WITH THE DB !!!
     
@@ -138,6 +143,7 @@ Listeners = {
   },
 
   gameStarted: function(){
+    console.log('game started');
     // $('#where_am_i').off('click', Map.setToWhereAmI)
     // $('#submit_location').off('submit', Map.setToLocation);
     // hiding seems the best, let's see if it screws up the styling
