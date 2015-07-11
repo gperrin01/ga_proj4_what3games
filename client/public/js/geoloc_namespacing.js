@@ -56,7 +56,9 @@ Map = {
       title: 'Move me around!'
     });
     // listener for when marker being dragged
-    google.maps.event.addListener(Marker.init, 'dragend', Marker.drag);
+    google.maps.event.addListener(Marker.init, 'dragend', function(){
+      Marker.drag(this);
+    });
     // Instantiate an info window to hold info for the markers 
     Marker.markerInfo = new google.maps.InfoWindow();
     // show the 3 words on the page and on the marker infowindow
@@ -201,9 +203,9 @@ Marker = {
 
   // when marker is dragged: update location and 3 words
   // also update the infoWindow
-  drag: function(){
-    coords = this.position.A + ', ' + this.position.F;
-    Display.threeWords(coords, this);
+  drag: function(marker){
+    coords = marker.position.A + ', ' + marker.position.F;
+    Display.threeWords(coords, marker);
     Display.location(coords);
   },
 

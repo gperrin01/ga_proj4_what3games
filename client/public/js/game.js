@@ -25,7 +25,12 @@ var Game = Game || {};
 var Listeners = Listeners || {};
 
 $(document).ready(function(){
-  $('#play_button').on('click', Game.browsingChallenge);
+  $('#play_button').on('click', function(){
+    Game.browsingChallenge;
+    // show marker and center map on it + ensure shows info + remvoe any journey shown
+    Display.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
+    Marker.drag(Marker.init);
+  });
   $('#submit_answer').on('submit', Answer.submit);
 })
 
@@ -43,15 +48,11 @@ Game = {
     $('#rules_display').text("Browsing Challenge! Get your answer to be able to browse the map again!");
     // mute marker drag, mute whereAmI, mute find location, mute showJourney
     Listeners.gameStarted();
-
     // turn on .journeyChallenge
     $('#submit_destination').on('submit', Game.journeyChallenge);
     $('#destination_button').on('click', Game.journeyChallenge)
-
     // finally let the stop button end the game
     $('#stop_button').on('click', Game.stop);
-    // show marker and center map on it + remvoe any journey shown
-    Display.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
 
     // Submitting an answer: checks answer PLUS 
     $('#submit_answer').off('submit', Answer.submit);
@@ -70,22 +71,19 @@ Game = {
     Answer.isValid(answer, Answer.isInDictionary, goNextStep);
 
     function goNextStep(valid){
-
       if (valid) {
         console.log('next step of the browsing');
         // if good Answer, congrats +1, + allows you to drag pin and find location
         Marker.init.setOptions({draggable: true});
+        Map.map.setOptions({draggable: true})
         $('#geocode_button').show();
 
         // then once dragged or shown, mute again -> it it Game.browsingChallenge() ??
-        google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
         $('#submit_location').off('submit');
         $('#submit_location').on('submit', Game.browsingChallenge);
+        google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
       }
-      else {
-         // else the isValid function SHOULD display the right message and we try again
-        console.log('wrong answer');
-      }
+      // else the isValid function SHOULD display the right message and we try again
     }
   },
 
@@ -134,7 +132,9 @@ Listeners = {
     $('#play_button').text('Start Playing!');
     $('#game_msg').text("Click Above to Start Playing and Count Your Score!");
 
+    // markers and map CAN be cliked on and dragged
     if (Marker.init) {Marker.init.setOptions({draggable: true});}
+    Map.map.setOptions({draggable: true})
   },
 
   gameStarted: function(){
@@ -150,7 +150,9 @@ Listeners = {
     $('#destination_button').val('Start Journey Challenge!');
     $('#game_msg').text("Easy Walk Challenge! Get your answer right to be able to browse the map again!");
 
+    // markers and maps cannot be dragged 
     if (Marker.init) {Marker.init.setOptions({draggable: false});}
+    Map.map.setOptions({draggable: false})
   }
 
 } // End Listeners Object
