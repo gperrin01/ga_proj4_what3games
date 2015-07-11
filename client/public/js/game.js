@@ -64,21 +64,29 @@ Game = {
   },
 
   browsingNextStep: function(){
+    event.preventDefault();
     
-    if (!!Answer.submit()) {
-      console.log('next sstep of the browsing');
-      // if good Answer, congrats +1, + allows you to drag pin and find location
-      Marker.init.setOptions({draggable: true});
-      $('#geocode_button').show();
+    var answer = $('#answer_input').val();
+    Answer.isValid(answer, Answer.isInDictionary, goNextStep);
 
-      // then once dragged or shown, mute again -> it it Game.browsingChallenge() ??
-      google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
-      $('#submit_location').off('submit');
-      $('#submit_location').on('submit', Game.browsingChallenge);
+    function goNextStep(valid){
+
+      if (valid) {
+        console.log('next step of the browsing');
+        // if good Answer, congrats +1, + allows you to drag pin and find location
+        Marker.init.setOptions({draggable: true});
+        $('#geocode_button').show();
+
+        // then once dragged or shown, mute again -> it it Game.browsingChallenge() ??
+        google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
+        $('#submit_location').off('submit');
+        $('#submit_location').on('submit', Game.browsingChallenge);
+      }
+      else {
+         // else the isValid function SHOULD display the right message and we try again
+        console.log('wrong answer');
+      }
     }
-    
-    else console.log('skipped the success');
-    // else the isValid function will display the right message and we try again
   },
 
   journeyChallenge: function(){

@@ -20,25 +20,13 @@ Answer = {
   submit: function(){
     event.preventDefault();
     var answer = $('#answer_input').val();
-
     // callback function after isValid to start the dictionnary thing
-    Answer.isValid(answer, Answer.isInDictionary)
-  },
-
-
-
-  updateView: function(valid, message) {
-    if (!valid) {
-      $('#answer_validity').text(message);
-    } else {
-
-    }
-    return valid;
+     Answer.isValid(answer, Answer.isInDictionary);
   },
 
   // Run all logic tests first & if they pass run the Dictionnary test
   // if Dic test ok, display the value coming from the dictionnary
-  isValid: function(answer, callback) {
+  isValid: function(answer, callbackOne, callbackForInDico) {
     var message;
     var valid;
 
@@ -67,55 +55,58 @@ Answer = {
       valid = false;
     }
 
-    if (valid === false) {
-      Answer.updateView(valid, message);
-    } else {
-      callback(answer, Answer.updateView)
-    }
+    // if valid is false, display relevant message and return FALSE to isValid
+    if (valid === false) { return Answer.updateView(valid, message);} 
+    // else (valid still undefined) run the isInDico WITH CALLBACK
+    else {  return callbackOne(answer, callbackForInDico)  }
   },
 
-  // ******************************
-  // Answer validity functions below
-  // ******************************
+  // KEY CALLBACK FUNCTION HERE!!
+  // updates view with the appropriate message &&&
+  // RETURNS TRUE OR FALSE to isValid
+  updateView: function(valid, message) {
+    $('#answer_validity').text(message);
+    console.log('valid?', valid);
+    return valid;
+  },
 
   isInDictionary: function(answer, callback){
-    var isInDico = false;
+
     var data = {
       key: Keys.yandex_dic,
       lang: "en-" + Answer.langTranslate['Italian'].short,
       text: answer
     };
 
-    // var promise = new Promise(function(resolve, reject){
+    $.get("https://dictionary.yandex.net/api/v1/dicservice.json/lookup?", data, function(result){
 
-      $.ajax({
-        type: 'GET',
-        url: "https://dictionary.yandex.net/api/v1/dicservice.json/lookup?", 
-        data: data
-      }).done(function(result){
+      if (result.def.length === 0) {
+        Answer.updateView(false, "Try again, this word is not in our dictionary!");
+        if (callback) {callback(false);}
+      }
+      else {
+        console.log(result.def[0]);
+        var answer = result.def[0].text;
+        var traduction = result.def[0].tr[0];
+        var tradText = 'In ' + Answer.langTranslate['Italian'].full + ' it is "';
+        var genre = (traduction.gen) ? (', ' + Answer.langTranslate.genre[traduction.gen] + ')' ) : (')');
+        tradText += traduction.text + '" (' + traduction.pos + genre;
 
-        if (result.def.length === 0) {
-          callback(false, "Try again, this word is not in our dictionary!");
-        }
+        $('#answer_validity').text('Well done! ' + tradText);
 
-        else {
-          // console.log(result.def[0]);
-          var answer = result.def[0].text;
-          var traduction = result.def[0].tr[0];
-          var tradText = 'In ' + Answer.langTranslate['Italian'].full + ' it is "';
-          var genre = (traduction.gen) ? (', ' + Answer.langTranslate.genre[traduction.gen] + ')' ) : (')');
-          tradText += traduction.text + '" (' + traduction.pos + genre;
-
-          $('#answer_validity').text('Well done! ' + tradText);
-
-          // add how many points??
-          var points = answer.length;
-          callback(true, 'Well done! ' + tradText)
-        }
-      });
+        // add how many points??
+        var points = answer.length;
+        Answer.updateView(true, 'Well done! ' + tradText)
+        if (callback) {callback(true);}
+      }
+    });
   },
 
-
+  
+  // ******************************
+  // Answer validity functions below
+  // ******************************
+  
   // answer must be three or more characters
   isLongEnough: function(answer) {
     return (answer.length > 2)
@@ -160,8 +151,7 @@ Answer = {
       var countInThreeWords = Words.theThreeWords.match(new RegExp(str, "g") || [] ).length
       if (countInAnswer > countInThreeWords) {
         var text = (countInThreeWords > 1) ? ' times' : ' time';
-        $('#answer_validity').text('Try again, "' +str+ '" is only present ' + countInThreeWords + text + ' in ' + Words.theThreeWords  )
-        return false
+        return 'Try again, "' +str+ '" is only present ' + countInThreeWords + text + ' in ' + Words.theThreeWords;
       }
       // sweet way found: returns an array with all occurences of the regexp
       // need create a new regexps as I cannot hardoce, as in eg for 'o': str.match(/o/g).length
