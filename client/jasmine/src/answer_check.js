@@ -17,7 +17,7 @@ Answer = {
    genre: {'m': 'masculine', 'f': 'feminine', 'n': 'neutral'}
   },
 
-  submitAnswer: function(){
+  submit: function(){
   event.preventDefault();
   var answer = $('#answer_input').val();
   return Answer.isValid(answer)
@@ -52,7 +52,10 @@ Answer = {
       return false
     }
     // if all checks pass we run the Dictionary check and display the results if it passes too
-    else return (Answer.isInDictionary(answer)) 
+    else  {
+      console.log('answer from isInDico', Answer.isInDictionary(answer));
+      return (Answer.isInDictionary(answer)) ;
+    }
   },
 
   // ******************************
@@ -69,23 +72,24 @@ Answer = {
 
     $.get("https://dictionary.yandex.net/api/v1/dicservice.json/lookup?", data, function(result){
 
-      if (result.def.length > 0) {
-        console.log(result.def[0]);
-        var answer = result.def[0].text;
-        var traduction = result.def[0].tr[0];
-        var tradText = 'In ' + Answer.langTranslate['Italian'].full + ' it is "';
-        var genre = (traduction.gen) ? (', ' + Answer.langTranslate.genre[traduction.gen] + ')' ) : (')');
-        tradText += traduction.text + '" (' + traduction.pos + genre;
-
-        $('#answer_validity').text('Well done! ' + tradText);
-
-        var points = answer.length;
-        return true;
-      }
-      else {
+      if (result.def.length === 0) {
         $('#answer_validity').text("Try again, this word is not in our dictionary!");
-        return false
+        return false;
       }
+
+      console.log(result.def[0]);
+      var answer = result.def[0].text;
+      var traduction = result.def[0].tr[0];
+      var tradText = 'In ' + Answer.langTranslate['Italian'].full + ' it is "';
+      var genre = (traduction.gen) ? (', ' + Answer.langTranslate.genre[traduction.gen] + ')' ) : (')');
+      tradText += traduction.text + '" (' + traduction.pos + genre;
+
+      $('#answer_validity').text('Well done! ' + tradText);
+
+      // add how many points??
+      var points = answer.length;
+
+      return true;
     })
   },
 
