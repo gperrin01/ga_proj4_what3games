@@ -76,6 +76,7 @@ Game = {
       $('#submit_location').off('submit');
       $('#submit_location').on('submit', Game.browsingChallenge);
     }
+    
     else console.log('skipped the success');
     // else the isValid function will display the right message and we try again
   },

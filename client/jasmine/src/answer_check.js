@@ -18,43 +18,59 @@ Answer = {
   },
 
   submit: function(){
-  event.preventDefault();
-  var answer = $('#answer_input').val();
-  return Answer.isValid(answer)
+    event.preventDefault();
+    var answer = $('#answer_input').val();
+
+    // callback function after isValid to start the dictionnary thing
+    Answer.isValid(answer, Answer.isInDictionary)
   },
 
-  // Run all logic tests first & if the pass run the Dictionnary test
+
+
+  updateView: function(valid, message) {
+    if (!valid) {
+      $('#answer_validity').text(message);
+    } else {
+
+    }
+    return valid;
+  },
+
+  // Run all logic tests first & if they pass run the Dictionnary test
   // if Dic test ok, display the value coming from the dictionnary
-  isValid: function(answer) {
+  isValid: function(answer, callback) {
+    var message;
+    var valid;
 
     if (!Answer.isLongEnough(answer)) {
-     $('#answer_validity').text('Try again, less than three characters is too easy!');
-     return false
+      message = "Try again, less than three characters is too easy!";
+      valid = false;
     }
     else if (!Answer.isNotOneOfThree(answer)) {
-      $('#answer_validity').text('Try again, choosing a part of the three words is too easy!');
-      return false
+      message = 'Try again, choosing a part of the three words is too easy!';
+      valid = false;
     }
     else if (!Answer.isNotBasicPlural(answer)) {
-      $('#answer_validity').text('Try again, pluralizing one of the words is too easy!');
-      return false
+      message = 'Try again, pluralizing one of the words is too easy!';
+      valid = false;
     }
     else if (!Answer.isNotBasicSingular(answer)) {
-      $('#answer_validity').text('Try again, taking the singular of one of the words is too easy!');
-      return false
+      message = 'Try again, taking the singular of one of the words is too easy!';
+      valid = false;
     }   
-    else if (!Answer.hasValidLetters(answer)) {
-      // $('#answer_validity').text('Try again, taking letters out');
-      return false
+    else if (typeof Answer.hasValidLetters(answer) === "string") {
+      message = Answer.hasValidLetters(answer);
+      valid = false;
     }
-    else if (!Answer.hasValidNumberOfLetters(answer)) {
-      // $('#answer_validity').text("Try again, a letter can only be used multiple times if it present multiple times in the three words");
-      return false
+    else if (typeof Answer.hasValidNumberOfLetters(answer) === "string") {
+      message = Answer.hasValidNumberOfLetters(answer);
+      valid = false;
     }
-    // if all checks pass we run the Dictionary check and display the results if it passes too
-    else  {
-      console.log('answer from isInDico', Answer.isInDictionary(answer));
-      return (Answer.isInDictionary(answer)) ;
+
+    if (valid === false) {
+      Answer.updateView(valid, message);
+    } else {
+      callback(answer, Answer.updateView)
     }
   },
 
@@ -62,37 +78,43 @@ Answer = {
   // Answer validity functions below
   // ******************************
 
-  isInDictionary: function(answer){
-
+  isInDictionary: function(answer, callback){
+    var isInDico = false;
     var data = {
       key: Keys.yandex_dic,
       lang: "en-" + Answer.langTranslate['Italian'].short,
       text: answer
     };
 
-    $.get("https://dictionary.yandex.net/api/v1/dicservice.json/lookup?", data, function(result){
+    // var promise = new Promise(function(resolve, reject){
 
-      if (result.def.length === 0) {
-        $('#answer_validity').text("Try again, this word is not in our dictionary!");
-        return false;
-      }
+      $.ajax({
+        type: 'GET',
+        url: "https://dictionary.yandex.net/api/v1/dicservice.json/lookup?", 
+        data: data
+      }).done(function(result){
 
-      console.log(result.def[0]);
-      var answer = result.def[0].text;
-      var traduction = result.def[0].tr[0];
-      var tradText = 'In ' + Answer.langTranslate['Italian'].full + ' it is "';
-      var genre = (traduction.gen) ? (', ' + Answer.langTranslate.genre[traduction.gen] + ')' ) : (')');
-      tradText += traduction.text + '" (' + traduction.pos + genre;
+        if (result.def.length === 0) {
+          callback(false, "Try again, this word is not in our dictionary!");
+        }
 
-      $('#answer_validity').text('Well done! ' + tradText);
+        else {
+          // console.log(result.def[0]);
+          var answer = result.def[0].text;
+          var traduction = result.def[0].tr[0];
+          var tradText = 'In ' + Answer.langTranslate['Italian'].full + ' it is "';
+          var genre = (traduction.gen) ? (', ' + Answer.langTranslate.genre[traduction.gen] + ')' ) : (')');
+          tradText += traduction.text + '" (' + traduction.pos + genre;
 
-      // add how many points??
-      var points = answer.length;
-      console.log(points);
+          $('#answer_validity').text('Well done! ' + tradText);
 
-      return true;
-    })
+          // add how many points??
+          var points = answer.length;
+          callback(true, 'Well done! ' + tradText)
+        }
+      });
   },
+
 
   // answer must be three or more characters
   isLongEnough: function(answer) {
@@ -121,8 +143,9 @@ Answer = {
     for (var i = 0; i < answer.length; i++) {
       var str = answer.charAt(i);
       if (Words.theThreeWords.indexOf(str) === -1) {
-        $('#answer_validity').text('Try again, "' + str + '" is not present in ' + Words.theThreeWords)
-        return false;
+        return 'Try again, "' + str + '" is not present in ' + Words.theThreeWords;
+        // $('#answer_validity').text('Try again, "' + str + '" is not present in ' + Words.theThreeWords)
+        // return false;
       }
     }
     return true;
