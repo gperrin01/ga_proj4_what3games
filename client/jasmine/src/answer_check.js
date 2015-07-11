@@ -88,6 +88,7 @@ Answer = {
 
       // add how many points??
       var points = answer.length;
+      console.log(points);
 
       return true;
     })
@@ -102,7 +103,7 @@ Answer = {
   // Words.theThreeWords.indexOf(answer) is not good as it would block substrings of the words
   // we only block Full Matches
   isNotOneOfThree: function(answer) {
-    return Words.theThreeWords.indexOf(answer) === -1
+    return Words.theThreeWords.split(' ').indexOf(answer) === -1
   },
 
   // if answer's last letter is an 's' remove it and check result isn't one of the 3 words
