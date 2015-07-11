@@ -22,6 +22,7 @@
 
 
 var Game = Game || {};
+var JourneyChallenge = JourneyChallenge || {};
 var Listeners = Listeners || {};
 
 var $game_msg = $('#game_msg');
@@ -29,14 +30,7 @@ var $rules_display = $('#rules_display');
 
 
 $(document).ready(function(){
-  $('#play_button').on('click', function(){
-    Game.browsingChallenge();
-    // show marker and center map on it + ensure shows info + remvoe any journey shown
-    // place marker at Random Loc in central london - muted during devpt so i can play faster and test
-    // Display.centerOnUpdatedMarker(new google.maps.LatLng(51.505831 + Math.random()/100, -0.132134857 - Math.random()/100), Marker.init, Map.zoomInit);
-    Display.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
-    Marker.drag(Marker.init);
-  });
+  $('#play_button').on('click', Game.initialize);
   $('#submit_answer').on('submit', Answer.submit);
 })
 
@@ -47,6 +41,15 @@ $(document).ready(function(){
 
 Game = {
 
+  initialize: function(){
+    Game.browsingChallenge();
+    // show marker and center map on it + ensure shows info + remvoe any journey shown
+    // place marker at Random Loc in central london - muted during devpt so i can play faster and test
+    // Display.centerOnUpdatedMarker(new google.maps.LatLng(51.505831 + Math.random()/100, -0.132134857 - Math.random()/100), Marker.init, Map.zoomInit);
+    Display.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
+    Marker.drag(Marker.init);
+  },
+
   browsingChallenge: function() {
     event.preventDefault();
     // THIS REALLY LOOKS LIKE I SHOULD BE USING TEMPLATING!! (but only backbone gives the listeners)
@@ -55,20 +58,18 @@ Game = {
     $('#rules_display').text("Browsing Challenge! Get your answer to be able to browse the map again!");
     // mute marker drag, mute whereAmI, mute find location, mute showJourney
     Listeners.gameStarted();
-    // turn on .journeyChallenge
+    // turn on .journeyChallenge and off the potential listeners from the journey game
+    $('#submit_destination').off('submit');
     $('#submit_destination').on('submit', Game.journeyChallenge);
-    $('#destination_button').on('click', Game.journeyChallenge)
 
-    // Submitting an answer: checks answer PLUS 
+    // Submitting an answer works differently during Game: check ntext steps
     $('#submit_answer').off('submit', Answer.submit);
     $('#submit_answer').on('submit', Game.browsingNextStep);
 
-    // finally let the stop button end the game
-    $('#stop_button').on('click', Game.stop);
-
     // COUNT SCORE!!!!! WILL HAVE TO BE HOOKED WITH THE DB !!!
     
-    // answer invalid, MSG: get valid answer to continue, or press Stop Button
+    // finally let the stop button end the game
+    $('#stop_button').on('click', Game.stop);
 
   },
 
@@ -102,7 +103,7 @@ Game = {
           Map.setToWhereAmI();
           Game.browsingChallenge();
         });
-        google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
+        Listeners.dragForNextChallenge =  google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
       }
       // else the isValid function SHOULD display the right message and we try again
     }
@@ -110,7 +111,17 @@ Game = {
 
   journeyChallenge: function(){
     event.preventDefault();
+
+    // update buttons to enable to submit a location and destination
     $('#game_msg').text("Journey Challenge! Get your answer right to move one step closer to the final destination!");
+    $('#submit_location').show();
+    $('#submit_location').off('submit');
+    $('#submit_destination').on('submit')
+    
+    // Submitting an answer works differently during Journey Challenge: check ntext steps
+    $('#submit_answer').off('submit', Answer.submit);
+    $('#submit_answer').on('submit', Game.browsingNextStep);
+
 
     // navigate through the steps
   },
@@ -120,25 +131,43 @@ Game = {
     Listeners.justBrowsing();
     // show marker and center map on it + remvoe any journey shown
     Display.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
-    // end stop button is muted
-    $('#stop_button').off('click', Game.stop);    
+
+    // freely move the marker without triggering the game
+    google.maps.event.removeListener(Listeners.dragForNextChallenge);
+
+    // Submitting an answer: back to normal browsing outside of game
+    $('#submit_answer').off('submit', Game.browsingNextStep);
+    $('#submit_answer').on('submit', Answer.submit);
 
     // scores are not tracked
 
+    // end stop button is muted
+    $('#stop_button').off('click', Game.stop);    
   }
 
 };  // End Game Object
 
+//***********************************
+// THE JOURNEY CHALLENGE
+//*****************************
+
+JourneyChallenge = {
+
+
+}
+
 
 //***********************************
-// THE LISTENERS FOR THE GAME
+// THE LISTENERS FOR THE GAME AND THE JOURNEY
 //***********************************
 
 
 Listeners = {
 
   justBrowsing: function(){
+    $('#where_am_i').off('click');
     $('#where_am_i').on('click', Map.setToWhereAmI)
+    $('#submit_location').off('submit');
     $('#submit_location').on('submit', Map.setToLocation);
     $('#submit_destination').on('submit', Journey.show);
 
@@ -148,7 +177,7 @@ Listeners = {
 
     // Update the buttons to reflect we are just browsing through the map
     $('#where_am_i').show();
-    $('#geocode_button').show();
+    $('#submit_location').show();
     $('#destination_button').val('Show Journey')
     $('#play_button').text('Start Playing!');
     $('#game_msg').text("Click Above to Start Playing and Count Your Score!");
