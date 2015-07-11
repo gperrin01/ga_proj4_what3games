@@ -46,6 +46,7 @@ $(document).ready(function(){
 Game = {
 
   browsingChallenge: function() {
+    event.preventDefault();
     // THIS REALLY LOOKS LIKE I SHOULD BE USING TEMPLATING!! (but only backbone gives the listeners)
 
     //Welcome message
@@ -78,14 +79,27 @@ Game = {
     function goNextStep(valid){
       if (valid) {
         console.log('next step of the browsing');
+
+        $('#game_msg').text("Move on the map to go the next challenge!");
+
         // if good Answer, congrats +1, + allows you to drag pin and find location
         Marker.init.setOptions({draggable: true});
         Map.map.setOptions({draggable: true})
-        $('#geocode_button').show();
+        $('#submit_location').show();
+        $('#where_am_i').show();
 
-        // then once dragged or shown, mute again -> it it Game.browsingChallenge() ??
-        $('#submit_location').off('submit');
-        $('#submit_location').on('submit', Game.browsingChallenge);
+        // then once dragged or shown, mute again -> Game.browsingChallenge() ??
+        $('#submit_location, #where_am_i').off('submit');
+        $('#submit_location').on('submit', function(){
+          event.preventDefault();
+          Map.setToLocation();
+          Game.browsingChallenge();
+        });
+        $('#where_am_i').on('click', function(){
+          event.preventDefault();
+          Map.setToWhereAmI();
+          Game.browsingChallenge();
+        });
         google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
       }
       // else the isValid function SHOULD display the right message and we try again
@@ -148,7 +162,7 @@ Listeners = {
     // $('#submit_location').off('submit', Map.setToLocation);
     // hiding seems the best, let's see if it screws up the styling
     $('#where_am_i').hide();
-    $('#geocode_button').hide();
+    $('#submit_location').hide();
     $('#submit_destination').off('submit', Journey.show);
 
     // Update the buttons to reflect we are Playing

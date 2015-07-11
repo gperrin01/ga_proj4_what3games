@@ -21,7 +21,7 @@ Answer = {
     event.preventDefault();
     var answer = $('#answer_input').val();
     // callback function after isValid to start the dictionnary thing
-     Answer.isValid(answer, Answer.isInDictionary);
+    Answer.isValid(answer, Answer.isInDictionary);
   },
 
   // Run all logic tests first & if they pass run the Dictionnary test
@@ -92,7 +92,7 @@ Answer = {
         // $('#answer_validity').text('Well done! ' + tradText + '<br> Move the pin to go to the next challenge!');
         // add how many points??
         var points = answer.length;
-        Display.updateView('Well done! ' + tradText + " -> Move on the map to go the next challenge!", $view, true)
+        Display.updateView('Well done! ' + tradText, $view, true)
 
         // this is the callback enabling the Game to know the result is TRUE
         if (callback) {callback(true);}
