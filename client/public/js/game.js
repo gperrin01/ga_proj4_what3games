@@ -32,6 +32,8 @@ $(document).ready(function(){
   $('#play_button').on('click', function(){
     Game.browsingChallenge();
     // show marker and center map on it + ensure shows info + remvoe any journey shown
+    // place marker at Random Loc in central london - muted during devpt so i can play faster and test
+    // Display.centerOnUpdatedMarker(new google.maps.LatLng(51.505831 + Math.random()/100, -0.132134857 - Math.random()/100), Marker.init, Map.zoomInit);
     Display.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
     Marker.drag(Marker.init);
   });

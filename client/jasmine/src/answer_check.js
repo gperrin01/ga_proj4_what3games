@@ -17,6 +17,8 @@ Answer = {
    genre: {'m': 'masculine', 'f': 'feminine', 'n': 'neutral'}
   },
 
+  // this is the basic submit check for freely moving on the map
+  // for the more advanced checks while in Game, see Game.browsingNextSteps
   submit: function(){
     event.preventDefault();
     var answer = $('#answer_input').val();

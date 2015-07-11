@@ -205,6 +205,7 @@ Marker = {
   // also update the infoWindow
   drag: function(marker){
     coords = marker.position.A + ', ' + marker.position.F;
+    console.log(coords);
     Display.threeWords(coords, marker);
     Display.location(coords);
   },
