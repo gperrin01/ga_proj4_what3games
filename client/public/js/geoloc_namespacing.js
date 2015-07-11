@@ -140,7 +140,8 @@ Journey = {
 
   show: function() {
     event.preventDefault();
-
+    console.log('show journey');
+    
     // ensure direction display is on and clear out any existing markerArray from previous calculations
     Journey.directionsDisplay.setMap(Map.map);
     Marker.clearStepArray();

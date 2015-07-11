@@ -28,7 +28,6 @@ var Listeners = Listeners || {};
 var $game_msg = $('#game_msg');
 var $rules_display = $('#rules_display');
 
-
 $(document).ready(function(){
   $('#play_button').on('click', Game.initialize);
   $('#submit_answer').on('submit', Answer.submit);
@@ -36,7 +35,7 @@ $(document).ready(function(){
 
 
 //***********************************
-// THE GAME
+// THE GAME (and simple challenge)
 //***********************************
 
 Game = {
@@ -60,7 +59,7 @@ Game = {
     Listeners.gameStarted();
     // turn on .journeyChallenge and off the potential listeners from the journey game
     $('#submit_destination').off('submit');
-    $('#submit_destination').on('submit', Game.journeyChallenge);
+    $('#submit_destination').on('submit', JourneyChallenge.initialize);
 
     // Submitting an answer works differently during Game: check ntext steps
     $('#submit_answer').off('submit', Answer.submit);
@@ -109,23 +108,6 @@ Game = {
     }
   },
 
-  journeyChallenge: function(){
-    event.preventDefault();
-
-    // update buttons to enable to submit a location and destination
-    $('#game_msg').text("Journey Challenge! Get your answer right to move one step closer to the final destination!");
-    $('#submit_location').show();
-    $('#submit_location').off('submit');
-    $('#submit_destination').on('submit')
-    
-    // Submitting an answer works differently during Journey Challenge: check ntext steps
-    $('#submit_answer').off('submit', Answer.submit);
-    $('#submit_answer').on('submit', Game.browsingNextStep);
-
-
-    // navigate through the steps
-  },
-
   stop: function(){
     // back to as if the page was loaded
     Listeners.justBrowsing();
@@ -153,6 +135,38 @@ Game = {
 
 JourneyChallenge = {
 
+  initialize: function(){
+
+    event.preventDefault();
+
+    // update buttons to enable to submit a location and destination
+    $('#game_msg').text("Journey Challenge! Enter an origin and a destination!");
+    $('#destination_button').val('Enter Destination')
+    $('#submit_location').show();
+    $('#submit_location').off('submit');
+    $('#submit_destination').off('submit');
+    $('#submit_destination').on('submit', JourneyChallenge.begin)
+    
+    // Nothing can be submitted at this points
+    $('#words_zone').hide();
+
+
+    // navigate through the steps
+  },
+
+  begin: function(){
+    event.preventDefault();
+    console.log('begin journeyChallenge');
+
+    $('#game_msg').text("Journey Challenge! Get your answer right to move one step closer to the final destination!");
+    $('#words_zone').show();
+
+    $('#submit_location').hide();
+    $('#submit_destination').hide();
+
+    //  Variation around the Journey.show, same vein as for the browsingNextSteps
+    Journey.show();
+  }
 
 }
 
@@ -172,13 +186,13 @@ Listeners = {
     $('#submit_destination').on('submit', Journey.show);
 
     //disable journeyChallenge
-    $('#submit_destination').off('submit', Game.journeyChallenge);
-    $('#destination_button').off('click', Game.journeyChallenge);
+    $('#submit_destination').off('submit', JourneyChallenge.initialize);
+    $('#destination_button').off('click', JourneyChallenge.initialize);
 
     // Update the buttons to reflect we are just browsing through the map
     $('#where_am_i').show();
     $('#submit_location').show();
-    $('#destination_button').val('Show Journey')
+    $('#destination_button').val('Enter Destination')
     $('#play_button').text('Start Playing!');
     $('#game_msg').text("Click Above to Start Playing and Count Your Score!");
 
