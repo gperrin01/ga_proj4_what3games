@@ -138,10 +138,9 @@ Journey = {
   // When submitting a destination: show journey including steps
   // ******************************************
 
-  show: function(e, callback) {
+  show: function(foo, callback) {
     event.preventDefault();
     console.log('show journey');
-    console.log('callback', callback);
     
     // ensure direction display is on and clear out any existing markerArray from previous calculations
     Journey.directionsDisplay.setMap(Map.map);
@@ -257,7 +256,7 @@ Display = {
       Words.theThreeWords = words;
       console.log(words);
 
-      $('#three_words_list').text('Your 3 words: ' + words);
+      // $('#three_words_list').text('Your 3 words: ' + words);
       // show the marker infowindow filled with the 3 words at all time
       Marker.markerInfo.setContent(words);
       Marker.markerInfo.open(Map.map, marker);
