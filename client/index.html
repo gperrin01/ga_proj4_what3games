@@ -26,23 +26,11 @@
   <div id="container">
 
     <div id="game_zone">
-
-      <div id="ready_zone">
-        <button id='play_button' class="ib"></button>
-        <h4 id="game_name" class="ib">Get the Longest Word!</h4>
-        <button id='stop_button' class="ib">Stop</button>
-        <h5 id="game_msg"></h5>
-      </div>
-
-      <div id="words_zone">
-        <!-- <h4 id="three_words_list" class="hidden">Your 3 words: </h4> -->
-        <form action="" id="submit_answer" class="ib">
-          <input id="answer_input" type="textbox" placeholder="Get the Longest Word!">
-          <input type="submit" value="Go" id="answer_button">
-        </form>
-        <h5 id="answer_validity" class="ib">Check your answer to see if it passes!</h5>
-      </div>
-
+      <button id='play_button' class="ib"></button>
+      <h4 id="game_name" class="ib">Get the Longest Word!</h4>
+      <button id='stop_button' class="ib">Stop</button>
+      <h5 id="game_msg"></h5>
+      <h5 id="journey_recap" class="hidden"></h5>
     </div>
 
     <div id="location_info">
@@ -55,6 +43,15 @@
         <input id="destination_input" type="textbox" value="63 Hanbury street, London">
         <input type="submit" id="destination_button">
       </form>
+    </div>
+
+    <div id="words_zone">
+      <!-- <h4 id="three_words_list" class="hidden">Your 3 words: </h4> -->
+      <form action="" id="submit_answer" class="ib">
+        <input id="answer_input" type="textbox" placeholder="Get the Longest Word!">
+        <input type="submit" value="Go" id="answer_button">
+      </form>
+      <h5 id="answer_validity" class="ib">Check your answer to see if it passes!</h5>
     </div>
 
     <div id="map-canvas"></div>

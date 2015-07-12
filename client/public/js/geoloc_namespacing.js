@@ -167,7 +167,6 @@ Journey = {
         // when playing journey challenge we call Journey.show(Journey.play)
         // Journey.play will be executed with the route returned by google
         if (callback) { 
-          console.log('should send me to callback');
           callback(response.routes[0].legs) 
         }
       }  
@@ -213,7 +212,6 @@ Marker = {
   // also update the infoWindow
   drag: function(marker){
     coords = marker.position.A + ', ' + marker.position.F;
-    console.log(coords);
     Display.threeWords(coords, marker);
     Display.location(coords);
   },

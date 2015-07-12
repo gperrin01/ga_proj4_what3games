@@ -13,10 +13,21 @@
 #game_name {
   margin-bottom: 0px;
 }
-#three_words_list {
-  margin: 10px 0px 10px 0px;
+
+#game_msg {
+  margin: 10px 0 10px 0;
+}
+#journey_recap {
+  margin: 10px 0 10px 0;
+}
+
+#words_zone {
+  text-align: center;
 }
 #submit_answer, #answer_validity {
-  margin-bottom: 10px;
-  margin-top: 0px;
+  margin: 10px 0 0 0;
 }
+
+/*#three_words_list {
+  margin: 10px 0px 10px 0px;
+}*/

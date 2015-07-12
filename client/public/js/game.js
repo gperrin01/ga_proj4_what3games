@@ -168,6 +168,12 @@ JourneyChallenge = {
 
   play: function(route) {
     console.log('play journey', route);
+    $('#journey_recap').show();
+
+    var steps = route[0].steps;
+
+    $('#journey_recap').text('Step one of ' + steps.length + ' || Points: ' );
+
   }
 
 }
