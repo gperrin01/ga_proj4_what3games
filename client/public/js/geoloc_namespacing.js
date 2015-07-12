@@ -138,9 +138,10 @@ Journey = {
   // When submitting a destination: show journey including steps
   // ******************************************
 
-  show: function() {
+  show: function(e, callback) {
     event.preventDefault();
     console.log('show journey');
+    console.log('callback', callback);
     
     // ensure direction display is on and clear out any existing markerArray from previous calculations
     Journey.directionsDisplay.setMap(Map.map);
@@ -164,7 +165,14 @@ Journey = {
         Journey.directionsDisplay.setDirections(response);
         Journey.showSteps(response);
 
-      }  else alert('Google Route error: ' + status);
+        // when playing journey challenge we call Journey.show(Journey.play)
+        // Journey.play will be executed with the route returned by google
+        if (callback) { 
+          console.log('should send me to callback');
+          callback(response.routes[0].legs) 
+        }
+      }  
+      else alert('Google Route error: ' + status);
     });
   },
 

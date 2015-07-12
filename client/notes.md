@@ -1,3 +1,4 @@
+CAllback functions as biggest learning point!!
 
 QUESTIONS
 What do i use for the server?????  Is it Rails, plus routes in rails which trigger _Rendering from client folder?

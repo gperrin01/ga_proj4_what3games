@@ -15,12 +15,12 @@ describe("Answer returned by the user", function() {
   // run tests against these dummy three words
   Words.theThreeWords = "belt parts remain";
 
-  xit("exists in the dictionary", function() {
-    expect(Answer.isValid('test')).toBe(true)
+  it("exists in the dictionary", function() {
+    expect(Answer.isValid('test', Answer.isInDictionary)).toBe(true)
   });
 
   it("cannot be less than 3 characters", function() {
-    expect(Answer.isValid('te')).toBe(false);
+    expect(Answer.isValid('te', Answer.isInDictionary)).toBe(false);
   });
 
   it("cannot be one of the 3 words", function(){

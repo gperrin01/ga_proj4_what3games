@@ -86,7 +86,6 @@ Game = {
 
         // if good Answer, congrats +1, + allows you to drag pin and find location
         Marker.init.setOptions({draggable: true});
-        Map.map.setOptions({draggable: true})
         $('#submit_location').show();
         $('#where_am_i').show();
 
@@ -156,7 +155,6 @@ JourneyChallenge = {
 
   begin: function(){
     event.preventDefault();
-    console.log('begin journeyChallenge');
 
     $('#game_msg').text("Journey Challenge! Get your answer right to move one step closer to the final destination!");
     $('#words_zone').show();
@@ -165,7 +163,11 @@ JourneyChallenge = {
     $('#submit_destination').hide();
 
     //  Variation around the Journey.show, same vein as for the browsingNextSteps
-    Journey.show();
+    Journey.show('foo', JourneyChallenge.play);
+  },
+
+  play: function(route) {
+    console.log('play journey', route);
   }
 
 }
@@ -183,11 +185,11 @@ Listeners = {
     $('#where_am_i').on('click', Map.setToWhereAmI)
     $('#submit_location').off('submit');
     $('#submit_location').on('submit', Map.setToLocation);
-    $('#submit_destination').on('submit', Journey.show);
 
-    //disable journeyChallenge
+    // Desination normal behaviour without triggering  journeyChallenge
     $('#submit_destination').off('submit', JourneyChallenge.initialize);
     $('#destination_button').off('click', JourneyChallenge.initialize);
+    $('#submit_destination').on('submit', Journey.show);
 
     // Update the buttons to reflect we are just browsing through the map
     $('#where_am_i').show();
@@ -196,9 +198,8 @@ Listeners = {
     $('#play_button').text('Start Playing!');
     $('#game_msg').text("Click Above to Start Playing and Count Your Score!");
 
-    // markers and map CAN be cliked on and dragged
+    // markers CAN be cliked on and dragged
     if (Marker.init) {Marker.init.setOptions({draggable: true});}
-    Map.map.setOptions({draggable: true})
   },
 
   gameStarted: function(){
@@ -215,9 +216,8 @@ Listeners = {
     $('#destination_button').val('Start Journey Challenge!');
     $('#game_msg').text("Easy Walk Challenge! Get your answer right to be able to browse the map again!");
 
-    // markers and maps cannot be dragged 
+    // markers cannot be dragged 
     if (Marker.init) {Marker.init.setOptions({draggable: false});}
-    Map.map.setOptions({draggable: false})
   }
 
 } // End Listeners Object
