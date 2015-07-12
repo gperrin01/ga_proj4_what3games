@@ -84,20 +84,16 @@ Answer = {
         if (callback) {callback(false);}
       }
       else {
-        console.log(result.def[0]);
         var answer = result.def[0].text;
         var traduction = result.def[0].tr[0];
         var tradText = 'In ' + Answer.langTranslate['Italian'].full + ', "'+answer+ ' is "';
         var genre = (traduction.gen) ? (', ' + Answer.langTranslate.genre[traduction.gen] + ')' ) : (')');
         tradText += traduction.text + '" (' + traduction.pos + genre;
 
-        // $('#answer_validity').text('Well done! ' + tradText + '<br> Move the pin to go to the next challenge!');
-        // add how many points??
-        var points = answer.length;
         Display.updateView('Well done! ' + tradText, $view, true)
 
         // this is the callback enabling the Game to know the result is TRUE
-        if (callback) {callback(true);}
+        if (callback) {callback(true, answer);}
       }
     });
   },

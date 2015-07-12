@@ -17,12 +17,17 @@
 
 // When click stop, all listeners back to normal
 
-
+// SCORES
+// when click 'play', score is reset to zero
+// play free-flow and journey to add to your score
+// Both: Points added to DB for each move (with record of the 3 words)
+// Journey: bonus for finishing journey, as a function of #steps (because more commitment than free-flow)
 
 
 
 var Game = Game || {};
 var JourneyChallenge = JourneyChallenge || {};
+var Score = Score || {};
 var Listeners = Listeners || {};
 
 var $game_msg = $('#game_msg');
@@ -74,7 +79,6 @@ Game = {
     
     // finally let the stop button end the game
     $('#stop_button').on('click', Game.stop);
-
   },
 
   checkNextStep: function(callback){
@@ -83,11 +87,17 @@ Game = {
     Answer.isValid(answer, Answer.isInDictionary, callback);
   },
 
-  goNextStep: function(valid){
+  goNextStep: function(valid, word){
     if (valid) {
-      $('#game_msg').text("Move on the map to go the next challenge!");
+
+      // Update your score and store in DB
+      var points = Score.count(word);
+      console.log(points);
+      // ADD DB STORAGE
+      // HOOK With Current_user object so that the views are refreshed whenever opened??
 
       // if good Answer, congrats +1, + allows you to drag pin and find location
+      $('#game_msg').text("Move on the map to go the next challenge!");
       Marker.init.setOptions({draggable: true});
       $('#submit_location').show();
       $('#where_am_i').show();
@@ -158,8 +168,9 @@ JourneyChallenge = {
 
   begin: function(){
     event.preventDefault();
-    // reset the count of successfull steps in the Journey
-    JourneyChallenge.count = 1;
+    // reset the Journey (count of steps and score)
+    JourneyChallenge.countSteps = 1;
+    JourneyChallenge.score = 0;
 
     $('#game_msg').text("Journey Challenge! Get your answer right to move one step closer to the final destination!");
     $('#words_zone').show();
@@ -172,7 +183,7 @@ JourneyChallenge = {
   play: function(route) {
     // store the route for later use
     JourneyChallenge.myJourney = route;
-    var count = JourneyChallenge.count;
+    var count = JourneyChallenge.countSteps;
     $('#journey_recap').show();
     var steps = route[0].steps;
     console.log('steps', steps);
@@ -180,7 +191,7 @@ JourneyChallenge = {
     // Until you reach the final step (end of steps array):
     if (count < steps.length){
 
-      $('#journey_recap').text('Checkpoint ' + count + ' of ' + (steps.length-1) + ' || Points: ' );
+      $('#journey_recap').text('Checkpoint ' + count + ' of ' + (steps.length-1) + ' || Points accumulated: ' + JourneyChallenge.score );
       // highlight the marker for that step: 3words and special icon
       JourneyChallenge.stepMarker = Marker.stepMarkerArray[count];
       Marker.showWords(JourneyChallenge.stepMarker);
@@ -193,22 +204,53 @@ JourneyChallenge = {
       });
     }
     else {
-      $('#game_msg').text("You did it! Destination reached with " +  " points"); 
+      // show final score and the bonus calc
+      var bonus = Score.calcBonus(steps.length);
+      $('#game_msg').text("You did it! " + steps.length + " checkpoints passed for a total of" 
+        + JourneyChallenge.score +  " points. You also earn " + bonus + " bonus points"); 
+      JourneyChallenge.score += bonus;
     }
   },
 
-  moveAlongJourney: function(valid){
+  moveAlongJourney: function(valid, word){
     if (valid) {
+
+      // Update your score in DB - Store in current_user? SAME AS FOR BROWSING
+      // Add to cumul for current journey
+      JourneyChallenge.score += Score.calc(word);
+
       // show the marker as "done"
       JourneyChallenge.stepMarker.setIcon(Marker.succes_icon);
       // increment the count of sucesfsul steps and play again!
-      JourneyChallenge.count++;
+      JourneyChallenge.countSteps++;
       JourneyChallenge.play(JourneyChallenge.myJourney);
     };
   }
 
 
 } // End JourneyChallenge Object
+
+//***********************************
+// THE SCORE
+//***********************************
+
+Score = {
+
+  calc: function(word) {
+    var length = word.length;
+    if (length >= 10) return 2 * (length + 2); // above 10 letters you get maxi bonus
+    else if (length === 9) return 16; // bonus is higher when large word
+    else if (length === 8) return 11;
+    else if (length === 7) return 7;
+    else if (length === 6) return 4;
+    else if (length === 5) return 2;
+    else if (length === 4) return 1;// 4-5 letters are only decent, no bonus
+    else  return 0; // 3 is easy, no reward but allowing you to keep playing
+  },
+  calcBonus: function(num_steps){
+    return num_steps;
+  }
+}
 
 
 //***********************************
