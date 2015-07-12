@@ -162,14 +162,11 @@ Journey = {
         // this creates the line from A to B
         console.log('Google route:', response);
         Journey.directionsDisplay.setDirections(response);
-
         Journey.showSteps(response);
 
         // when playing journey challenge we call Journey.show(Journey.play)
         // Journey.play will be executed with the route returned by google
-        if (callback) { 
-          callback(response.routes[0].legs) 
-        }
+        (callback) ? callback(response.routes[0].legs) : console.log('no callback');
       }  
       else alert('Google Route error: ' + status);
     });
@@ -185,15 +182,9 @@ Journey = {
           map: Map.map
         });
       Marker.stepMarkerArray[i] = step_marker;
-
       // create the info window which will popup on click on marker
       Marker.attachInfo(step_marker, 'Play the Journey Challenge to unlock this location!');
-      
     }
-
-    // replace icon on the origin and destination markers
-    // Marker.stepMarkerArray[0].setIcon(Marker.init_icon);
-    // Marker.stepMarkerArray[stepMarkerArray.length - 1].setIcon(Marker.destination_icon);
   }
 
 }; // End Journey Object
@@ -217,6 +208,11 @@ Marker = {
     var coords = marker.position.A + ', ' + marker.position.F;
     Display.threeWords(coords, marker);
     Display.location(coords);
+  },
+
+  showWords: function(marker){
+    var coords = marker.position.A + ', ' + marker.position.F;
+    Display.threeWords(coords, marker);
   },
 
   // On click on a marker, it will show info (location and 3 words)

@@ -173,8 +173,14 @@ JourneyChallenge = {
     var steps = route[0].steps;
     $('#journey_recap').text('Step one of ' + steps.length + ' || Points: ' );
 
-    console.log(Marker.stepMarkerArray);
-    Display.threeWords(Marker.stepMarkerArray[3]);
+    var array = Marker.stepMarkerArray;
+    console.log(array);
+    // reset the msg showing on infoWindos
+    for (var i = 0; i < array.length; i++){
+      google.maps.event.addListener(array[i], 'click', function(){
+          Marker.showWords(this);
+      });
+    }
     // Marker.markerInfo.setContent('teeeeest');
     // Marker.markerInfo.open(Map.map, Marker.stepMarkerArray[4]);
   }
