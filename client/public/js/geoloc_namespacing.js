@@ -26,6 +26,7 @@ Map = {
   londonLong: -0.12750,
   zoomInit: 13,
   zoomShowLocation: 16,
+  zoomStepJourney: 16,
 
   // ******************************************
   // On page load: map centered in London
@@ -160,7 +161,6 @@ Journey = {
     Journey.directionsService.route(request, function(response, status) {
       if (status == google.maps.DirectionsStatus.OK) {
         // this creates the line from A to B
-        console.log('Google route:', response);
         Journey.directionsDisplay.setDirections(response);
         Journey.showSteps(response);
 
@@ -199,8 +199,10 @@ Marker = {
   stepMarkerArray: [],
   init: '',
   init_icon: 'http://www.agiespana.es/_portal/_widgets/googlemaps/red_marker.png',
+  step_icon: "http://www.thruway.ny.gov/travelers/img/questionmark.png",
+  succes_icon: "http://es.pinkbike.org/245/sprt/i/trailforks/mapicons/poi_12.png",
   destination: '',
-  destination_icon: "http://www.veryicon.com/icon/ico/Object/Vista%20Map%20Markers/Map%20Marker%20Chequered%20Flag%20Right%20Chartreuse.ico",
+  destination_icon: "",
 
   // when marker is dragged: update location and 3 words
   // also update the infoWindow
@@ -254,11 +256,11 @@ Display = {
       console.log(words);
 
       // $('#three_words_list').text('Your 3 words: ' + words);
-      // show the marker infowindow filled with the 3 words at all time
+      // show the marker infowindow filled with the 3 words at all time, including when clicking on it
       Marker.markerInfo.setContent(words);
       Marker.markerInfo.open(Map.map, marker);
-
-      return words
+      // ensure click enables to show the words
+      Marker.attachInfo(marker, words);
     });
   },
 

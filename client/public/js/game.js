@@ -31,6 +31,9 @@ var $rules_display = $('#rules_display');
 $(document).ready(function(){
   $('#play_button').on('click', Game.initialize);
   $('#submit_answer').on('submit', Answer.submit);
+
+  /// Shorctut to click during TEsting
+  $('#journey_challenge_button').on('click', JourneyChallenge.begin)
 })
 
 
@@ -63,7 +66,9 @@ Game = {
 
     // Submitting an answer works differently during Game: check ntext steps
     $('#submit_answer').off('submit', Answer.submit);
-    $('#submit_answer').on('submit', Game.browsingNextStep);
+    $('#submit_answer').on('submit', function(){
+      Game.checkNextStep(Game.goNextStep);
+    });
 
     // COUNT SCORE!!!!! WILL HAVE TO BE HOOKED WITH THE DB !!!
     
@@ -72,39 +77,37 @@ Game = {
 
   },
 
-  browsingNextStep: function(){
+  checkNextStep: function(callback){
     event.preventDefault();
-    
     var answer = $('#answer_input').val();
-    Answer.isValid(answer, Answer.isInDictionary, goNextStep);
+    Answer.isValid(answer, Answer.isInDictionary, callback);
+  },
 
-    function goNextStep(valid){
-      if (valid) {
-        console.log('next step of the browsing');
+  goNextStep: function(valid){
+    if (valid) {
+      $('#game_msg').text("Move on the map to go the next challenge!");
 
-        $('#game_msg').text("Move on the map to go the next challenge!");
+      // if good Answer, congrats +1, + allows you to drag pin and find location
+      Marker.init.setOptions({draggable: true});
+      $('#submit_location').show();
+      $('#where_am_i').show();
 
-        // if good Answer, congrats +1, + allows you to drag pin and find location
-        Marker.init.setOptions({draggable: true});
-        $('#submit_location').show();
-        $('#where_am_i').show();
-
-        // then once dragged or shown, mute again -> Game.browsingChallenge() ??
-        $('#submit_location, #where_am_i').off('submit');
-        $('#submit_location').on('submit', function(){
-          event.preventDefault();
-          Map.setToLocation();
-          Game.browsingChallenge();
-        });
-        $('#where_am_i').on('click', function(){
-          event.preventDefault();
-          Map.setToWhereAmI();
-          Game.browsingChallenge();
-        });
-        Listeners.dragForNextChallenge =  google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
-      }
-      // else the isValid function SHOULD display the right message and we try again
+      // then once dragged or shown, mute again -> Game.browsingChallenge() ??
+      $('#submit_location, #where_am_i').off('submit');
+      $('#submit_location').on('submit', function(){
+        event.preventDefault();
+        Map.setToLocation();
+        Game.browsingChallenge();
+      });
+      $('#where_am_i').on('click', function(){
+        event.preventDefault();
+        Map.setToWhereAmI();
+        Game.browsingChallenge();
+      });
+      google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
+      // Listeners.dragForNextChallenge =  google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
     }
+    // else the isValid function SHOULD display the right message and we try again
   },
 
   stop: function(){
@@ -155,37 +158,54 @@ JourneyChallenge = {
 
   begin: function(){
     event.preventDefault();
+    // reset the count of successfull steps in the Journey
+    JourneyChallenge.count = 1;
 
     $('#game_msg').text("Journey Challenge! Get your answer right to move one step closer to the final destination!");
     $('#words_zone').show();
-
     $('#submit_location').hide();
     $('#submit_destination').hide();
-
     //  Variation around the Journey.show, same vein as for the browsingNextSteps
     Journey.show('foo', JourneyChallenge.play);
   },
 
   play: function(route) {
-    console.log('play journey', route);
+    // store the route for later use
+    JourneyChallenge.myJourney = route;
+    var count = JourneyChallenge.count;
     $('#journey_recap').show();
-
     var steps = route[0].steps;
-    $('#journey_recap').text('Step one of ' + steps.length + ' || Points: ' );
+    console.log('steps', steps);
 
-    var array = Marker.stepMarkerArray;
-    console.log(array);
-    // reset the msg showing on infoWindos
-    for (var i = 0; i < array.length; i++){
-      google.maps.event.addListener(array[i], 'click', function(){
-          Marker.showWords(this);
+    // Until you reach the final step (end of steps array):
+    // while (count < steps.length) { // < OR <= ??
+      $('#journey_recap').text('Checkpoint ' + count + ' of ' + steps.length + ' || Points: ' );
+      // highlight the marker for that step: 3words and special icon
+      JourneyChallenge.stepMarker = Marker.stepMarkerArray[count];
+      Marker.showWords(JourneyChallenge.stepMarker);
+      JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
+
+      // Submitting an answer works differently during JourneyChallenge: check next steps
+      $('#submit_answer').off('submit');
+      $('#submit_answer').on('submit', function(){
+        Game.checkNextStep(JourneyChallenge.moveAlongJourney)
       });
+    //   i++;
+    // }
+  },
+
+  moveAlongJourney: function(valid){
+    if (valid) {
+      // show the marker as "done"
+      JourneyChallenge.stepMarker.setIcon(Marker.succes_icon);
+      // increment the count of sucesfsul steps and play again!
+      JourneyChallenge.count++;
+      JourneyChallenge.play(JourneyChallenge.myJourney);
     }
-    // Marker.markerInfo.setContent('teeeeest');
-    // Marker.markerInfo.open(Map.map, Marker.stepMarkerArray[4]);
   }
 
-}
+
+} // End JourneyChallenge Object
 
 
 //***********************************
