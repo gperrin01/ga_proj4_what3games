@@ -162,6 +162,7 @@ Journey = {
         // this creates the line from A to B
         console.log('Google route:', response);
         Journey.directionsDisplay.setDirections(response);
+
         Journey.showSteps(response);
 
         // when playing journey challenge we call Journey.show(Journey.play)
@@ -184,8 +185,10 @@ Journey = {
           map: Map.map
         });
       Marker.stepMarkerArray[i] = step_marker;
+
       // create the info window which will popup on click on marker
-      Marker.attachInfo(step_marker, Journey.myRoute.steps[i].instructions);
+      Marker.attachInfo(step_marker, 'Play the Journey Challenge to unlock this location!');
+      
     }
 
     // replace icon on the origin and destination markers
@@ -211,7 +214,7 @@ Marker = {
   // when marker is dragged: update location and 3 words
   // also update the infoWindow
   drag: function(marker){
-    coords = marker.position.A + ', ' + marker.position.F;
+    var coords = marker.position.A + ', ' + marker.position.F;
     Display.threeWords(coords, marker);
     Display.location(coords);
   },
@@ -240,7 +243,7 @@ Marker = {
 
 Display = {
 
-  // Display the 3 words on the #three_words_list and on the infowindow of a marker
+  // Display the 3 words on the infowindow of a marker
   threeWords: function(coords, marker){
     var data = {
       'key': Keys.w3w_api, // var key = process.env.W3W_KEY;

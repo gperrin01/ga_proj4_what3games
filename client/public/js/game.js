@@ -171,9 +171,12 @@ JourneyChallenge = {
     $('#journey_recap').show();
 
     var steps = route[0].steps;
-
     $('#journey_recap').text('Step one of ' + steps.length + ' || Points: ' );
 
+    console.log(Marker.stepMarkerArray);
+    Display.threeWords(Marker.stepMarkerArray[3]);
+    // Marker.markerInfo.setContent('teeeeest');
+    // Marker.markerInfo.open(Map.map, Marker.stepMarkerArray[4]);
   }
 
 }
