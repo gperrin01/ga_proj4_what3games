@@ -178,8 +178,9 @@ JourneyChallenge = {
     console.log('steps', steps);
 
     // Until you reach the final step (end of steps array):
-    // while (count < steps.length) { // < OR <= ??
-      $('#journey_recap').text('Checkpoint ' + count + ' of ' + steps.length + ' || Points: ' );
+    if (count < steps.length){
+
+      $('#journey_recap').text('Checkpoint ' + count + ' of ' + (steps.length-1) + ' || Points: ' );
       // highlight the marker for that step: 3words and special icon
       JourneyChallenge.stepMarker = Marker.stepMarkerArray[count];
       Marker.showWords(JourneyChallenge.stepMarker);
@@ -190,8 +191,10 @@ JourneyChallenge = {
       $('#submit_answer').on('submit', function(){
         Game.checkNextStep(JourneyChallenge.moveAlongJourney)
       });
-    //   i++;
-    // }
+    }
+    else {
+      $('#game_msg').text("You did it! Destination reached with " +  " points"); 
+    }
   },
 
   moveAlongJourney: function(valid){
@@ -201,7 +204,7 @@ JourneyChallenge = {
       // increment the count of sucesfsul steps and play again!
       JourneyChallenge.count++;
       JourneyChallenge.play(JourneyChallenge.myJourney);
-    }
+    };
   }
 
 
