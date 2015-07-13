@@ -81,10 +81,10 @@ Game = {
     $('#stop_button').on('click', Game.stop);
   },
 
-  checkNextStep: function(callback){
+  checkNextStep: function(callbackForInDico){
     event.preventDefault();
     var answer = $('#answer_input').val();
-    Answer.isValid(answer, Answer.isInDictionary, callback);
+    Answer.isValid(answer, Answer.isInDictionary, callbackForInDico);
   },
 
   goNextStep: function(valid, word){
@@ -177,7 +177,7 @@ JourneyChallenge = {
     $('#submit_location').hide();
     $('#submit_destination').hide();
     //  Variation around the Journey.show, same vein as for the browsingNextSteps
-    Journey.show('foo', JourneyChallenge.play);
+    Journey.show(null, JourneyChallenge.play);
   },
 
   play: function(route) {

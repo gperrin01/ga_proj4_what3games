@@ -66,7 +66,7 @@ Answer = {
     else {  return callbackOne(answer, callbackForInDico)  }
   },
 
-  isInDictionary: function(answer, callback){
+  isInDictionary: function(answer, callbackForInDico){
 
     var $view = $('#answer_validity');
 
@@ -80,8 +80,8 @@ Answer = {
 
       if (result.def.length === 0) {
         Display.updateView("Try again, this word is not in our dictionary!", $view, false);
-        // this is the callback enabling the Game to know the result is FALSE
-        if (callback) {callback(false);}
+        // this is the callbackForInDico enabling the Game to know the result is FALSE
+        if (callbackForInDico) {callbackForInDico(false);}
       }
       else {
         var answer = result.def[0].text;
@@ -92,8 +92,8 @@ Answer = {
 
         Display.updateView('Well done! ' + tradText, $view, true)
 
-        // this is the callback enabling the Game to know the result is TRUE
-        if (callback) {callback(true, answer);}
+        // this is the callbackForInDico enabling the Game to know the result is TRUE
+        if (callbackForInDico) {callbackForInDico(true, answer);}
       }
     });
   },

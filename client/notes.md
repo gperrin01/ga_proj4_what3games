@@ -34,6 +34,11 @@ IF USING RAILS DB
 for joint table based on 2 existing models
 rails generate migration CreateJoinTableStudentTeacher student teacher
 
+jQ session to intereact between Devise and my Views
+https://github.com/AlexChittock/JQuery-Session-Plugin
+
+Rails javascript_tag to create a script
+
 
 *******
 DICO

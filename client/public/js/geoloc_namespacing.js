@@ -14,6 +14,8 @@ $(document).ready(function(){
 })
 
 
+
+
 // ******************************************
 // MAP PROPERTIES AND FUNCTIONS
 // ******************************************
@@ -139,7 +141,7 @@ Journey = {
   // When submitting a destination: show journey including steps
   // ******************************************
 
-  show: function(foo, callback) {
+  show: function(noop, callback) {
     event.preventDefault();
     console.log('show journey');
     
