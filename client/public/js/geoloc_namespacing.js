@@ -254,8 +254,12 @@ Display = {
     $.get("https://api.what3words.com/position", data, function(response){
       // store the words so they can be used in the Games
       var words = response.words.join(' ');
+      // if i were Rich Murray Clark i would do:
+      // var words = _.shuffle(x.join('').split('')).join('')
       Words.theThreeWords = words;
       console.log(words);
+
+
 
       // $('#three_words_list').text('Your 3 words: ' + words);
       // show the marker infowindow filled with the 3 words at all time, including when clicking on it
