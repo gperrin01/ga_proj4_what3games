@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>What 3 Games</title>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -19,9 +19,9 @@
   <script type="text/javascript" src="others/other.js"></script>
   <script type="text/javascript" src="public/js/underscore.js"></script>
 
-  <script type="text/javascript" src="jasmine/lib/jasmine-2.3.4/jasmine.js"></script>
-  <script type="text/javascript" src="jasmine/lib/jasmine-2.3.4/jasmine-html.js"></script>
-  <script type="text/javascript" src="jasmine/lib/jasmine-2.3.4/boot.js"></script>
+<!--   // <script type="text/javascript" src="jasmine/lib/jasmine-2.3.4/jasmine.js"></script>
+  // <script type="text/javascript" src="jasmine/lib/jasmine-2.3.4/jasmine-html.js"></script>
+  // <script type="text/javascript" src="jasmine/lib/jasmine-2.3.4/boot.js"></script> -->
 
   <script src="http://maps.googleapis.com/maps/api/js?region=GB"></script>
   <script src="public/js/geoloc_namespacing.js"></script>
@@ -31,14 +31,60 @@
 </head>
 <body>
 
-  <div id="container">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">What3Games</a>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Browse <span class="sr-only">(current)</span></a></li>
+          <li><a href="#" id='play_button'>Play</a></li>
+          <li><a href="#" id='journey_challenge_button'>Journey Challenge</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Rules</a></li>
+          <li><a href="#">About</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My account <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">Separated link</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Rankings <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">Separated link</a></li>
+            </ul>
+          </li>
+        </ul> <!-- /.navbar-right -->
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
 
-    <div id="game_zone">
-      <button id='play_button' class="ib"></button>
-      <button id='journey_challenge_button' class="ib">Journey Chall</button>
-      <h4 id="game_name" class="ib">Get the Longest Word!</h4>
+
+  <div id="container-fluid">
+
+    <div id="game_zone" class="row">
+ <!--      <button id='play_button' class="ib"></button>
+      <button id='journey_challenge_button' class="ib">Journey Chall</button> -->
+
       <button id='stop_button' class="ib">Stop</button>
-      <h5 id="game_msg"></h5>
+      <h5 id="game_msg" class="ib"></h5>
       <h5 id="journey_recap" class="hidden"></h5>
     </div>
 
@@ -54,18 +100,25 @@
       </form>
     </div>
 
-    <div id="words_zone">
-      <!-- <h4 id="three_words_list" class="hidden">Your 3 words: </h4> -->
-      <form action="" id="submit_answer" class="ib">
-        <input id="answer_input" type="textbox" placeholder="Get the Longest Word!">
-        <input type="submit" value="Go" id="answer_button">
-      </form>
-      <h5 id="answer_validity" class="ib">Check your answer to see if it passes!</h5>
+
+    <div id="map_container">
+      
+      <div id="words_zone">
+        <!-- <h4 id="three_words_list" class="hidden">Your 3 words: </h4> -->
+        <form action="" id="submit_answer" class="ib">
+          <input id="answer_input" type="textbox" placeholder="Get the Longest Word!">
+          <input type="submit" value="Go" id="answer_button">
+        </form>
+        <h5 id="answer_validity" class="ib">Check your answer to see if it passes!</h5>
+      </div>
+
+      <div id="map-canvas"></div>
+
     </div>
 
-    <div id="map-canvas"></div>
 
-  </div>
+
+  </div> <!-- end container bootstrap -->
 
   
 </body>
