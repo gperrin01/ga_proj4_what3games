@@ -91,7 +91,7 @@ Game = {
     if (valid) {
 
       // Update your score and store in DB
-      var points = Score.count(word);
+      var points = Score.calc(word);
       console.log(points);
       // ADD DB STORAGE
       // HOOK With Current_user object so that the views are refreshed whenever opened??
