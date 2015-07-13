@@ -197,6 +197,10 @@ JourneyChallenge = {
       Marker.showWords(JourneyChallenge.stepMarker);
       JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
 
+      // recenter the map??
+      console.log(JourneyChallenge.stepMarker);
+      Map.map.setCenter(JourneyChallenge.stepMarker.position)
+
       // Submitting an answer works differently during JourneyChallenge: check next steps
       $('#submit_answer').off('submit');
       $('#submit_answer').on('submit', function(){
