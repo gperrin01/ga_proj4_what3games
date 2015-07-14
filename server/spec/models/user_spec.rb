@@ -22,6 +22,8 @@ RSpec.describe User, type: :model do
       user3.update_score 20
       # binding.pry
       expect(user.global_ranking). to eq 2
+      expect(user3.global_ranking). to eq 1
+      expect(user2.global_ranking). to eq 3
     end
 
 
