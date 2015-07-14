@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many  :answers
+  has_many :locations, through: :answers
+
 
   attr_accessor :score
 
@@ -16,6 +18,10 @@ class User < ActiveRecord::Base
 
   def global_ranking
     User.order('score DESC').index(self) + 1
+  end
+
+  def count_answers
+    self.answers.length
   end
 
 
