@@ -10,8 +10,7 @@
   // Simple game: move pin around or choose a location
     // cannot move pin or click a location unless you win or press stop - will show msg
     // if click destination if will ask are you sure you quit the free-walk game
-
-    // Journey challenge: starts when you create a journey
+// When click Journey: starts when you create a journey
     // if you try to move the pin or select a location 
       // it will ask: are you sure you want to quit the journey challenge 
 
@@ -30,16 +29,53 @@ var JourneyChallenge = JourneyChallenge || {};
 var Score = Score || {};
 var Listeners = Listeners || {};
 
-var $game_msg = $('#game_msg');
-var $rules_display = $('#rules_display');
 
 $(document).ready(function(){
-  $('#play_button').on('click', Game.initialize);
-  $('#submit_answer').on('submit', Answer.submit);
-
-  /// Shorctut to click during TEsting
-  $('#journey_challenge_button').on('click', JourneyChallenge.begin)
+  Listeners.justBrowsing;
 })
+
+
+
+//***********************************
+// THE LISTENERS FOR THE GAME AND THE JOURNEY
+//***********************************
+
+
+Listeners = {
+
+  justBrowsing: function(){
+    $('#play_button').on('click', Game.initialize);
+    $('#play_button').text('Play');
+
+    $('#game_msg').text("Freely Browse the Map, or Play to Enter the Challenges");
+
+    $('#where_am_i').off('click');
+    $('#where_am_i').on('click', Map.setToWhereAmI)
+    $('#where_am_i').show();
+
+    $('#submit_location').off('submit');
+    $('#submit_location').on('submit', Map.setToLocation);
+    $('#submit_location').show();
+
+    $('#submit_destination').on('submit', JourneyChallenge.begin);
+
+    $('#submit_answer').on('submit', Answer.submit);
+
+    // markers CAN be cliked on and dragged
+    if (Marker.init) {Marker.init.setOptions({draggable: true});}
+  },
+
+  gameStarted: function(){
+    $('#game_msg').text("Easy Walk Challenge! Get your answer right to be able to browse the map again!");
+
+    $('#where_am_i').hide();
+    $('#submit_location').hide();
+
+    // markers cannot be dragged 
+    if (Marker.init) {Marker.init.setOptions({draggable: false});}
+  }
+
+} // End Listeners Object
 
 
 //***********************************
@@ -59,15 +95,12 @@ Game = {
 
   browsingChallenge: function() {
     event.preventDefault();
-    // THIS REALLY LOOKS LIKE I SHOULD BE USING TEMPLATING!! (but only backbone gives the listeners)
+
+    // mute marker drag, mute whereAmI, mute find location, mute showJourney
+    Listeners.gameStarted();
 
     //Welcome message
     $('#rules_display').text("Browsing Challenge! Get your answer to be able to browse the map again!");
-    // mute marker drag, mute whereAmI, mute find location, mute showJourney
-    Listeners.gameStarted();
-    // turn on .journeyChallenge and off the potential listeners from the journey game
-    $('#submit_destination').off('submit');
-    $('#submit_destination').on('submit', JourneyChallenge.initialize);
 
     // Submitting an answer works differently during Game: check ntext steps
     $('#submit_answer').off('submit', Answer.submit);
@@ -146,25 +179,6 @@ Game = {
 //*****************************
 
 JourneyChallenge = {
-
-  initialize: function(){
-
-    event.preventDefault();
-
-    // update buttons to enable to submit a location and destination
-    $('#game_msg').text("Journey Challenge! Enter an origin and a destination!");
-    $('#destination_button').val('Enter Destination')
-    $('#submit_location').show();
-    $('#submit_location').off('submit');
-    $('#submit_destination').off('submit');
-    $('#submit_destination').on('submit', JourneyChallenge.begin)
-    
-    // Nothing can be submitted at this points
-    $('#words_zone').hide();
-
-
-    // navigate through the steps
-  },
 
   begin: function(){
     event.preventDefault();
@@ -257,54 +271,6 @@ Score = {
 }
 
 
-//***********************************
-// THE LISTENERS FOR THE GAME AND THE JOURNEY
-//***********************************
-
-
-Listeners = {
-
-  justBrowsing: function(){
-    $('#where_am_i').off('click');
-    $('#where_am_i').on('click', Map.setToWhereAmI)
-    $('#submit_location').off('submit');
-    $('#submit_location').on('submit', Map.setToLocation);
-
-    // Desination normal behaviour without triggering  journeyChallenge
-    $('#submit_destination').off('submit', JourneyChallenge.initialize);
-    $('#destination_button').off('click', JourneyChallenge.initialize);
-    $('#submit_destination').on('submit', Journey.show);
-
-    // Update the buttons to reflect we are just browsing through the map
-    $('#where_am_i').show();
-    $('#submit_location').show();
-    $('#destination_button').val('Enter Destination')
-    $('#play_button').text('Play');
-    $('#game_msg').text("Click Above to Start Playing and Count Your Score!");
-
-    // markers CAN be cliked on and dragged
-    if (Marker.init) {Marker.init.setOptions({draggable: true});}
-  },
-
-  gameStarted: function(){
-    console.log('game started');
-    // $('#where_am_i').off('click', Map.setToWhereAmI)
-    // $('#submit_location').off('submit', Map.setToLocation);
-    // hiding seems the best, let's see if it screws up the styling
-    $('#where_am_i').hide();
-    $('#submit_location').hide();
-    $('#submit_destination').off('submit', Journey.show);
-
-    // Update the buttons to reflect we are Playing
-    $('#play_button').text('Start again');
-    $('#destination_button').val('Start Journey Challenge!');
-    $('#game_msg').text("Easy Walk Challenge! Get your answer right to be able to browse the map again!");
-
-    // markers cannot be dragged 
-    if (Marker.init) {Marker.init.setOptions({draggable: false});}
-  }
-
-} // End Listeners Object
 
 
 
