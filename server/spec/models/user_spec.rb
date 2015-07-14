@@ -8,9 +8,9 @@ RSpec.describe User, type: :model do
   let(:user){User.create :email => 'test@example.com', :password => 'password', :password_confirmation => 'password'}
   let(:user2){User.create :email => 'tet@example.com', :password => 'password', :password_confirmation => 'password'}
   let(:user3){User.create :email => 'st@example.com', :password => 'password', :password_confirmation => 'password'}
-  let(:answer){Answer.create :word => 'test this thing', :points => 5}
-  let(:answer2){Answer.create :word => 'test another thing', :points => 2}
-  let(:journey){Journey.create :start => 'start', :finish => 'finish', :bonus_points => 6}
+  let(:answer){Answer.create :word => 'test', :points => 5}
+  let(:answer2){Answer.create :word => 'another', :points => 2}
+  # let(:journey){Journey.create :start => 'start', :finish => 'finish', :bonus_points => 6}
 
     it "has a score of zero on creation" do 
       expect(user.calc_score). to eq 0
