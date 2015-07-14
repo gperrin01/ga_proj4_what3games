@@ -10,9 +10,13 @@ class User < ActiveRecord::Base
 
   def update_score (points)
     self['score'] += points
-
+    self.save
+    # self.update(score: score + points)
   end
 
+  def global_ranking
+    User.order('score DESC').index(self) + 1
+  end
 
 
 end
