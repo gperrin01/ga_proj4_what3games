@@ -88,7 +88,7 @@
   <div class="row">
   <!-- Big row: LEFT location/destination, MIDDLE Answer RIGHT stop button -->
 
-    <div class="col-xs-4 text-left">  <!-- LEFT SIDE --> 
+    <div class="col-xs-3 text-left">  <!-- LEFT SIDE --> 
 
       <form id="submit_location" class="form-inline">
         <div class="form-group">
@@ -109,13 +109,12 @@
     </div> <!-- END LEFT SIDE -->
 
 
-    <div class="col-xs-4 text-center">  <!-- MIDDLE SIDE --> 
+    <div class="col-xs-5 text-center">  <!-- MIDDLE SIDE --> 
       <div class="row">
-        <h5 id="game_msg" class=""></h5>
+        <h4 id="" class="">****  <span id="game_msg"></span>  ****</h4>
       </div>
 
-      <form class="form-horizontal text-center" id="words_zone">
-
+      <form class="form-horizontal text-center" id="submit_answer">
         <div class="form-group form-group-sm has-warning has-feedback" style="margin-bottom: 0px">
           <div class="col-xs-10">
             <input type="text" class="form-control input-sm" id="answer_input" aria-describedby="answer_inputStatus" placeholder="Get the Longest Word!">
@@ -128,11 +127,10 @@
         <div class="form-group has-warning has-feedback text-center">
           <label id="answer_validity" class="control-label" for="answer_input">Test your answer!</label>
         </div>
-
       </form>
     </div>  <!-- END MIDDLE SIDE --> 
     
-    <div class="col-xs-4 text-right">  <!-- RIGHT SIDE -->
+    <div class="col-xs-3 text-right">  <!-- RIGHT SIDE -->
       <form action="" class="form">
           <button id='stop_button' class="btn-sm btn-default">Stop</button>
        </form>

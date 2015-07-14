@@ -45,34 +45,40 @@ Listeners = {
 
   justBrowsing: function(){
     $('#play_button').on('click', Game.initialize);
-    $('#play_button').text('Play');
-
     $('#game_msg').text("Freely Browse the Map, or Play to Enter the Challenges");
 
     $('#where_am_i').off('click');
     $('#where_am_i').on('click', Map.setToWhereAmI)
-    $('#where_am_i').show();
 
     $('#submit_location').off('submit');
     $('#submit_location').on('submit', Map.setToLocation);
-    $('#submit_location').show();
 
     $('#submit_destination').on('submit', JourneyChallenge.begin);
 
+    $('#submit_answer').off('submit');
     $('#submit_answer').on('submit', Answer.submit);
 
-    // markers CAN be cliked on and dragged
+    // markers CAN be cliked on and dragged & will not trigger the game
     if (Marker.init) {Marker.init.setOptions({draggable: true});}
+    google.maps.event.removeListener(Listeners.dragForNextChallenge);
   },
 
   gameStarted: function(){
-    $('#game_msg').text("Easy Walk Challenge! Get your answer right to be able to browse the map again!");
+    Listeners.enableMovingOnMap(false)
+    // finally let the stop button end the game
+    $('#stop_button').on('click', Game.stop);
+  }, 
 
-    $('#where_am_i').hide();
-    $('#submit_location').hide();
+  // prevent clicks on the map or finding a new location
+  enableMovingOnMap: function(boolean) {
+    $('#where_am_i').attr('disabled', !boolean);
+    $('#geocode_button').attr('disabled', !boolean);
+    $('#address_input').attr('disabled', !boolean);
+    // If TRUE, markers CAN be dragged
+    if (Marker.init) {Marker.init.setOptions({draggable: boolean});}
 
-    // markers cannot be dragged 
-    if (Marker.init) {Marker.init.setOptions({draggable: false});}
+    boolean ? $('#game_msg').text("Move on the map for the next challenge!") 
+        : $('#game_msg').text("Get your answer right to browse the map again");
   }
 
 } // End Listeners Object
@@ -95,23 +101,17 @@ Game = {
 
   browsingChallenge: function() {
     event.preventDefault();
-
-    // mute marker drag, mute whereAmI, mute find location, mute showJourney
     Listeners.gameStarted();
-
     //Welcome message
     $('#rules_display').text("Browsing Challenge! Get your answer to be able to browse the map again!");
 
     // Submitting an answer works differently during Game: check ntext steps
-    $('#submit_answer').off('submit', Answer.submit);
+    $('#submit_answer').off('submit');
     $('#submit_answer').on('submit', function(){
       Game.checkNextStep(Game.goNextStep);
     });
 
     // COUNT SCORE!!!!! WILL HAVE TO BE HOOKED WITH THE DB !!!
-    
-    // finally let the stop button end the game
-    $('#stop_button').on('click', Game.stop);
   },
 
   checkNextStep: function(callbackForInDico){
@@ -121,21 +121,18 @@ Game = {
   },
 
   goNextStep: function(valid, word){
+    // If TRUE, do all the below, 
+    // else the isValid function display the error message and we try again
     if (valid) {
-
       // Update your score and store in DB
       var points = Score.calc(word);
       console.log(points);
-      // ADD DB STORAGE
       // HOOK With Current_user object so that the views are refreshed whenever opened??
 
       // if good Answer, congrats +1, + allows you to drag pin and find location
-      $('#game_msg').text("Move on the map to go the next challenge!");
-      Marker.init.setOptions({draggable: true});
-      $('#submit_location').show();
-      $('#where_am_i').show();
+      Listeners.enableMovingOnMap(true);
 
-      // then once dragged or shown, mute again -> Game.browsingChallenge() ??
+      // Then once a move on the map is made, freeze everything again for the next challenge
       $('#submit_location, #where_am_i').off('submit');
       $('#submit_location').on('submit', function(){
         event.preventDefault();
@@ -147,10 +144,8 @@ Game = {
         Map.setToWhereAmI();
         Game.browsingChallenge();
       });
-      google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
-      // Listeners.dragForNextChallenge =  google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
+      Listeners.dragForNextChallenge =  google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
     }
-    // else the isValid function SHOULD display the right message and we try again
   },
 
   stop: function(){
@@ -158,18 +153,9 @@ Game = {
     Listeners.justBrowsing();
     // show marker and center map on it + remvoe any journey shown
     Display.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
-
-    // freely move the marker without triggering the game
-    google.maps.event.removeListener(Listeners.dragForNextChallenge);
-
-    // Submitting an answer: back to normal browsing outside of game
-    $('#submit_answer').off('submit', Game.browsingNextStep);
-    $('#submit_answer').on('submit', Answer.submit);
-
-    // scores are not tracked
-
+    // DO NOT TRACK SCORE
     // end stop button is muted
-    $('#stop_button').off('click', Game.stop);    
+    $('#stop_button').off('click', Game.stop);   
   }
 
 };  // End Game Object

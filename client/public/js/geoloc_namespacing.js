@@ -84,7 +84,6 @@ Map = {
 
   setToLocation: function() {
     event.preventDefault();
-
     // get the coordinates of the location typed
     var address = $('#address_input').val();
     Map.geocoder.geocode( {'address': address}, function(results, status) {
