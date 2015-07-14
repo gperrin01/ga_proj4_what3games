@@ -47,7 +47,7 @@ Map = {
       },
       zoomControlOptions: {
         style: google.maps.ZoomControlStyle.SMALL,
-        position: google.maps.ControlPosition.BOTTOM_LEFT
+        position: google.maps.ControlPosition.LEFT_BOTTOM
       },
       panControlOptions: {
         position: google.maps.ControlPosition.BOTTOM_CENTER

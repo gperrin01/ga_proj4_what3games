@@ -31,96 +31,128 @@
 </head>
 <body>
 
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">What3Games</a>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">What3Games</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Browse <span class="sr-only">(current)</span></a></li>
+        <li><a href="#" id='play_button'>Play</a></li>
+        <li><a href="#" id='journey_challenge_button'>Journey</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Rules</a></li>
+        <li><a href="#">About</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My account <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Rankings <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>
+      </ul> <!-- /.navbar-right -->
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+<div id="container-fluid">
+
+  <div id="game_zone" class="row">
+<!--      <button id='play_button' class="ib"></button>
+    <button id='journey_challenge_button' class="ib">Journey Chall</button> -->
+    <h5 id="game_msg" class="ib"></h5>
+    <h5 id="journey_recap" class="hidden"></h5>
+  </div>
+
+
+  <div class="row">
+  <!-- Big row: LEFT location/destination, MIDDLE Answer RIGHT stop button -->
+
+    <div class="col-xs-4 text-left">  <!-- LEFT SIDE --> 
+      <form id="submit_location" class="form-inline">
+        <div class="form-group">
+          <label class="" for="exampleInputEmail3">From</label>
+          <input id="address_input" type="text" class="form-control input-sm" value="London, UK">
+        </div>
+       <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="">Find</button>
+      </form>
+      <form id="submit_destination" class="form-inline">
+        <div class="form-group">
+          <label class="" for="exampleInputEmail3">To</label>
+          <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London">
+        </div>
+       <button type="submit" id="destination_button" class="btn btn-sm btn-success" value="">Play!</button>
+      </form>
+      <div class="row">
+        <button id="where_am_i" class="col-xs-1 btn-primary"><span id="where_am_i" class="glyphicon glyphicon-screenshot"></span></button>
       </div>
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Browse <span class="sr-only">(current)</span></a></li>
-          <li><a href="#" id='play_button'>Play</a></li>
-          <li><a href="#" id='journey_challenge_button'>Journey</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Rules</a></li>
-          <li><a href="#">About</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My account <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-            </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Rankings <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-            </ul>
-          </li>
-        </ul> <!-- /.navbar-right -->
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
+    </div> <!-- END LEFT SIDE -->
 
 
-  <div id="container-fluid">
-
-      <div id="game_zone" class="row">
-   <!--      <button id='play_button' class="ib"></button>
-        <button id='journey_challenge_button' class="ib">Journey Chall</button> -->
-        <button id='stop_button' class="ib">Stop</button>
-        <h5 id="game_msg" class="ib"></h5>
-        <h5 id="journey_recap" class="hidden"></h5>
-      </div>
-
-      <div id="location_info">
-        <form action="" id="submit_location" class="ib">
-          <input id="address_input" type="textbox" value="London, UK">
-          <input type="submit" value="Show location" id="geocode_button">
-        </form>
-        <button id="where_am_i" class="ib">Where am I ?</button>
-        <form action="" id="submit_destination">
-          <input id="destination_input" type="textbox" value="63 Hanbury street, London">
-          <input type="submit" id="destination_button">
-        </form>
-      </div>
-
+    <div class="col-xs-4 text-center">  <!-- MIDDLE SIDE --> 
       <form class="form-horizontal text-center" id="words_zone">
         <div class="form-group has-warning has-feedback text-center">
-          <label id="answer_validity" class="col-xs-4 col-xs-offset-4 control-label" for="answer_input">Test your answer!</label>
+          <label id="answer_validity" class="control-label" for="answer_input">Test your answer!</label>
         </div>
         <div class="form-group form-group-sm has-warning has-feedback">
-          <div class="col-xs-3 col-xs-offset-3">
+          <div class="col-xs-8">
             <input type="text" class="form-control input-sm" id="answer_input" aria-describedby="answer_inputStatus" placeholder="Get the Longest Word!">
             <span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
-            <span id="answer_inputStatus" class="sr-only">(warning)</span>
           </div>
-          <div class="col-xs-1">
+          <div class="col-xs-4">
             <button type="submit" class="btn-xs btn-primary">Go</button>
           </div>
         </div>
       </form>
+    </div>  <!-- END MIDDLE SIDE --> 
+    
+    <div class="col-xs-4 text-right">  <!-- RIGHT SIDE -->
+      <button id='stop_button' class="btn-sm btn-default">Stop</button>
+    </div>
+
+  </div> <!-- END Main Row -->
+
+
+<!--   <div id="location_info">
+    <form action="" id="submit_location" class="ib">
+      <input id="address_input" type="textbox" value="London, UK">
+      <input type="submit" value="Show location" id="geocode_button">
+    </form>
+    <form action="" id="submit_destination">
+      <input id="destination_input" type="textbox" value="63 Hanbury street, London">
+      <input type="submit" id="destination_button">
+    </form>
+  </div> -->
 
 
 
-      <div id="map-canvas"></div>
 
 
-  </div> <!-- end container bootstrap -->
+  <div id="map-canvas"></div>
+
+
+</div> <!-- end container bootstrap -->
 
   
 </body>
