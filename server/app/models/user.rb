@@ -7,22 +7,35 @@ class User < ActiveRecord::Base
   has_many  :answers
   has_many :locations, through: :answers
 
+# separately, Multiple Users are competing on Multiple Journeys
+  # has_and_belongs_to_many :journeys
 
-  attr_accessor :score
 
-  def update_score (points)
-    self['score'] += points
-    self.save
-    # self.update(score: score + points)
+
+  attr_accessor :bonus_points
+
+  def calc_score
+    # score is the sum of all answer-points, (plus all journey-bonuses
+    self.answers.pluck(:points).inject(&:+) ? 
+      self.answers.pluck(:points).inject(&:+) + self['bonus_points'] : self['bonus_points'] 
+
+    # LATER when adding journeys in the models, + self.journeys.pluck(:bonus_points).inject(&:+)
   end
 
-  def global_ranking
-    User.order('score DESC').index(self) + 1
+  def update_bonus_points (points)
+    self['bonus_points'] += points
+    self.save
   end
 
   def count_answers
     self.answers.length
   end
+
+  def global_ranking
+    User.all.sort { |a,b| b.calc_score <=> a.calc_score }.index(self) + 1
+  end
+
+
 
 
 end

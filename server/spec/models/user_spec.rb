@@ -10,23 +10,16 @@ RSpec.describe User, type: :model do
   let(:user3){User.create :email => 'st@example.com', :password => 'password', :password_confirmation => 'password'}
   let(:answer){Answer.create :word => 'test this thing', :points => 5}
   let(:answer2){Answer.create :word => 'test another thing', :points => 2}
+  let(:journey){Journey.create :start => 'start', :finish => 'finish', :bonus_points => 6}
 
-   it 'is created with score of 0' do
-      expect(user['score']).to eq 0
+    it "has a score of zero on creation" do 
+      expect(user.calc_score). to eq 0
     end
 
-    it 'can add points to their score' do
-      user.update_score 5
-      expect(user['score']). to eq 5
-    end
-
-    it 'can have a ranking' do 
-      user.update_score 10
-      user2.update_score 3
-      user3.update_score 20
-      # binding.pry
-      expect(user3.global_ranking). to eq 1
-      expect(user2.global_ranking). to eq 3
+    it "updates its score once an answer is logged" do
+      user.answers << answer
+      user.answers << answer2
+      expect(user.calc_score).to eq 7
     end
 
     it 'can count the number of answers given' do 
@@ -34,5 +27,24 @@ RSpec.describe User, type: :model do
       user.answers << answer2
       expect(user.count_answers).to eq 2
     end
+
+    it 'can add bonus_points (at the end of a journey)' do
+      user.update_bonus_points 5
+      expect(user['bonus_points']).to eq 5
+    end
+
+    it 'can have a ranking' do 
+      user.update_bonus_points 10
+      user2.update_bonus_points 3
+      user3.update_bonus_points 20
+      expect(user3.global_ranking).to eq 1
+      expect(user2.global_ranking).to eq 3
+    end
+
+    # JOURNEYS TO COME LATER
+    # it 'earns bonus points after winning a journey' do
+    #   user.journeys << journey
+    #   expect(user.score). to eq 6
+    # end
 
 end

@@ -2,5 +2,10 @@ class Location < ActiveRecord::Base
 
   has_many :answers
   has_many :users, through: :answers
-  
-end
+
+# LOCATION is often a start and often an end
+  has_many :journeys_as_start_location, class_name: "Journey", foreign_key: "start_location_id"
+  has_many :journeys_as_end_location, class_name: "Journey", foreign_key: "end_location_id"
+  has_and_belongs_to_many :journeys
+
+  end

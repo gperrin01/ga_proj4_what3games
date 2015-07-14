@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150714121513) do
+ActiveRecord::Schema.define(version: 20150714143644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,15 @@ ActiveRecord::Schema.define(version: 20150714121513) do
     t.integer  "location_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "points"
+  end
+
+  create_table "journeys", force: :cascade do |t|
+    t.integer  "start_location_id"
+    t.integer  "end_location_id"
+    t.integer  "bonus_points"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "locations", force: :cascade do |t|
@@ -44,7 +53,7 @@ ActiveRecord::Schema.define(version: 20150714121513) do
     t.inet     "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.integer  "score",                  default: 0
+    t.integer  "bonus_points",           default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
