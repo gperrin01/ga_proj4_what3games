@@ -75,6 +75,27 @@ Game = {
       Game.checkNextStep(Game.goNextStep);
     });
 
+    $('#login').on('click', login)
+
+    function login(){
+
+      $.post(baseUrl + "/users/sign_in", data, function(response){
+        console.log(response);
+        User.someObj = {
+          user: response.user,
+          token: response.jwt
+        }
+      })
+
+    }
+
+
+    function updateScore() {
+
+      $.put(baseUrl + "/users/" +  ) 
+
+    }
+
     // COUNT SCORE!!!!! WILL HAVE TO BE HOOKED WITH THE DB !!!
     
     // finally let the stop button end the game
