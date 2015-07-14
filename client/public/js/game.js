@@ -279,7 +279,7 @@ Listeners = {
     $('#where_am_i').show();
     $('#submit_location').show();
     $('#destination_button').val('Enter Destination')
-    $('#play_button').text('Start Playing!');
+    $('#play_button').text('Play');
     $('#game_msg').text("Click Above to Start Playing and Count Your Score!");
 
     // markers CAN be cliked on and dragged

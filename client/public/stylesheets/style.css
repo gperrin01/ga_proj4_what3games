@@ -11,3 +11,11 @@
 }
 
 
+#words_zone {
+  /*margin: 0 auto;*/
+  /*width: 200px;*/
+};
+
+#answer_validity {
+  text-align: center;
+}

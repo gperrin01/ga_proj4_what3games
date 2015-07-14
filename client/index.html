@@ -48,7 +48,7 @@
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">Browse <span class="sr-only">(current)</span></a></li>
           <li><a href="#" id='play_button'>Play</a></li>
-          <li><a href="#" id='journey_challenge_button'>Journey Challenge</a></li>
+          <li><a href="#" id='journey_challenge_button'>Journey</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#">Rules</a></li>
@@ -79,43 +79,45 @@
 
   <div id="container-fluid">
 
-    <div id="game_zone" class="row">
- <!--      <button id='play_button' class="ib"></button>
-      <button id='journey_challenge_button' class="ib">Journey Chall</button> -->
-
-      <button id='stop_button' class="ib">Stop</button>
-      <h5 id="game_msg" class="ib"></h5>
-      <h5 id="journey_recap" class="hidden"></h5>
-    </div>
-
-    <div id="location_info">
-      <button id="where_am_i">Where am I ?</button>
-      <form action="" id="submit_location">
-        <input id="address_input" type="textbox" value="London, UK">
-        <input type="submit" value="Show location" id="geocode_button">
-      </form>
-      <form action="" id="submit_destination">
-        <input id="destination_input" type="textbox" value="63 Hanbury street, London">
-        <input type="submit" id="destination_button">
-      </form>
-    </div>
-
-
-    <div id="map_container">
-      
-      <div id="words_zone">
-        <!-- <h4 id="three_words_list" class="hidden">Your 3 words: </h4> -->
-        <form action="" id="submit_answer" class="ib">
-          <input id="answer_input" type="textbox" placeholder="Get the Longest Word!">
-          <input type="submit" value="Go" id="answer_button">
-        </form>
-        <h5 id="answer_validity" class="ib">Check your answer to see if it passes!</h5>
+      <div id="game_zone" class="row">
+   <!--      <button id='play_button' class="ib"></button>
+        <button id='journey_challenge_button' class="ib">Journey Chall</button> -->
+        <button id='stop_button' class="ib">Stop</button>
+        <h5 id="game_msg" class="ib"></h5>
+        <h5 id="journey_recap" class="hidden"></h5>
       </div>
 
+      <div id="location_info">
+        <form action="" id="submit_location" class="ib">
+          <input id="address_input" type="textbox" value="London, UK">
+          <input type="submit" value="Show location" id="geocode_button">
+        </form>
+        <button id="where_am_i" class="ib">Where am I ?</button>
+        <form action="" id="submit_destination">
+          <input id="destination_input" type="textbox" value="63 Hanbury street, London">
+          <input type="submit" id="destination_button">
+        </form>
+      </div>
+
+      <form class="form-horizontal text-center" id="words_zone">
+        <div class="form-group has-warning has-feedback text-center">
+          <label id="answer_validity" class="col-xs-4 col-xs-offset-4 control-label" for="answer_input">Test your answer!</label>
+        </div>
+        <div class="form-group form-group-sm has-warning has-feedback">
+          <div class="col-xs-3 col-xs-offset-3">
+            <input type="text" class="form-control input-sm" id="answer_input" aria-describedby="answer_inputStatus" placeholder="Get the Longest Word!">
+            <span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
+            <span id="answer_inputStatus" class="sr-only">(warning)</span>
+          </div>
+          <div class="col-xs-1">
+            <button type="submit" class="btn-xs btn-primary">Go</button>
+          </div>
+        </div>
+      </form>
+
+
+
       <div id="map-canvas"></div>
-
-    </div>
-
 
 
   </div> <!-- end container bootstrap -->

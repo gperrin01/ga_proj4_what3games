@@ -41,7 +41,17 @@ Map = {
     Map.latlng = new google.maps.LatLng(Map.londonLat, Map.londonLong);
     var mapOptions = {
       zoom: Map.zoomInit,
-      center: Map.latlng
+      center: Map.latlng,
+      mapTypeControlOptions: {
+        position: google.maps.ControlPosition.RIGHT_BOTTOM
+      },
+      zoomControlOptions: {
+        style: google.maps.ZoomControlStyle.SMALL,
+        position: google.maps.ControlPosition.BOTTOM_LEFT
+      },
+      panControlOptions: {
+        position: google.maps.ControlPosition.BOTTOM_CENTER
+      }
     };
     Map.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
