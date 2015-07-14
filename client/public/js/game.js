@@ -44,6 +44,9 @@ $(document).ready(function(){
 Listeners = {
 
   justBrowsing: function(){
+    Listeners.enableMovingOnMap(true);
+    Listeners.enableDestination(true);
+
     $('#play_button').on('click', Game.initialize);
     $('#game_msg').text("Freely Browse the Map, or Play to Enter the Challenges");
 
@@ -57,10 +60,6 @@ Listeners = {
 
     $('#submit_answer').off('submit');
     $('#submit_answer').on('submit', Answer.submit);
-
-    // markers CAN be cliked on and dragged & will not trigger the game
-    if (Marker.init) {Marker.init.setOptions({draggable: true});}
-    google.maps.event.removeListener(Listeners.dragForNextChallenge);
   },
 
   gameStarted: function(){
@@ -74,11 +73,17 @@ Listeners = {
     $('#where_am_i').attr('disabled', !boolean);
     $('#geocode_button').attr('disabled', !boolean);
     $('#address_input').attr('disabled', !boolean);
-    // If TRUE, markers CAN be dragged
-    if (Marker.init) {Marker.init.setOptions({draggable: boolean});}
+    // If TRUE, markers CAN be dragged & will not trigger the game
+    if (Marker.init) {Marker.init.setOptions({draggable: boolean});};
+    google.maps.event.removeListener(Listeners.dragForNextChallenge);
 
     boolean ? $('#game_msg').text("Move on the map for the next challenge!") 
         : $('#game_msg').text("Get your answer right to browse the map again");
+  },
+
+  enableDestination: function(boolean) {
+    $('#destination_input').attr('disabled', !boolean);
+    $('#destination_button').attr('disabled', !boolean);
   }
 
 } // End Listeners Object
@@ -172,10 +177,10 @@ JourneyChallenge = {
     JourneyChallenge.countSteps = 1;
     JourneyChallenge.score = 0;
 
-    $('#game_msg').text("Journey Challenge! Get your answer right to move one step closer to the final destination!");
-    $('#words_zone').show();
-    $('#submit_location').hide();
-    $('#submit_destination').hide();
+    Listeners.enableMovingOnMap(false);
+    Listeners.enableDestination(false);
+    $('#game_msg').text("Journey Challenge! Quizz your way until destination!");
+
     //  Variation around the Journey.show, same vein as for the browsingNextSteps
     Journey.show(null, JourneyChallenge.play);
   },
@@ -184,21 +189,20 @@ JourneyChallenge = {
     // store the route for later use
     JourneyChallenge.myJourney = route;
     var count = JourneyChallenge.countSteps;
-    $('#journey_recap').show();
     var steps = route[0].steps;
     console.log('steps', steps);
 
     // Until you reach the final step (end of steps array):
     if (count < steps.length){
 
-      $('#journey_recap').text('Checkpoint ' + count + ' of ' + (steps.length-1) + ' || Points accumulated: ' + JourneyChallenge.score );
+      $('#game_msg').html('Checkpoint ' + count + '/' + (steps.length-1)
+        + ' <span class="glyphicon glyphicon-play"></span>  Score: '+ JourneyChallenge.score );
+
       // highlight the marker for that step: 3words and special icon
       JourneyChallenge.stepMarker = Marker.stepMarkerArray[count];
       Marker.showWords(JourneyChallenge.stepMarker);
       JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
-
       // recenter the map??
-      console.log(JourneyChallenge.stepMarker);
       Map.map.setCenter(JourneyChallenge.stepMarker.position)
 
       // Submitting an answer works differently during JourneyChallenge: check next steps
@@ -209,9 +213,9 @@ JourneyChallenge = {
     }
     else {
       // show final score and the bonus calc
-      var bonus = Score.calcBonus(steps.length);
-      $('#game_msg').text("You did it! " + steps.length + " checkpoints passed for a total of" 
-        + JourneyChallenge.score +  " points. You also earn " + bonus + " bonus points"); 
+      var bonus = Score.calcBonus(steps.length) - 1;
+      $('#game_msg').html("Nice job!  <span class='glyphicon glyphicon-play'></span>  You earn " 
+        + JourneyChallenge.score +  " points and " + bonus + " bonus points"); 
       JourneyChallenge.score += bonus;
     }
   },
