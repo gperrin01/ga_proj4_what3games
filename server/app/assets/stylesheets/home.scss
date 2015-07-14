@@ -1,0 +1,37 @@
+// Place all the styles related to the home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#map-canvas{
+  width:100%; 
+  height:450px;
+}
+
+.ib {
+  display: inline-block;
+}
+.hidden{
+  display: none;
+}
+
+#game_name {
+  margin-bottom: 0px;
+}
+
+#game_msg {
+  margin: 10px 0 10px 0;
+}
+#journey_recap {
+  margin: 10px 0 10px 0;
+}
+
+#words_zone {
+  text-align: center;
+}
+#submit_answer, #answer_validity {
+  margin: 10px 0 0 0;
+}
+
+/*#three_words_list {
+  margin: 10px 0px 10px 0px;
+}*/
