@@ -43,15 +43,16 @@ class User < ActiveRecord::Base
   attr_accessor :bonus_points
 
   def calc_score
+    self.points
+    # BELOW IS OUT since I will not keep all the answers
     # score is the sum of all answer-points, (plus all journey-bonuses
-    self.answers.pluck(:points).inject(&:+) ? 
-      self.answers.pluck(:points).inject(&:+) + self['bonus_points'] : self['bonus_points'] 
-
+    # self.answers.pluck(:points).inject(&:+) ? 
+    #   self.answers.pluck(:points).inject(&:+) + self['bonus_points'] : self['bonus_points'] 
     # LATER when adding journeys in the models, + self.journeys.pluck(:bonus_points).inject(&:+)
   end
 
-  def update_bonus_points (points)
-    self['bonus_points'] += points
+  def update_points (points)
+    self.points += points
     self.save
   end
 
@@ -63,11 +64,13 @@ class User < ActiveRecord::Base
     User.all.sort { |a,b| b.calc_score <=> a.calc_score }.index(self) + 1
   end
 
-  def add_but_only_keep_best (answer, location)  
-    location.answers << answer
-    self.answers << answer
-    ids_to_delete = self.answers.where(location_id: location['id']).order('points desc').pluck(:id).drop(1)
-    Answer.delete(ids_to_delete)
-  end
+  # def add_but_only_keep_best (answer, location)  
+  #   location.answers << answer
+  #   self.answers << answer
+  #   ids_to_delete = self.answers.where(location_id: location['id']).order('points desc').pluck(:id).drop(1)
+  #   Answer.delete(ids_to_delete)
+  # end
+
+
 
 end

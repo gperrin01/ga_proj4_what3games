@@ -1,9 +1,7 @@
 var User = User || {};
 
-
-
 // ******************************************
-// USER
+// Prepare for Signin, Login, Logout
 // ******************************************
 
 var base_url = "http://localhost:3000"
@@ -58,6 +56,36 @@ $(document).ready(function(){
       User.currentUser = {};
       Cookies.remove('current_user_authentication_token');
     });
-  })
-  
+  });
 })
+
+// ******************************************
+// User
+// ******************************************
+
+
+User = {
+
+  updateDbWithAnswer: function(answer, points, threeWords) {
+    // In DB, update the points in any case, then check if answer should be persisted in DB
+    var data = {
+      id: User.currentUser.id,
+      word: answer,
+      points: points,
+      threeWords: threeWords,
+      authentication_token: User.currentUser.authentication_token
+    };
+    $.post(base_url + "/answers", data, function(response){
+      console.log(response);
+    })
+
+  }
+}
+
+
+
+
+
+
+
+

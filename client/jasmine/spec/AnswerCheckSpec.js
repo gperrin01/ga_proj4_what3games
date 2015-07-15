@@ -13,7 +13,7 @@
 describe("Answer returned by the user", function() {
 
   // run tests against these dummy three words
-  Words.theThreeWords = "belt parts remain";
+  User.theThreeWords = "belt parts remain";
 
   it("exists in the dictionary", function() {
     expect(Answer.isValid('test', Answer.isInDictionary)).toBe(true)

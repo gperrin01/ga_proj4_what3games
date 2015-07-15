@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     delete "users/:authentication_token", to: "sessions#destroy"
   end
 
+  post 'answers', to: 'answers#create'
 
   root 'home#index'
 

@@ -273,7 +273,7 @@ Display = {
                 + "</form>"
                 + "<p>" + words + "</p>"
 
-      Words.theThreeWords = words;
+      User.theThreeWords = words;
       console.log(words);
 
       // show the marker infowindow filled with the 3 words at all time, including when clicking on it

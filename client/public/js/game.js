@@ -34,12 +34,9 @@ $(document).ready(function(){
   Listeners.justBrowsing;
 })
 
-
-
 //***********************************
 // THE LISTENERS FOR THE GAME AND THE JOURNEY
 //***********************************
-
 
 Listeners = {
 
@@ -115,8 +112,6 @@ Game = {
     $('#submit_answer').on('submit', function(){
       Game.checkNextStep(Game.goNextStep);
     });
-
-    // COUNT SCORE!!!!! WILL HAVE TO BE HOOKED WITH THE DB !!!
   },
 
   checkNextStep: function(callbackForInDico){
@@ -125,16 +120,16 @@ Game = {
     Answer.isValid(answer, Answer.isInDictionary, callbackForInDico);
   },
 
-  goNextStep: function(valid, word){
+  goNextStep: function(valid, answer){
     // If TRUE, do all the below, 
     // else the isValid function display the error message and we try again
     if (valid) {
-      // Update your score and store in DB
-      var points = Score.calc(word);
-      console.log(points);
-      // HOOK With Current_user object so that the views are refreshed whenever opened??
 
-      // if good Answer, congrats +1, + allows you to drag pin and find location
+      // Update the Database with your answer and score at that location
+      var points = Score.calc(answer);
+      User.updateDbWithAnswer(answer, points, User.theThreeWords)
+
+      // If good Answer, congrats +1, + allows you to drag pin and find location
       Listeners.enableMovingOnMap(true);
 
       // Then once a move on the map is made, freeze everything again for the next challenge

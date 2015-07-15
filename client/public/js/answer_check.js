@@ -108,11 +108,11 @@ Answer = {
     return (answer.length > 2)
   },
 
-  // true if answer NOT inside of Words.theThreeWords
-  // Words.theThreeWords.indexOf(answer) is not good as it would block substrings of the words
+  // true if answer NOT inside of User.theThreeWords
+  // User.theThreeWords.indexOf(answer) is not good as it would block substrings of the words
   // we only block Full Matches
   isNotOneOfThree: function(answer) {
-    return Words.theThreeWords.split(' ').indexOf(answer) === -1
+    return User.theThreeWords.split(' ').indexOf(answer) === -1
   },
 
   // if answer's last letter is an 's' remove it and check result isn't one of the 3 words
@@ -129,9 +129,9 @@ Answer = {
   hasValidLetters: function(answer) {
     for (var i = 0; i < answer.length; i++) {
       var str = answer.charAt(i);
-      if (Words.theThreeWords.indexOf(str) === -1) {
-        return 'Try again, "' + str + '" is not present in ' + Words.theThreeWords;
-        // $('#answer_validity').text('Try again, "' + str + '" is not present in ' + Words.theThreeWords)
+      if (User.theThreeWords.indexOf(str) === -1) {
+        return 'Try again, "' + str + '" is not present in ' + User.theThreeWords;
+        // $('#answer_validity').text('Try again, "' + str + '" is not present in ' + User.theThreeWords)
         // return false;
       }
     }
@@ -144,10 +144,10 @@ Answer = {
     for (var i = 0; i < answer.length; i++) {
       var str = answer.charAt(i);
       var countInAnswer = answer.match(new RegExp(str, "g") || [] ).length
-      var countInThreeWords = Words.theThreeWords.match(new RegExp(str, "g") || [] ).length
+      var countInThreeWords = User.theThreeWords.match(new RegExp(str, "g") || [] ).length
       if (countInAnswer > countInThreeWords) {
         var text = (countInThreeWords > 1) ? ' times' : ' time';
-        return 'Try again, "' +str+ '" is only present ' + countInThreeWords + text + ' in ' + Words.theThreeWords;
+        return 'Try again, "' +str+ '" is only present ' + countInThreeWords + text + ' in ' + User.theThreeWords;
       }
       // sweet way found: returns an array with all occurences of the regexp
       // need create a new regexps as I cannot hardoce, as in eg for 'o': str.match(/o/g).length
