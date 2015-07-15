@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
-  devise_for :users
+  # for devise registrations: use the controller "registrations"
+  devise_for :users, controllers: { registrations: "registrations" }
+
+  
   root 'home#index'
 
 end

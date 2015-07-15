@@ -120,6 +120,7 @@ GEM
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     rack (1.6.4)
+    rack-cors (0.4.0)
     rack-pjax (0.8.0)
       nokogiri (~> 1.5)
       rack (~> 1.1)
@@ -250,6 +251,7 @@ DEPENDENCIES
   pg
   pry-byebug
   pry-rails
+  rack-cors
   rails (= 4.2.1)
   rails_12factor
   rails_admin
