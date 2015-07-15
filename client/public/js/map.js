@@ -43,6 +43,7 @@ Map = {
     var mapOptions = {
       zoom: Map.zoomInit,
       center: Map.latlng,
+      scrollwheel: false,
       mapTypeControlOptions: {
         position: google.maps.ControlPosition.RIGHT_BOTTOM
       },
