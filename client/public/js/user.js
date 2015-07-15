@@ -1,4 +1,5 @@
 var User = User || {};
+var View = View || {};
 
 // ******************************************
 // Prepare for Signin, Login, Logout
@@ -42,13 +43,15 @@ $(document).ready(function(){
   // On Logout, tell Devise, delete Cookie, delete current_user
   $('#logout').on('click', function(){
     event.preventDefault();
-    // var data = Cookies.get()
+
     $.ajax({
       type: 'delete',
       url: base_url + "/users/" + User.currentUser.authentication_token
     }).done(function(response){
+      alert('See you soon, ' + User.currentUser.email);
       User.currentUser = {};
       Cookies.remove('current_user_authentication_token');
+      document.location.reload();
     });
   });
 
@@ -62,15 +65,16 @@ $(document).ready(function(){
 User = {
 
   isLoggedIn: function(){
-    // Get the current_user if any Cookie is present (meaning you have never logged out or expired)
-    // set the Listeners accordingly and render templates
     var token = Cookies.get('current_user_authentication_token');
     if (!!token) {
-
+      // Get the current_user if any Cookie is present (meaning you have never logged out or expired)
       $.get(base_url + "/users/" + token, function(response){
         User.currentUser = response;
       });
-
+      // RENDER NAV FOR LOGIN
+      View.render( $("#navbar_no_login_template"), null, $('#main-navbar'));
+    } else {
+      // REDNER NAV FOR WELCOME USER
     }
   },
 
@@ -103,10 +107,17 @@ User = {
 
 }  // End User Object
 
+// ******************************************
+// Views
+// ******************************************
 
-
-
-
-
+View = {
+  render: function(templateElement, object, parentElement) {
+    var template = templateElement.html();
+    Mustache.parse(template);
+    var rendered = Mustache.render(template, object);
+    parentElement.append(rendered);
+  }
+}
 
 

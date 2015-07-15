@@ -40,10 +40,6 @@ $(document).ready(function(){
 
 Listeners = {
 
-  isLoggedIn: function(){
-
-  },
-
   justBrowsing: function(){
     Listeners.enableMovingOnMap(true);
     Listeners.enableDestination(true);
@@ -85,7 +81,8 @@ Listeners = {
   enableDestination: function(boolean) {
     $('#destination_input').attr('disabled', !boolean);
     $('#destination_button').attr('disabled', !boolean);
-  }
+  },
+
 
 } // End Listeners Object
 
