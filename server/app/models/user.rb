@@ -64,6 +64,7 @@ class User < ActiveRecord::Base
     User.all.sort { |a,b| b.calc_score <=> a.calc_score }.index(self) + 1
   end
 
+
   # def add_but_only_keep_best (answer, location)  
   #   location.answers << answer
   #   self.answers << answer

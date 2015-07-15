@@ -12,7 +12,7 @@ class Answer < ActiveRecord::Base
       location = Location.create three_words: three_words
       location.answers << self
       user.answers << self
-      return {new_best: true, best_answer: self.points, your_answer: self.points}
+      return {current_user: user, best_answer: self.points, your_answer: self.points}
     else
 
       # Else if curr_user's new amswer is better than the existing one, or if it's the 1st answer here
@@ -24,9 +24,9 @@ class Answer < ActiveRecord::Base
         self.save
         location.answers << self
         user.answers << self 
-        return {new_best: true, best_answer: self.points, your_answer: self.points}
+        return {current_user: user, best_answer: self.points, your_answer: self.points}
       else
-        return {new_best: false, best_answer: existing_answer.points, your_answer: self.points} 
+        return {current_user: user, best_answer: existing_answer.points, your_answer: self.points} 
       end
     end      
   end

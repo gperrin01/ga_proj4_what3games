@@ -8,14 +8,6 @@ var base_url = "http://localhost:3000"
 
 $(document).ready(function(){
 
-  // Get the current_user if any Cookie is present (meaning you have never logged out or expired)
-  var token = Cookies.get('current_user_authentication_token');
-  if (!!token) {
-    $.get(base_url + "/users/" + token, function(response){
-      User.currentUser = response;
-    });
-  }
-
   // On signup send info for Devise (in Rails) to create the user
   $('#signup').on('submit', function(event){
     event.preventDefault();
@@ -66,6 +58,19 @@ $(document).ready(function(){
 
 User = {
 
+  isLoggedIn: function(){
+    // Get the current_user if any Cookie is present (meaning you have never logged out or expired)
+    // set the Listeners accordingly and render templates
+    var token = Cookies.get('current_user_authentication_token');
+    if (!!token) {
+
+      $.get(base_url + "/users/" + token, function(response){
+        User.currentUser = response;
+      });
+
+    }
+  },
+
   updateDbWithAnswer: function(answer, points, threeWords) {
     // In DB, update the points in any case, then check if answer should be persisted in DB
     var data = {
@@ -76,11 +81,24 @@ User = {
       authentication_token: User.currentUser.authentication_token
     };
     $.post(base_url + "/answers", data, function(response){
-      console.log(response);
+      User.current_user = response.current_user;
+      var best_here = response.best_answer;
+      var you_here = response.your_answer;
     })
+  },
 
+  addBonusPoints: function(points) {
+    $.ajax({
+      type: 'PUT',
+      url: base_url + "/users/" + User.currentUser.authentication_token,
+      data: {points: points},
+      dataType: 'json'
+    }).done(function(response){
+      User.current_user = response;
+    })
   }
-}
+
+}  // End User Object
 
 
 

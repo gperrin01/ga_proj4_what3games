@@ -1,3 +1,5 @@
+What is stopping anyone from doing curl? put requests from terminal to users/their_own_auth_token and add lots of points??
+
 *******
 Struggles and Learning points
 *******

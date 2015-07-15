@@ -32,6 +32,7 @@ var Listeners = Listeners || {};
 
 $(document).ready(function(){
   Listeners.justBrowsing;
+  User.isLoggedIn
 })
 
 //***********************************
@@ -39,6 +40,10 @@ $(document).ready(function(){
 //***********************************
 
 Listeners = {
+
+  isLoggedIn: function(){
+
+  },
 
   justBrowsing: function(){
     Listeners.enableMovingOnMap(true);
@@ -212,6 +217,9 @@ JourneyChallenge = {
       $('#game_msg').html("Nice job!  <span class='glyphicon glyphicon-play'></span>  You earn " 
         + JourneyChallenge.score +  " points and " + bonus + " bonus points"); 
       JourneyChallenge.score += bonus;
+
+      // update the DB with these bonus points then update the user with them
+      User.addBonusPoints(bonus)
     }
   },
 
@@ -240,15 +248,16 @@ JourneyChallenge = {
 Score = {
 
   calc: function(word) {
-    var length = word.length;
-    if (length >= 10) return 2 * (length + 2); // above 10 letters you get maxi bonus
-    else if (length === 9) return 16; // bonus is higher when large word
-    else if (length === 8) return 11;
-    else if (length === 7) return 7;
-    else if (length === 6) return 4;
-    else if (length === 5) return 2;
-    else if (length === 4) return 1;// 4-5 letters are only decent, no bonus
-    else  return 0; // 3 is easy, no reward but allowing you to keep playing
+    return word.length;
+    // var length = word.length;
+    // if (length >= 10) return 2 * (length + 2); // above 10 letters you get maxi bonus
+    // else if (length === 9) return 16; // bonus is higher when large word
+    // else if (length === 8) return 11;
+    // else if (length === 7) return 7;
+    // else if (length === 6) return 4;
+    // else if (length === 5) return 2;
+    // else if (length === 4) return 1;// 4-5 letters are only decent, no bonus
+    // else  return 0; // 3 is easy, no reward but allowing you to keep playing
   },
   calcBonus: function(num_steps){
     return num_steps;

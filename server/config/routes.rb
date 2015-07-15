@@ -14,6 +14,8 @@ Rails.application.routes.draw do
 
   post 'answers', to: 'answers#create'
 
+  put 'users/:authentication_token', to: 'users#add_points'
+
   root 'home#index'
 
 end
