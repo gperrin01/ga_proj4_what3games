@@ -1,16 +1,44 @@
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
 
+###########
+# Associations
+###########
   has_many  :answers
   has_many :locations, through: :answers
 
 # separately, Multiple Users are competing on Multiple Journeys
   # has_and_belongs_to_many :journeys
 
+###########
+# for User Auth
+###########
 
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
+  # callback on user model: 
+  before_save :ensure_authentication_token
+
+  def ensure_authentication_token
+    if authentication_token.blank?
+      self.authentication_token = generate_authentication_token
+    end
+  end
+
+  def generate_authentication_token
+    # repeat loop if you create a token already in-use
+    loop do
+      token = Devise.friendly_token
+      break token unless User.where(authentication_token: token).first
+    end
+  end
+
+
+###########
+# Methods
+###########
 
   attr_accessor :bonus_points
 
