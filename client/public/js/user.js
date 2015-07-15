@@ -37,6 +37,10 @@ $(document).ready(function(){
     $.post(base_url + "/users/sign_in", data, function(response){
       Cookies.set('current_user_authentication_token', response.authentication_token, { expires: 7 });
       User.currentUser = response;
+
+      // RENDER NAV FOR LOGIN
+      User.currentUser.splitEmail = User.currentUser.email.split('@')[0];
+      View.render( $("#navbar_isloggedin_template"), User.currentUser, $('#main-navbar') );
     })
   });
 
@@ -115,6 +119,7 @@ User = {
 
 View = {
   render: function(templateElement, object, parentElement) {
+    parentElement.empty();
     var template = templateElement.html();
     Mustache.parse(template);
     var rendered = Mustache.render(template, object);
