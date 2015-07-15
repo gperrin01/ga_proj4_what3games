@@ -32,8 +32,7 @@ var Listeners = Listeners || {};
 
 $(document).ready(function(){
   Listeners.justBrowsing;
-  User.isLoggedIn
-})
+});
 
 //***********************************
 // THE LISTENERS FOR THE GAME AND THE JOURNEY
@@ -133,6 +132,7 @@ Game = {
       // UPDATE DATABASE with your answer and score at that location
       var points = Score.calc(answer);
       User.updateDbWithAnswer(answer, points, User.theThreeWords)
+      User.current_user.points += points
 
       // If good Answer, congrats +1, + allows you to drag pin and find location
       Listeners.enableMovingOnMap(true);
@@ -219,19 +219,22 @@ JourneyChallenge = {
       JourneyChallenge.score += bonus;
 
       // update the DB with these bonus points then update the user with them
-      User.addBonusPoints(bonus)
+      User.addBonusPoints(bonus);
+      User.current_user += bonus;
     }
   },
 
-  moveAlongJourney: function(valid, word){
+  moveAlongJourney: function(valid, answer){
     if (valid) {
-
-      // Update your score in DB - Store in current_user? SAME AS FOR BROWSING
-      // Add to cumul for current journey
-      JourneyChallenge.score += Score.calc(word);
+      // UPDATE DATABASE with your answer and score at that location
+      var points = Score.calc(answer);
+      User.updateDbWithAnswer(answer, points, User.theThreeWords)
+      User.current_user.points += points;
+      JourneyChallenge.score += points;
 
       // show the marker as "done"
       JourneyChallenge.stepMarker.setIcon(Marker.succes_icon);
+
       // increment the count of sucesfsul steps and play again!
       JourneyChallenge.countSteps++;
       JourneyChallenge.play(JourneyChallenge.myJourney);

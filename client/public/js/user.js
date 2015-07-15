@@ -8,6 +8,8 @@ var base_url = "http://localhost:3000"
 
 $(document).ready(function(){
 
+  User.isLoggedIn();
+
   // On signup send info for Devise (in Rails) to create the user
   $('#signup').on('submit', function(event){
     event.preventDefault();
@@ -49,7 +51,8 @@ $(document).ready(function(){
       Cookies.remove('current_user_authentication_token');
     });
   });
-})
+
+}); // end doc ready
 
 // ******************************************
 // User
@@ -81,7 +84,7 @@ User = {
       authentication_token: User.currentUser.authentication_token
     };
     $.post(base_url + "/answers", data, function(response){
-      User.current_user = response.current_user;
+      console.log('updated points');
       var best_here = response.best_answer;
       var you_here = response.your_answer;
     })
@@ -94,7 +97,7 @@ User = {
       data: {points: points},
       dataType: 'json'
     }).done(function(response){
-      User.current_user = response;
+      console.log('bonus points');
     })
   }
 
