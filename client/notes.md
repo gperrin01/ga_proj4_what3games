@@ -1,4 +1,12 @@
-CAllback functions as biggest learning point!!
+*******
+Struggles and Learning points
+*******
+
+CAllback functions to "wait" until the API replied
+
+Integrating Devise with a non-Rails client: need to better understnad devise. Create specific routes which will be triggered from the client browser. Create my own Registrations and SessionsController, inheriting from the Devise Controllers but building on them
+Learning about JS-cookies to manage auth_token and tell devise it is safe  (explain better!!)
+Tweaking Rspec so that it can simulate a Devise login!
 
 *******
 QUESTIONS
