@@ -7,6 +7,7 @@ var Marker = Marker || {};
 var Display = Display || {};
 var Words = Words || {};
 
+
 $(document).ready(function(){
   Map.initialize();
 
@@ -265,17 +266,22 @@ Display = {
       var words = response.words.join(' ');
       // if i were Rich Murray Clark i would do:
       // var words = _.shuffle(x.join('').split('')).join('')
+
+      var html = "<form><input id='' type='text' />"
+                + "<input type='submit' id='' placeholder='Get the longest word' />"
+                + "</form>"
+                + "<p>" + words + "</p>"
+
       Words.theThreeWords = words;
       console.log(words);
 
-
-
-      // $('#three_words_list').text('Your 3 words: ' + words);
       // show the marker infowindow filled with the 3 words at all time, including when clicking on it
-      Marker.markerInfo.setContent(words);
+      // Marker.markerInfo.setContent(words);
+      Marker.markerInfo.setContent(html);
       Marker.markerInfo.open(Map.map, marker);
       // ensure click enables to show the words
-      Marker.attachInfo(marker, words);
+      Marker.attachInfo(marker, html);
+      // Marker.attachInfo(marker, words);
     });
   },
 
