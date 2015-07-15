@@ -35,6 +35,12 @@ RSpec.describe Answer, type: :model do
     expect(user.answers.where(location_id: location.id).first.word).to eq 'test'
   end
 
+  it "will be added anyway if it is the first answer for this user" do 
+    answer3 = Answer.new :word => 'winner', :points => 12
+    answer3.only_add_if_best_at_this_location(location.three_words, user)
+    expect(user.answers.where(location_id: location.id).first.word).to eq 'winner'
+  end
+
   it "will replace the current best answer at this location if it has a higher score" do 
     location.answers << answer
     user.answers << answer
