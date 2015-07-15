@@ -41,9 +41,9 @@ $(document).ready(function(){
   });
 
   // On Logout, tell Devise, delete Cookie, delete current_user
-  $('#logout').on('click', function(){
+  $('#main-navbar').on('click', '#logout', function(){
     event.preventDefault();
-
+    console.log('click');
     $.ajax({
       type: 'delete',
       url: base_url + "/users/" + User.currentUser.authentication_token
