@@ -8,6 +8,10 @@ Integrating Devise with a non-Rails client: need to better understnad devise. Cr
 Learning about JS-cookies to manage auth_token and tell devise it is safe  (explain better!!)
 Tweaking Rspec so that it can simulate a Devise login!
 
+the power of TDD when building complex methods
+  - not sure about what will happen in the code
+  - tbh not sure about functionality you want
+
 *******
 QUESTIONS
 *******
