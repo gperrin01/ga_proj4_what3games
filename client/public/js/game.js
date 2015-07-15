@@ -125,7 +125,7 @@ Game = {
     // else the isValid function display the error message and we try again
     if (valid) {
 
-      // Update the Database with your answer and score at that location
+      // UPDATE DATABASE with your answer and score at that location
       var points = Score.calc(answer);
       User.updateDbWithAnswer(answer, points, User.theThreeWords)
 

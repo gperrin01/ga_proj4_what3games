@@ -5,14 +5,15 @@ class AnswersController < ApplicationController
 
   def create
     # whatever happens we update the user score
-    current_user.update_points params[:points].to_i
+    points = params[:points].to_i
+    current_user.update_points points
 
     # prepare the answer for all the checks: to be saved, it needs to be the user's best answer at this location
-    answer = Answer.new points: params[:points].to_i, word: params[:word]
+    answer = Answer.new points: points, word: params[:word]
     # Location.find_or_create_by(three_words: params[:threeWords])
-    answer.only_add_if_best_at_this_location(params[:threeWords], current_user)
+    new_best = answer.only_add_if_best_at_this_location(params[:threeWords], current_user)
     
-    render json: answer
+    render json: new_best
   end
 
   private
