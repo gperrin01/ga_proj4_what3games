@@ -5,6 +5,7 @@ class Answer < ActiveRecord::Base
 
 
   def only_add_if_best_at_this_location three_words, user 
+
     # If 3words describe a new location, then it is the best answer at this location & we create the location
     if Location.where(three_words: three_words).length === 0
       self.save 
@@ -12,10 +13,13 @@ class Answer < ActiveRecord::Base
       location.answers << self
       user.answers << self
     else
-      # get curr_user's best answer at this location (ie the only one)
-      # if new amswer is better then save it and add it to location and user
+
+      # Else if curr_user's new amswer is better than the existing one, or if it's the 1st answer here
+      # save the new one and add it to location and user, & delete the existing one
       location = Location.where(three_words: three_words).first
-      if self.points > user.answers.where(location_id: location.id).first.points 
+      existing_answer = user.answers.where(location_id: location.id).first 
+      if !existing_answer || self.points > existing_answer.points 
+        existing_answer.delete if existing_answer
         self.save
         location.answers << self
         user.answers << self 
