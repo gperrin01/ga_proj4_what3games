@@ -6,6 +6,12 @@ Rails.application.routes.draw do
     sessions: "sessions"
   }
 
+  # when get requeset sent to users/tokenxyz, trigger controller sessions, method show
+  devise_scope :user do
+    get "users/:authentication_token", to: "sessions#show"
+    delete "users/:authentication_token", to: "sessions#destroy"
+  end
+
 
   root 'home#index'
 
