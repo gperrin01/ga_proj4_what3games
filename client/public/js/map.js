@@ -270,7 +270,7 @@ Display = {
                 + "<form id='submit_answer'><input id='answer_input' type='text' placeholder='Make the longest word'/>"
                 + "<input type='submit' value='Go' />"
                 + "</form>"
-                + "<p id='answer_validity'></p>";
+                + "<p id='answer_validity' class='text-center'></p>";
 
       // OR RENDER IT ???
 

@@ -66,10 +66,6 @@ Listeners = {
     $('#main_row_header').on('submit', '#submit_location', Map.setToLocation);
 
     $('#main_row_header').on('submit', '#submit_destination', JourneyChallenge.begin);
-
-    $('#body').off('submit', '#submit_answer');
-    $('#body').on('submit', '#submit_answer', Answer.submit);
-
   },
 
   gameStarted: function(){
@@ -125,9 +121,13 @@ Game = {
     $('#rules_display').text("Browsing Challenge! Get your answer to be able to browse the map again!");
 
     // Submitting an answer works differently during Game: check ntext steps
-    $('#body').off('submit', '#submit_answer');
-    $('#body').on('submit', '#submit_answer', function(){
-      Game.checkNextStep(Game.goNextStep);
+    google.maps.event.clearInstanceListeners(Marker.markerInfo);
+
+    google.maps.event.addListener(Marker.markerInfo, 'domready', function(){
+      $('#submit_answer').on('submit', function(){
+        event.preventDefault();
+        Game.checkNextStep(Game.goNextStep);
+      })
     });
   },
 
@@ -173,8 +173,6 @@ Game = {
     // show marker and center map on it + remvoe any journey shown
     Display.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
     // DO NOT TRACK SCORE
-    // end stop button is muted
-    $('#main_row_header').off('click', '#stop_button', Game.stop);   
   }
 
 };  // End Game Object
@@ -220,9 +218,12 @@ JourneyChallenge = {
       Map.map.setCenter(JourneyChallenge.stepMarker.position)
 
       // Submitting an answer works differently during JourneyChallenge: check next steps
-      $('#body').off('submit', '#submit_answer');
-      $('#body').on('submit', '#submit_answer', function(){
-        Game.checkNextStep(JourneyChallenge.moveAlongJourney)
+      // google.maps.event.clearInstanceListeners(Marker.markerInfo);
+      google.maps.event.addListener(JourneyChallenge.stepMarker, 'domready', function(){
+        $('#submit_answer').on('submit', function(){
+          event.preventDefault();
+          Game.checkNextStep(JourneyChallenge.moveAlongJourney);
+        })
       });
     }
     else {
