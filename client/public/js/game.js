@@ -205,6 +205,10 @@ JourneyChallenge = {
 
       // highlight the marker for that step: 3words and special icon
       JourneyChallenge.stepMarker = Marker.stepMarkerArray[count];
+      JourneyChallenge.stepMarker.setAnimation(google.maps.Animation.DROP);
+      window.setTimeout(function(){
+        JourneyChallenge.stepMarker.setAnimation(google.maps.Animation.BOUNCE);
+      }, 900);
       Marker.showWords(JourneyChallenge.stepMarker);
       JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
       // recenter the map??
@@ -247,6 +251,7 @@ JourneyChallenge = {
 
       // show the marker as "done"
       JourneyChallenge.stepMarker.setIcon(Marker.succes_icon);
+      JourneyChallenge.stepMarker.setAnimation(null);
 
       // increment the count of sucesfsul steps and play again!
       JourneyChallenge.countSteps++;
