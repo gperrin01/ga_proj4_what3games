@@ -268,10 +268,11 @@ Display = {
       // if i were Rich Murray Clark i would do:
       // var words = _.shuffle(x.join('').split('')).join('')
 
-      var html = "<form><input id='' type='text' />"
-                + "<input type='submit' id='' placeholder='Get the longest word' />"
+      var html = "<p style='text-align: center; margin: 2px 0 3px 0'>" + words + "</p>"
+                + "<form><input id='' type='text' placeholder='Make the longest word'/>"
+                + "<input type='submit' value='Go' />"
                 + "</form>"
-                + "<p>" + words + "</p>"
+                
 
       User.theThreeWords = words;
       console.log(words);
