@@ -44,25 +44,27 @@ Listeners = {
     Listeners.enableMovingOnMap(true);
     Listeners.enableDestination(true);
 
-    $('#play_button').on('click', Game.initialize);
+    // EVENT DELEGATION !!
+    $('#main_row_header').on('click', '#play_button', Game.initialize);
     $('#game_msg').text("Freely Browse the Map, or Play to Enter the Challenges");
 
-    $('#where_am_i').off('click');
-    $('#where_am_i').on('click', Map.setToWhereAmI)
+    $('#main_row_header').off('click', '#where_am_i');
+    // $('#where_am_i').off('click');
+    $('#main_row_header').on('click', '#where_am_i', Map.setToWhereAmI)
 
-    $('#submit_location').off('submit');
-    $('#submit_location').on('submit', Map.setToLocation);
+    $('#main_row_header').off('submit', '#submit_location');
+    $('#main_row_header').on('submit', '#submit_location', Map.setToLocation);
 
-    $('#submit_destination').on('submit', JourneyChallenge.begin);
+    $('#main_row_header').on('submit', '#submit_destination', JourneyChallenge.begin);
 
-    $('#submit_answer').off('submit');
-    $('#submit_answer').on('submit', Answer.submit);
+    $('#main_row_header').off('submit', '#submit_answer');
+    $('#main_row_header').on('submit', '#submit_answer', Answer.submit);
   },
 
   gameStarted: function(){
     Listeners.enableMovingOnMap(false)
     // finally let the stop button end the game
-    $('#stop_button').on('click', Game.stop);
+    $('#main_row_header').on('click', '#stop_button', Game.stop);
   }, 
 
   // prevent clicks on the map or finding a new location
@@ -109,8 +111,8 @@ Game = {
     $('#rules_display').text("Browsing Challenge! Get your answer to be able to browse the map again!");
 
     // Submitting an answer works differently during Game: check ntext steps
-    $('#submit_answer').off('submit');
-    $('#submit_answer').on('submit', function(){
+    $('#main_row_header').off('submit', '#submit_answer');
+    $('#main_row_header').on('submit', '#submit_answer', function(){
       Game.checkNextStep(Game.goNextStep);
     });
   },
@@ -129,19 +131,20 @@ Game = {
       // UPDATE DATABASE with your answer and score at that location
       var points = Score.calc(answer);
       User.updateDbWithAnswer(answer, points, User.theThreeWords)
-      User.current_user.points += points
+      User.currentUser.points += points
 
       // If good Answer, congrats +1, + allows you to drag pin and find location
       Listeners.enableMovingOnMap(true);
 
       // Then once a move on the map is made, freeze everything again for the next challenge
-      $('#submit_location, #where_am_i').off('submit');
-      $('#submit_location').on('submit', function(){
+      $('#main_row_header').off('submit', '#submit_location')
+      $('#main_row_header').off('submit', '#where_am_i')
+      $('#main_row_header').on('submit', '#submit_location', function(){
         event.preventDefault();
         Map.setToLocation();
         Game.browsingChallenge();
       });
-      $('#where_am_i').on('click', function(){
+      $('#main_row_header').on('click','#where_am_i', function(){
         event.preventDefault();
         Map.setToWhereAmI();
         Game.browsingChallenge();
@@ -157,7 +160,7 @@ Game = {
     Display.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
     // DO NOT TRACK SCORE
     // end stop button is muted
-    $('#stop_button').off('click', Game.stop);   
+    $('#main_row_header').off('click', '#stop_button', Game.stop);   
   }
 
 };  // End Game Object
@@ -203,8 +206,8 @@ JourneyChallenge = {
       Map.map.setCenter(JourneyChallenge.stepMarker.position)
 
       // Submitting an answer works differently during JourneyChallenge: check next steps
-      $('#submit_answer').off('submit');
-      $('#submit_answer').on('submit', function(){
+      $('#main_row_header').off('submit', '#submit_answer');
+      $('#main_row_header').on('submit', '#submit_answer', function(){
         Game.checkNextStep(JourneyChallenge.moveAlongJourney)
       });
     }
@@ -217,7 +220,7 @@ JourneyChallenge = {
 
       // update the DB with these bonus points then update the user with them
       User.addBonusPoints(bonus);
-      User.current_user += bonus;
+      User.currentUser += bonus;
     }
   },
 
@@ -226,7 +229,7 @@ JourneyChallenge = {
       // UPDATE DATABASE with your answer and score at that location
       var points = Score.calc(answer);
       User.updateDbWithAnswer(answer, points, User.theThreeWords)
-      User.current_user.points += points;
+      User.currentUser.points += points;
       JourneyChallenge.score += points;
 
       // show the marker as "done"

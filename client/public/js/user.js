@@ -31,7 +31,7 @@ User = {
         User.currentUser = response;
         // RENDER NAV FOR LOGIN
         User.currentUser.splitEmail = User.currentUser.email.split('@')[0];
-        View.render( $("#navbar_isloggedin_template"), User.currentUser, $('#main-navbar') );
+        View.render( $("#navbar_isloggedin_template"), User.currentUser, $('#main-navbar'), 'slideDown' );
       });
     } else {
       // REDNER NAV FOR WELCOME USER
