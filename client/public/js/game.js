@@ -32,6 +32,17 @@ var Listeners = Listeners || {};
 
 $(document).ready(function(){
   Listeners.justBrowsing;
+
+  // browse button acts as a reset: back to home page
+  $('#main-navbar').on('click', '#play-li', function(){
+    console.log('play');
+    Game.initialize();
+  });
+  $("#main-navbar").on('click', '#browse-li', function(){
+    console.log('browse');
+    User.isLoggedIn();
+    Map.initialize();
+  })
 });
 
 //***********************************
@@ -45,14 +56,13 @@ Listeners = {
     Listeners.enableDestination(true);
 
     // EVENT DELEGATION !!
-    $('#main_row_header').on('click', '#play_button', Game.initialize);
     $('#game_msg').text("Freely Browse the Map, or Play to Enter the Challenges");
 
-    $('#main_row_header').off('click', '#where_am_i');
+    // $('#main_row_header').off('click', '#where_am_i');
     // $('#where_am_i').off('click');
     $('#main_row_header').on('click', '#where_am_i', Map.setToWhereAmI)
 
-    $('#main_row_header').off('submit', '#submit_location');
+    // $('#main_row_header').off('submit', '#submit_location');
     $('#main_row_header').on('submit', '#submit_location', Map.setToLocation);
 
     $('#main_row_header').on('submit', '#submit_destination', JourneyChallenge.begin);
@@ -64,7 +74,7 @@ Listeners = {
   gameStarted: function(){
     Listeners.enableMovingOnMap(false)
     // finally let the stop button end the game
-    $('#main_row_header').on('click', '#stop_button', Game.stop);
+    // $('#main_row_header').on('click', '#stop_button', Game.stop);
   }, 
 
   // prevent clicks on the map or finding a new location
@@ -97,6 +107,9 @@ Game = {
 
   initialize: function(){
     Game.browsingChallenge();
+
+    // RENDER VIEW WHERE NOTHING IS GREYED and it says ready to play
+    
     // show marker and center map on it + ensure shows info + remvoe any journey shown
     // place marker at Random Loc in central london - muted during devpt so i can play faster and test
     // Display.centerOnUpdatedMarker(new google.maps.LatLng(51.505831 + Math.random()/100, -0.132134857 - Math.random()/100), Marker.init, Map.zoomInit);
@@ -221,6 +234,7 @@ JourneyChallenge = {
       // update the DB with these bonus points then update the user with them
       User.addBonusPoints(bonus);
       User.currentUser += bonus;
+
     }
   },
 
@@ -239,6 +253,10 @@ JourneyChallenge = {
       JourneyChallenge.countSteps++;
       JourneyChallenge.play(JourneyChallenge.myJourney);
     };
+  },
+
+  end: function(){
+
   }
 
 

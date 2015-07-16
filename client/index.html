@@ -37,69 +37,18 @@
 <div class="container-fluid">
 
   <div id="main_row_header" class="row main_row">
-  <!-- Big row: LEFT location/destination, MIDDLE Answer RIGHT stop button -->
-
-    <div class="col-xs-3 text-left">  <!-- LEFT SIDE --> 
-
-      <form id="submit_location" class="form-inline">
-        <div class="form-group">
-          <label class="sr-only" for="address_input">From</label>
-          <input id="address_input" type="text" class="form-control input-sm" value="London, UK">
-        </div>
-        <div class="form-group">
-          <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="">Find</button>
-          <button id="where_am_i" class="btn-xs btn-default"> <span class="glyphicon glyphicon-screenshot"></span> </button>
-        </div>
-      </form>       
-
-      <form id="submit_destination" class="form">
-          <label class="sr-only" for="destination_input">To</label>
-          <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London">
-       <button type="submit" id="destination_button" class="btn btn-success" value="">Click to Play Until You Reach Destination</button>
-      </form>
-    </div> <!-- END LEFT SIDE -->
-
-
-    <div class="col-xs-5 text-center">  <!-- MIDDLE SIDE --> 
-      <div class="row">
-        <h4 id="" class=""><span class="glyphicon glyphicon-star"></span> <span id="game_msg"></span> <span class="glyphicon glyphicon-star"></span></h4>
-      </div>
-
-      <form class="form-horizontal text-center" id="submit_answer">
-        <div class="form-group form-group-sm has-warning has-feedback" style="margin-bottom: 0px">
-          <div class="col-xs-10">
-            <input type="text" class="form-control input-sm" id="answer_input" aria-describedby="answer_inputStatus" placeholder="Get the Longest Word!">
-            <span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
-          </div>
-          <div class="col-xs-2">
-            <button type="submit" class="btn-xs btn-primary">Go</button>
-          </div>
-        </div>
-        <div class="form-group has-warning has-feedback text-center">
-          <label id="answer_validity" class="control-label" for="answer_input">Test your answer!</label>
-        </div>
-      </form>
-    </div>  <!-- END MIDDLE SIDE --> 
-    
-    <div class="col-xs-3 text-right">  <!-- RIGHT SIDE -->
-      <form action="" class="form">
-          <button id='stop_button' class="btn-sm btn-default">Stop</button>
-       </form>
-      <form action="" class="form">
-        <button id='' class="btn-sm btn-default">Flag</button>
-      </form>
-    </div>
-
   </div> <!-- END Main Row -->
 
-
   <div id="map-canvas"></div>
-
 
 </div> <!-- end container bootstrap -->
 
   
 </body>
+
+<!-- **********************
+***  SCRIPTS FOR NAV BAR
+ ********************** -->
 
 <!-- Script for Navbar WHEN NOBODY LOGGED IN -->
 <script type="x-tmpl-mustache" id="navbar_no_login_template">
@@ -116,7 +65,7 @@
      <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#" >Browse <span class="sr-only">(current)</span></a></li>
+        <li id="browse-li"class="active"><a href="#" >Browse <span class="sr-only">(current)</span></a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login to Play<span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -167,7 +116,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li id="browse-li" class="active"><a href="#" >Browse <span class="sr-only">(current)</span></a></li>
-        <li id="play-li"><a href="#" id='play_button'>Play</a></li>
+        <li id="play-li"><a href="#">Play</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Rules</a></li>
@@ -195,9 +144,14 @@
 
   </div>   <!-- /.container-fluid -->
 </script>
-<!-- END of SCRIPT FOR THE NAV BAR WHEN NOBODY LOGGED IN -->
 
-<!-- Scripts for signup and login -->
+<!-- END of SCRIPT FOR THE NAV BAR WHEN User LOGGED IN -->
+<!-- END of SCRIPT FOR THE NAV BAR  -->
+
+<!-- **********************
+***  SCRIPTS FOR LOGIN FORMS
+ ********************** -->
+
 <script type="x-tmpl-mustache" id="login_form_template">
   <form id="login" class="form-horizontal col-xs-4 col-xs-offset-4">
     <div class="form-group"> 
@@ -237,9 +191,104 @@
       </div>
   </form>
 </script>
+
 <!-- END of Scripts for signup and login -->
 
 
+<!-- **********************
+***  SCRIPTS MAIN HEADER AND PLAY AREA
+ ********************** -->
+
+<!-- **********************
+ Script main area when User IS logged in 
+  ********************** -->
+
+ <!-- Big row: LEFT location/destination, MIDDLE Answer RIGHT stop button -->
+<script type="x-tmpl-mustache" id="main_area_loggedin_template">
+  <div class="col-xs-3 text-left">  <!-- LEFT SIDE --> 
+    <form id="submit_location" class="form-inline">
+      <div class="form-group">
+        <label class="sr-only" for="address_input">From</label>
+        <input id="address_input" type="text" class="form-control input-sm" value="London, UK">
+      </div>
+      <div class="form-group">
+        <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="">Find</button>
+        <button id="where_am_i" class="btn-xs btn-default"> <span class="glyphicon glyphicon-screenshot"></span> </button>
+      </div>
+    </form>       
+
+    <form id="submit_destination" class="form">
+        <label class="sr-only" for="destination_input">To</label>
+        <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London">
+     <button type="submit" id="destination_button" class="btn btn-success" value="">Click to Play Until You Reach Destination</button>
+    </form>
+  </div> <!-- END LEFT SIDE -->
+
+
+  <div class="col-xs-5 text-center">  <!-- MIDDLE SIDE --> 
+    <div class="row">
+      <h4 id="" class=""><span class="glyphicon glyphicon-star"></span> <span id="game_msg"></span> <span class="glyphicon glyphicon-star"></span></h4>
+    </div>
+    <form class="form-horizontal text-center" id="submit_answer">
+      <div class="form-group form-group-sm has-warning has-feedback" style="margin-bottom: 0px">
+        <div class="col-xs-10">
+          <input type="text" class="form-control input-sm" id="answer_input" aria-describedby="answer_inputStatus" placeholder="Get the Longest Word!">
+          <span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
+        </div>
+        <div class="col-xs-2">
+          <button type="submit" class="btn-xs btn-primary">Go</button>
+        </div>
+      </div>
+      <div class="form-group has-warning has-feedback text-center">
+        <label id="answer_validity" class="control-label" for="answer_input">Test your answer!</label>
+      </div>
+    </form>
+  </div>  <!-- END MIDDLE SIDE --> 
+</script>
+
+
+<!-- Script main area when User IS NOT logged in -->
+
+ <!-- Big row: LEFT location/destination, MIDDLE Answer RIGHT stop button -->
+<script type="x-tmpl-mustache" id="main_area_notlogged_template">
+  <div class="col-xs-3 text-left">  <!-- LEFT SIDE --> 
+    <form id="submit_location" class="form-inline">
+      <div class="form-group">
+        <label class="sr-only" for="address_input">From</label>
+        <input id="address_input" type="text" class="form-control input-sm" value="London, UK">
+      </div>
+      <div class="form-group">
+        <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="">Find</button>
+        <button id="where_am_i" class="btn-xs btn-default"> <span class="glyphicon glyphicon-screenshot"></span> </button>
+      </div>
+    </form>       
+    <form id="submit_destination" class="form">
+        <label class="sr-only" for="destination_input">To</label>
+        <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London" disabled>
+     <button type="submit" id="destination_button" class="btn btn-success" disabled>Login Above to Play the Real Challenge</button>
+    </form>
+  </div> <!-- END LEFT SIDE -->
+
+  <div class="col-xs-5 text-center">  <!-- MIDDLE SIDE --> 
+    <div class="row">
+      <h4 id="" class=""><span class="glyphicon glyphicon-star"></span> <span id="game_msg"></span> <span class="glyphicon glyphicon-star"></span></h4>
+    </div>
+    <form class="form-horizontal text-center" id="submit_answer">
+      <div class="form-group form-group-sm has-warning has-feedback" style="margin-bottom: 0px">
+        <div class="col-xs-10">
+          <input type="text" class="form-control input-sm" id="answer_input" aria-describedby="answer_inputStatus" placeholder="Get the Longest Word!">
+          <span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
+        </div>
+        <div class="col-xs-2">
+          <button type="submit" class="btn-xs btn-primary">Go</button>
+        </div>
+      </div>
+      <div class="form-group has-warning has-feedback text-center">
+        <label id="answer_validity" class="control-label" for="answer_input">Test your answer!</label>
+      </div>
+    </form>
+  </div>  <!-- END MIDDLE SIDE --> 
+</script>
 
 
 </html>

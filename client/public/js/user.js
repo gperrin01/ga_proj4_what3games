@@ -29,13 +29,15 @@ User = {
       // Get the current_user if any Cookie is present (meaning you have never logged out or expired)
       $.get(base_url + "/users/" + token, function(response){
         User.currentUser = response;
-        // RENDER NAV FOR LOGIN
+        // RENDER NAV and Main area FOR LOGIN
         User.currentUser.splitEmail = User.currentUser.email.split('@')[0];
         View.render( $("#navbar_isloggedin_template"), User.currentUser, $('#main-navbar'), 'slideDown' );
+        View.render( $("#main_area_loggedin_template"), User.currentUser, $('#main_row_header'), 'slideDown' );
       });
     } else {
-      // REDNER NAV FOR WELCOME USER
+      // REDNER NAV and Main area for NO LOGGED user
       View.render( $("#navbar_no_login_template"), null, $('#main-navbar') );
+      View.render( $("#main_area_notlogged_template"), User.currentUser, $('#main_row_header'), 'slideDown' )
     }
   },
 

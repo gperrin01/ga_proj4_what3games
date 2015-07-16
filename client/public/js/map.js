@@ -157,9 +157,7 @@ Journey = {
     console.log('show journey');
     
     // ensure direction display is on and clear out any existing markerArray from previous calculations
-    Journey.directionsDisplay.setMap(Map.map);
-    Marker.clearStepArray();
-    Marker.init.setMap(null);
+    Display.clearJourney();
 
     // create the Google direction request for the route
     var origin = $('#address_input').val();
@@ -298,6 +296,7 @@ Display = {
 
   // Update marker position to new location + show marker + center map + ensure zoom close
   centerOnUpdatedMarker: function(ggl_coords, marker, zoom) {
+    Display.clearJourney();
     marker.setMap(Map.map);
     marker.setPosition(ggl_coords);
     Map.map.setCenter(ggl_coords);
@@ -306,6 +305,12 @@ Display = {
     // finally, clear map of any pins and directions, as we now search for one direction
     Marker.clearStepArray();
     Journey.directionsDisplay.setMap(null);
+  },
+
+  clearJourney: function() {
+    Journey.directionsDisplay.setMap(Map.map);
+    Marker.clearStepArray();
+    Marker.init.setMap(null);
   },
 
   // updates view with the appropriate message &&&
