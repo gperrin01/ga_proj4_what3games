@@ -33,25 +33,10 @@
 <nav id="main-navbar" class="navbar navbar-default">
 </nav>
 
-<div id="user_auth">
-  <form id="signup">
-    <input type="text" id="signup-email" name="email" placeholder="Email">
-    <input type="password" id="signup-password" name="password" placeholder="Password">
-    <input type="password" id="signup-password-confirm" name="password-confirm" placeholder="Confirm password">
-    <button type="submit">Sign-up</button>
-  </form>
-
-  <form id="login" class="text-center">
-    <input type="text" id="login-email" name="email" placeholder="Email">
-    <input type="password" id="login-password" name="password" placeholder="Password">
-    <button type="submit">Log in</button>
-  </form>
-
-</div>
 
 <div class="container-fluid">
 
-  <div id="main_row" class="row">
+  <div id="main_row_header" class="row">
   <!-- Big row: LEFT location/destination, MIDDLE Answer RIGHT stop button -->
 
     <div class="col-xs-3 text-left">  <!-- LEFT SIDE --> 
@@ -212,9 +197,47 @@
 </script>
 <!-- END of SCRIPT FOR THE NAV BAR WHEN NOBODY LOGGED IN -->
 
+<!-- Scripts for signup and login -->
+<script type="x-tmpl-mustache" id="login_form_template">
+  <form id="login" class="form-horizontal col-xs-4 col-xs-offset-4">
+    <div class="form-group"> 
+      <label class="col-xs-4 control-label" for="login-email">Email</label>
+      <div class="col-xs-8">
+        <input type="email" class="form-control" id="login-email" name="email" placeholder="Email">
+      </div>
+    </div>
+    <div class="form-group"> 
+      <label class="col-xs-4 control-label" for="login-password">Password</label>
+      <div class="col-xs-8">
+        <input type="password" class="form-control" id="login-password" name="password" placeholder="Password">
+      </div>
+    </div>
+    <div class="form-group">
+      <button class="col-xs-offset-4 col-xs-8 submit_button btn btn-primary" type="submit">Log in</button>
+    </div>
+  </form>
+</script>
 
-
-
+<script type="x-tmpl-mustache" id="signup_form_template">
+  <form id="signup" class="col-xs-4 col-xs-offset-4">
+    <div class="form-group">
+      <label for="signup-email">Enter your email</label>
+      <input class="form-control" type="email" id="signup-email" name="email" placeholder="Email">
+    </div>
+    <div class="form-group">
+      <label for="signup-password">Enter your password <small>(8 characters minimum)</small></label>
+      <input class="form-control" type="password" id="signup-password" name="password" placeholder="Password">
+    </div>
+    <div class="form-group">
+      <label for="signup-password-confirm">Confirm your password <small>(8 characters minimum)</small></label>
+      <input class="form-control" type="password" id="signup-password-confirm" name="password-confirm" placeholder="Confirm password">
+    </div>
+      <div class="form-group">
+        <button class="col-xs-12 submit_button btn btn-primary" type="submit">Sign-up</button>
+      </div>
+  </form>
+</script>
+<!-- END of Scripts for signup and login -->
 
 
 

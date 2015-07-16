@@ -10,54 +10,9 @@ var base_url = "http://localhost:3000"
 $(document).ready(function(){
 
   User.isLoggedIn();
-
-  // On signup send info for Devise (in Rails) to create the user
-  $('#signup').on('submit', function(event){
-    event.preventDefault();
-    var data = {
-      registration: {
-        email: $('#signup-email').val(),
-        password: $('#signup-password').val(),
-        password_confirmation: $('#signup-password-confirm').val()
-      }
-    };
-    $.post(base_url + '/users', data, function(response){
-      console.log(response);
-      // FLASH MESSAGE WELL DONE?
-    })
-    .fail(function(err) {
-      console.log(err);
-    })
-  });
-
-  // On Login, check OK with Devise and save current_user info in Cookie + User object
-  $('#login').on('submit', function(){
-    event.preventDefault();
-    var data = $('#login').serialize();
-    $.post(base_url + "/users/sign_in", data, function(response){
-      Cookies.set('current_user_authentication_token', response.authentication_token, { expires: 7 });
-      User.currentUser = response;
-
-      // RENDER NAV FOR LOGIN
-      User.currentUser.splitEmail = User.currentUser.email.split('@')[0];
-      View.render( $("#navbar_isloggedin_template"), User.currentUser, $('#main-navbar') );
-    })
-  });
-
-  // On Logout, tell Devise, delete Cookie, delete current_user
-  $('#main-navbar').on('click', '#logout', function(){
-    event.preventDefault();
-    console.log('click');
-    $.ajax({
-      type: 'delete',
-      url: base_url + "/users/" + User.currentUser.authentication_token
-    }).done(function(response){
-      alert('See you soon, ' + User.currentUser.email);
-      User.currentUser = {};
-      Cookies.remove('current_user_authentication_token');
-      document.location.reload();
-    });
-  });
+  User.signupProcess();
+  User.loginProcess();
+  User.logoutProcess();
 
 }); // end doc ready
 
@@ -82,6 +37,78 @@ User = {
       // REDNER NAV FOR WELCOME USER
       View.render( $("#navbar_no_login_template"), null, $('#main-navbar') );
     }
+  },
+
+  loginProcess: function(){
+    // Signup form visible only on click on the sign up button
+    $('.login_link').on('click', function(){
+      console.log('click login');
+      var form = $('#login_form_template')
+      View.render( form, null, $('#main_row_header') );
+      // form.fadeIn("slow"); ANIMATIONS !!!
+    });
+
+    // On Login, check OK with Devise and save current_user info in Cookie + User object
+    $('body').on('submit', '#login', function(){
+      event.preventDefault();
+      console.log('submit login');
+      var data = $('#login').serialize();
+      $.post(base_url + "/users/sign_in", data, function(response){
+        Cookies.set('current_user_authentication_token', response.authentication_token, { expires: 7 });
+        User.currentUser = response;
+        // reload the page and have it all ready for the user
+        document.location.reload();
+        // RENDER NAV FOR LOGIN
+        // console.log('render login');
+        // User.currentUser.splitEmail = User.currentUser.email.split('@')[0];
+        // View.render( $("#navbar_isloggedin_template"), User.currentUser, $('#main-navbar') );
+      })
+    });
+  },
+
+  signupProcess: function() {
+    // Signup form visible only on click on the sign up button
+    $('.signup_link').on('click', function(){
+      var form = $('#signup_form_template')
+      View.render( form, null, $('#main_row_header') );
+      // form.fadeIn("slow"); ANIMATIONS !!!
+    });
+
+    // On signup send info for Devise (in Rails) to create the user
+    $('#signup').on('submit', function(event){
+      event.preventDefault();
+      var data = {
+        registration: {
+          email: $('#signup-email').val(),
+          password: $('#signup-password').val(),
+          password_confirmation: $('#signup-password-confirm').val()
+        }
+      };
+      $.post(base_url + '/users', data, function(response){
+        console.log(response);
+        // FLASH MESSAGE WELL DONE?
+      })
+      .fail(function(err) {
+        console.log(err);
+      })
+    });
+  },
+
+  logoutProcess: function(){
+    // On Logout, tell Devise, delete Cookie, delete current_user
+    $('#main-navbar').on('click', '#logout', function(){
+      event.preventDefault();
+      console.log('click');
+      $.ajax({
+        type: 'delete',
+        url: base_url + "/users/" + User.currentUser.authentication_token
+      }).done(function(response){
+        alert('See you soon, ' + User.currentUser.email);
+        User.currentUser = {};
+        Cookies.remove('current_user_authentication_token');
+        document.location.reload();
+      });
+    });
   },
 
   updateDbWithAnswer: function(answer, points, threeWords) {

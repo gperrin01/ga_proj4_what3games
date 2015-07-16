@@ -23,6 +23,10 @@
 }
 
 
+.submit_button {
+  margin-bottom: 15px;
+}
+
 #answer_validity {
   text-align: center !important;
 }
