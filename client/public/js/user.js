@@ -43,9 +43,10 @@ User = {
     // Signup form visible only on click on the sign up button
     $('.login_link').on('click', function(){
       console.log('click login');
-      var form = $('#login_form_template')
-      View.render( form, null, $('#main_row_header') );
+      var header = $('#main_row_header');
+      View.render( $('#login_form_template'), null, header, 'slideDown' );
       // form.fadeIn("slow"); ANIMATIONS !!!
+
     });
 
     // On Login, check OK with Devise and save current_user info in Cookie + User object
@@ -70,7 +71,7 @@ User = {
     // Signup form visible only on click on the sign up button
     $('.signup_link').on('click', function(){
       var form = $('#signup_form_template')
-      View.render( form, null, $('#main_row_header') );
+      View.render( form, null, $('#main_row_header'),'slideDown' );
       // form.fadeIn("slow"); ANIMATIONS !!!
     });
 
@@ -145,12 +146,19 @@ User = {
 // ******************************************
 
 View = {
-  render: function(templateElement, object, parentElement) {
-    parentElement.empty();
+  // render = fully change parent element, 
+  // append = add to parent element
+  render: function(templateElement, object, parentElement, animation) {
+    // parentElement.empty();
     var template = templateElement.html();
     Mustache.parse(template);
     var rendered = Mustache.render(template, object);
-    parentElement.append(rendered);
+    parentElement.html(rendered);
+
+    if (animation === 'slideDown'){
+      parentElement.hide();
+      parentElement.slideDown('slow');
+    }
   }
 }
 
