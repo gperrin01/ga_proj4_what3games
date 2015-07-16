@@ -12,6 +12,7 @@ $(document).ready(function(){
   User.signupProcess();
   User.loginProcess();
   User.logoutProcess();
+  $('#ranking').on('click', User.rankings);
 }); 
 
 // ******************************************
@@ -133,6 +134,15 @@ User = {
       dataType: 'json'
     }).done(function(response){
       console.log('bonus points');
+    })
+  },
+
+  rankings: function() {
+    // send the current_user auth token and receive his rankings as well as the global rankings
+    // top 5 w most points + top 5 with best ever answer + top 5 best at this lcoation
+    var 
+    $.get(base_url + "/users/" + User.currentUser.authentication_token + "/ranking", function(response){
+      console.log('rankings', response);
     })
   }
 
