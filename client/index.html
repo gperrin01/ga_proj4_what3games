@@ -30,7 +30,7 @@
 
 <body>
 
-<nav id="main-navbar" class="navbar navbar-default">
+<nav id="main-navbar" class="navbar navbar-default navbar-fixed-top">
 </nav>
 
 
@@ -64,7 +64,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">What3Games</a>
+      <a class="navbar-brand" href="#">Worlds of the Word</a>
     </div>
      <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -105,7 +105,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">What3Games</a>
+      <a class="navbar-brand" href="#">Worlds of the Word</a>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -187,12 +187,14 @@
 <!-- If YES logged in -->
 <script type="x-tmpl-mustache" id="main_area_loggedin_template">
   <div class="col-xs-6 col-xs-offset-3">   
-    <h4 class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Browse the map and earn points creating the longest words</span> <span class="glyphicon glyphicon-star"></span><br>
+    <h4 id="up" class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Our world is a treasure. So are our words.</span> <span class="glyphicon glyphicon-star"></span>
+    </h4>
+   <h4 id="down" class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Explore the map and enter the challenge.</span> <span class="glyphicon glyphicon-star"></span>
     </h4>
   </div> 
   <div class="col-xs-3 text-right">
     <form class="form-inline">
-      <div class="form-group">
+      <div id="ranking_div" class="form-group">
         <button id="ranking" class="btn btn-primary btn"><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings</button>
       </div>
     </form>
@@ -202,14 +204,16 @@
 <!-- during JOURNEY CHALLENGE -->
 <script type="x-tmpl-mustache" id="main_area_journeychall_template">
   <div class="col-xs-6 col-xs-offset-3">   
-    <h4 class="text-center">
-      <span class="glyphicon glyphicon-star"></span> <span id="game_msg">Make it to Destination and Earn Bonus Points</span> <span class="glyphicon glyphicon-star"></span><br><br>
+    <h4 id="up" class="text-center">
+      <span class="glyphicon glyphicon-star"></span> <span id="game_msg">Make it to Destination and Earn Bonus Points</span> <span class="glyphicon glyphicon-star"></span>
+    </h4>
+    <h4 id="down" class="text-center">
       <span class="glyphicon glyphicon-star"></span>  Checkpoint: {{count}}/{{steps}} <span class="glyphicon glyphicon-play"></span> Score: {{score}}  <span class="glyphicon glyphicon-star"></span>
     </h4>
   </div> 
   <div class="col-xs-3 text-right">
     <form class="form-inline">
-      <div class="form-group">
+      <div id="ranking_div" class="form-group">
         <button id="ranking" class="btn btn-primary btn"><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings</button>
       </div>
     </form>
@@ -220,11 +224,14 @@
 <!-- If NOT logged in -->
 <script type="x-tmpl-mustache" id="main_area_not_loggedin_template">
   <div class="col-xs-6 col-xs-offset-3">   
-    <h4 class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Move on the Map to Test Yourself and Login to Enter the Challenge</span> <span class="glyphicon glyphicon-star"></span></h4>
+    <h4 id="up" class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Our world is a treasure. So are our words.</span> <span class="glyphicon glyphicon-star"></span>
+    </h4>
+   <h4 id="down" class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Log in to explore the map and enter the challenge.</span> <span class="glyphicon glyphicon-star"></span>
+    </h4>
   </div> 
   <div class="col-xs-3 text-right">
     <form class="form-inline">
-      <div class="form-group">
+      <div id="ranking_div" class="form-group">
         <button id="ranking" class="btn btn-primary btn" disabled><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings</button>
       </div>
     </form>

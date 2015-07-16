@@ -1,3 +1,5 @@
+body { padding-top: 56px; }
+
 #location_forms {
   z-index: 10;
   position: relative;
@@ -17,6 +19,21 @@
 
 h4 {
   margin: 0 0 0 0 ;
+}
+
+#navbar-brand {
+  font-style: oblique;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+#down {
+  position: relative;
+  bottom: -6px;
+}
+#ranking_div {
+  position: relative;
+  top: 9px;
 }
 
 /* the infowindow */
