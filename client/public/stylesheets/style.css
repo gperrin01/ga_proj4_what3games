@@ -52,6 +52,7 @@ h4 {
 #ranking_div {
   position: relative;
   top: 9px;
+  z-index: 20;
 }
 
 /* the infowindow */

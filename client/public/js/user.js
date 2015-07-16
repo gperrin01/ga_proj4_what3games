@@ -5,14 +5,14 @@ var View = View || {};
 // Prepare for Signin, Login, Logout
 // ******************************************
 
-var base_url = "http://localhost:3000"
+var base_url = "http://localhost:3000";
 
 $(document).ready(function(){
   User.isLoggedIn();
   User.signupProcess();
   User.loginProcess();
   User.logoutProcess();
-  $('#ranking').on('click', User.rankings);
+  $('#main_row_header').on('click', '#ranking', User.rankings);
 }); 
 
 // ******************************************
@@ -138,10 +138,18 @@ User = {
   },
 
   rankings: function() {
+    event.preventDefault();
+
+    console.log('prepare rankings');
     // send the current_user auth token and receive his rankings as well as the global rankings
     // top 5 w most points + top 5 with best ever answer + top 5 best at this lcoation
-    var 
-    $.get(base_url + "/users/" + User.currentUser.authentication_token + "/ranking", function(response){
+    // data will show "  one two three  "
+    var data = {words: $('#three_words').text().split(' ').slice(2,5).join(' ')};
+    $.ajax({
+      url: base_url + "/users/" + User.currentUser.authentication_token + "/ranking",
+      data: data,
+      dataType: 'json' 
+    }).done(function(response){
       console.log('rankings', response);
     })
   }

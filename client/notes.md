@@ -1,5 +1,7 @@
 What is stopping anyone from doing curl? put requests from terminal to users/their_own_auth_token and add lots of points??
 
+In my routes should i put users#rankings and update as part of the devise thing?
+
 *******
 Struggles and Learning points
 *******
