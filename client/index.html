@@ -88,15 +88,6 @@
             <li class="signup_link"><a href="#">Sign up</a></li>
           </ul>
         </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Rankings <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
       </ul>  <!-- /.navbar-right -->
     </div>   <!-- /.navbar-collapse -->
 
@@ -132,15 +123,6 @@
             <li><a href="#">I <span class="glyphicon glyphicon-heart"></span> this app</a></li>
             <li role="separator" class="divider"></li>
             <li id="logout"><a href="#">Logout</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Rankings <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
           </ul>
         </li>
       </ul>  <!-- /.navbar-right -->
@@ -216,10 +198,28 @@
   </div>
 </script>
 
+<!-- during JOURNEY CHALLENGE -->
+<script type="x-tmpl-mustache" id="main_area_journeychall_template">
+  <div class="col-xs-6 col-xs-offset-3">   
+    <h4 class="text-center">
+      <span class="glyphicon glyphicon-star"></span> <span id="game_msg">Make it to Destination and Earn Bonus Points</span> <span class="glyphicon glyphicon-star"></span><br>
+      <span class="glyphicon glyphicon-star"></span>  Checkpoint: {{count}}/{{steps}} <span class="glyphicon glyphicon-play"></span> Score: {{score}}  <span class="glyphicon glyphicon-star"></span>
+    </h4>
+  </div> 
+  <div class="col-xs-3 text-right">
+    <form class="form-inline">
+      <div class="form-group">
+        <button id="ranking" class="btn btn-primary btn"><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings</button>
+      </div>
+    </form>
+  </div>
+</script>
+
+
 <!-- If NOT logged in -->
 <script type="x-tmpl-mustache" id="main_area_not_loggedin_template">
   <div class="col-xs-6 col-xs-offset-3">   
-    <h4 class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Browse the Map to Test Yourself or Login to Enter the Challenge/span> <span class="glyphicon glyphicon-star"></span></h4>
+    <h4 class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Move on the Map to Test Yourself and Login to Enter the Challenge</span> <span class="glyphicon glyphicon-star"></span></h4>
   </div> 
   <div class="col-xs-3 text-right">
     <form class="form-inline">
@@ -276,6 +276,33 @@
     </form>
   </div> <!-- END LEFT SIDE -->
 </script>
+
+
+<!-- **********************
+ *** During JOURNEY CHALLENGE
+  ********************** -->
+
+<!-- Disable all forms -->
+<script type="x-tmpl-mustache" id="location_forms_journeychallenge_template">
+  <div class="col-xs-3 text-left"> 
+    <form id="submit_location" class="form-inline">
+      <div class="form-group">
+        <label class="sr-only" for="address_input" disabled>From</label>
+        <input id="address_input" type="text" class="form-control input-sm" value="London, UK" disabled>
+      </div>
+      <div class="form-group">
+        <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="" disabled>Find</button>
+        <button id="where_am_i" class="btn-xs btn-default" disabled> <span class="glyphicon glyphicon-screenshot"></span> </button>
+      </div>
+    </form>       
+    <form id="submit_destination" class="form">
+        <label class="sr-only" for="destination_input">To</label>
+        <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London" disabled>
+     <button type="submit" id="destination_button" class="btn btn-success" disabled>Click to Play Until You Reach Destination</button>
+    </form>
+  </div> 
+</script>
+
 
 
 </html>

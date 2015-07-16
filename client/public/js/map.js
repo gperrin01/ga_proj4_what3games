@@ -10,11 +10,7 @@ var Words = Words || {};
 
 $(document).ready(function(){
   Map.initialize();
-
-  Listeners.justBrowsing();
 })
-
-
 
 
 // ******************************************
@@ -75,7 +71,7 @@ Map = {
       Marker.drag(this);
     });
     // Instantiate an info window to hold info for the markers 
-    Marker.markerInfo = new google.maps.InfoWindow();
+    Marker.infoWindow = new google.maps.InfoWindow();
     // show the 3 words on the page and on the marker infowindow
     Display.threeWords(Map.londonLat + ', ' + Map.londonLong, Marker.init);
   },
@@ -111,7 +107,7 @@ Map = {
     // get location using html5 native geolocation and wait for success
     if(!!Map.geo) {
       console.log('your brower supports geoloc');
-      $('#three_words_list').text("Just a second while we get your words");
+      $('#three_words_list').text("Just a second while we find your location");
       var wpid = Map.geo.getCurrentPosition(Map.geoloc_success, Map.geoloc_error, {enableHighAccuracy:true, maximumAge:30000, timeout:27000});
     } else {
       alert("ERROR: Your Browser doesnt support the Html5 Geo Location API");
@@ -231,8 +227,8 @@ Marker = {
   // On click on a marker, it will show info (location and 3 words)
   attachInfo: function(marker, text) {
     google.maps.event.addListener(marker, 'click', function() {
-      Marker.markerInfo.setContent(text);
-      Marker.markerInfo.open(Map.map, marker);
+      Marker.infoWindow.setContent(text);
+      Marker.infoWindow.open(Map.map, marker);
     });
   },
 
@@ -261,10 +257,9 @@ Display = {
     };
 
     $.get("https://api.what3words.com/position", data, function(response){
-      // store the words so they can be used in the Games
       var words = response.words.join(' ');
-      // if i were Rich Murray Clark i would do:
-      // var words = _.shuffle(x.join('').split('')).join('')
+      User.theThreeWords = words;
+      console.log(words);
 
       var html = "<p style='text-align: center; margin: 2px 0 3px 0'>" + words + "</p>"
                 + "<form id='submit_answer'><input id='answer_input' type='text' placeholder='Make the longest word'/>"
@@ -272,27 +267,19 @@ Display = {
                 + "</form>"
                 + "<p id='answer_validity' class='text-center'></p>";
 
-      // OR RENDER IT ???
-
-      User.theThreeWords = words;
-      console.log(words);
-
       // show the marker infowindow filled with the 3 words at all time, including when clicking on it
-      Marker.markerInfo.setContent(html);
-      Marker.markerInfo.open(Map.map, marker);
+      Marker.infoWindow.setContent(html);
+      Marker.infoWindow.open(Map.map, marker);
       // ensure click enables to show the words
       Marker.attachInfo(marker, html);
 
       // add listener to the submit !!
-      google.maps.event.addListener(Marker.markerInfo, 'domready', function(){
+      google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
         $('#submit_answer').on('submit', function(){
           event.preventDefault();
           Answer.submit();
         })
       });
-
-      
-
     });
   },
 

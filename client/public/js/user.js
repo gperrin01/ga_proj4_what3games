@@ -8,13 +8,11 @@ var View = View || {};
 var base_url = "http://localhost:3000"
 
 $(document).ready(function(){
-
   User.isLoggedIn();
   User.signupProcess();
   User.loginProcess();
   User.logoutProcess();
-
-}); // end doc ready
+}); 
 
 // ******************************************
 // User
@@ -38,8 +36,8 @@ User = {
     } else {
       // REDNER NAV and Main area for NO LOGGED user
       View.render( $("#navbar_no_login_template"), null, $('#main-navbar') );
-      View.render( $("#main_area_notlogged_template"), User.currentUser, $('#main_row_header'), 'slideDown' )
-      View.render( $("#location_forms_not_loggedin_template"), User.currentUser, $('#location_forms'), 'slideDown' )
+      View.render( $("#main_area_not_loggedin_template"), null, $('#main_row_header'), 'slideDown' )
+      View.render( $("#location_forms_not_loggedin_template"), null, $('#location_forms'), 'slideDown' )
     }
   },
 
@@ -47,8 +45,7 @@ User = {
     // Signup form visible only on click on the sign up button
     $('.login_link').on('click', function(){
       console.log('click login');
-      var header = $('#main_row_header');
-      View.render( $('#login_form_template'), null, header, 'slideDown' );
+      View.render( $('#login_form_template'), null, $('#main_row_header'), 'slideDown' );
       // form.fadeIn("slow"); ANIMATIONS !!!
 
     });
@@ -63,10 +60,6 @@ User = {
         User.currentUser = response;
         // reload the page and have it all ready for the user
         document.location.reload();
-        // RENDER NAV FOR LOGIN
-        // console.log('render login');
-        // User.currentUser.splitEmail = User.currentUser.email.split('@')[0];
-        // View.render( $("#navbar_isloggedin_template"), User.currentUser, $('#main-navbar') );
       })
     });
   },

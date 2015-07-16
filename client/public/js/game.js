@@ -29,9 +29,8 @@ var JourneyChallenge = JourneyChallenge || {};
 var Score = Score || {};
 var Listeners = Listeners || {};
 
-
 $(document).ready(function(){
-  Listeners.justBrowsing;
+  Listeners.justBrowsing();
 
   // browse button acts as a reset: back to home page
   $('#main-navbar').on('click', '#play-li', function(){
@@ -52,31 +51,25 @@ $(document).ready(function(){
 Listeners = {
 
   justBrowsing: function(){
+    console.log('just browsing ');
+    // Turn on the relevant events and cancel the previous ones -  EVENT DELEGATION
     Listeners.enableMovingOnMap(true);
     Listeners.enableDestination(true);
+    $('#location_forms').off('submit');
+    $('#location_forms').off('click');
 
-    // EVENT DELEGATION !!
-    // $('#location_forms').off('click', '#where_am_i');
-    // $('#where_am_i').off('click');
     $('#location_forms').on('click', '#where_am_i', Map.setToWhereAmI)
-
-    // $('#location_forms').off('submit', '#submit_location');
     $('#location_forms').on('submit', '#submit_location', Map.setToLocation);
-
     $('#location_forms').on('submit', '#submit_destination', JourneyChallenge.begin);
   },
 
-  gameStarted: function(){
-    Listeners.enableMovingOnMap(false)
-    // finally let the stop button end the game
-    // $('#location_forms').on('click', '#stop_button', Game.stop);
-  }, 
-
   // prevent clicks on the map or finding a new location
   enableMovingOnMap: function(boolean) {
+    console.log('move on map', boolean);
     $('#where_am_i').attr('disabled', !boolean);
     $('#geocode_button').attr('disabled', !boolean);
     $('#address_input').attr('disabled', !boolean);
+
     // If TRUE, markers CAN be dragged & will not trigger the game
     if (Marker.init) {Marker.init.setOptions({draggable: boolean});};
     google.maps.event.removeListener(Listeners.dragForNextChallenge);
@@ -107,21 +100,20 @@ Game = {
 
     // show marker and center map on it + ensure shows info + remvoe any journey shown
     // place marker at Random Loc in central london - muted during devpt so i can play faster and test
-    // Display.centerOnUpdatedMarker(new google.maps.LatLng(51.505831 + Math.random()/100, -0.132134857 - Math.random()/100), Marker.init, Map.zoomInit);
-    Display.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
+    Display.centerOnUpdatedMarker(new google.maps.LatLng(51.505831 + Math.random()/100, -0.132134857 - Math.random()/100), Marker.init, Map.zoomInit);
+    // Display.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
     Marker.drag(Marker.init);
   },
 
   browsingChallenge: function() {
     event.preventDefault();
-    Listeners.gameStarted();
-    //Welcome message
-    $('#rules_display').text("Browsing Challenge! Get your answer to be able to browse the map again!");
+    Listeners.enableMovingOnMap(false)
+    Listeners.enableDestination(true);
 
-    // Submitting an answer works differently during Game: check ntext steps
-    google.maps.event.clearInstanceListeners(Marker.markerInfo);
+    // Submitting an answer works differently during Game: check next steps
+    google.maps.event.clearInstanceListeners(Marker.infoWindow);
 
-    google.maps.event.addListener(Marker.markerInfo, 'domready', function(){
+    google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
       $('#submit_answer').on('submit', function(){
         event.preventDefault();
         Game.checkNextStep(Game.goNextStep);
@@ -150,7 +142,8 @@ Game = {
 
       // Then once a move on the map is made, freeze everything again for the next challenge
       $('#location_forms').off('submit', '#submit_location')
-      $('#location_forms').off('submit', '#where_am_i')
+      $('#location_forms').off('click', '#where_am_i')
+
       $('#location_forms').on('submit', '#submit_location', function(){
         event.preventDefault();
         Map.setToLocation();
@@ -161,10 +154,13 @@ Game = {
         Map.setToWhereAmI();
         Game.browsingChallenge();
       });
+
       Listeners.dragForNextChallenge =  google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
     }
   },
 
+
+// IS THIS USED ANYMORE ???
   stop: function(){
     // back to as if the page was loaded
     Listeners.justBrowsing();
@@ -189,7 +185,6 @@ JourneyChallenge = {
 
     Listeners.enableMovingOnMap(false);
     Listeners.enableDestination(false);
-    $('#game_msg').text("Journey Challenge! Quizz your way until destination!");
 
     //  Variation around the Journey.show, same vein as for the browsingNextSteps
     Journey.show(null, JourneyChallenge.play);
@@ -205,8 +200,8 @@ JourneyChallenge = {
     // Until you reach the final step (end of steps array):
     if (count < steps.length) {
 
-      $('#game_msg').html('Checkpoint ' + count + '/' + (steps.length-1)
-        + ' <span class="glyphicon glyphicon-play"></span>  Score: '+ JourneyChallenge.score );
+      var msg = {count: count, steps: steps.length-1, score: JourneyChallenge.score};
+      View.render($('#main_area_journeychall_template'), msg, $('#main_row_header') );
 
       // highlight the marker for that step: 3words and special icon
       JourneyChallenge.stepMarker = Marker.stepMarkerArray[count];
@@ -216,9 +211,9 @@ JourneyChallenge = {
       Map.map.setCenter(JourneyChallenge.stepMarker.position)
 
       // Submitting an answer works differently during JourneyChallenge: check next steps
-      google.maps.event.clearListeners(Marker.markerInfo, 'domready');
+      google.maps.event.clearListeners(Marker.infoWindow, 'domready');
 
-      google.maps.event.addListener(Marker.markerInfo, 'domready', function(){
+      google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
         $('#submit_answer').on('submit', function(){
           event.preventDefault();
           console.log('submitting journey next steps')
