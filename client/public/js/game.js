@@ -232,7 +232,7 @@ JourneyChallenge = {
       // update the DB with these bonus points then update the user with them
       User.addBonusPoints(bonus);
       User.currentUser += bonus;
-      
+
       Listeners.enableDestination(true);
     }
   },

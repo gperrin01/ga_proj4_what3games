@@ -10,6 +10,7 @@ var Words = Words || {};
 
 $(document).ready(function(){
   Map.initialize();
+  Display.initialize();
 })
 
 
@@ -332,8 +333,15 @@ Display = {
       $('#answer_validity').addClass('bg-success text-success')
     }  else {
       $('#answer_validity').addClass('bg-danger text-danger');
-    }
-  
+    } 
+  },
+
+  initialize: function(){
+    $('#main-navbar').on('click', 'li', function(){
+      $('#main-navbar li').removeClass('active');
+      $(this).addClass('active');
+      console.log('active')
+    })
   }
 
 }; // End Display Object
