@@ -67,8 +67,9 @@ h4 {
 }
 #rankings_zone {
   position: relative;
-  top: -80px;
-  right: 1px;
+  top: -77px;
+  right: 0px;
+  /*opacity: 0;*/
 }
 
 

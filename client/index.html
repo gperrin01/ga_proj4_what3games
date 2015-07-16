@@ -39,59 +39,7 @@
   <!-- Line moved above the map with location and destination -->
   <div id="location_forms" class="row"></div>
 
-  <div id="rankings_zone" class="row">
-    <div id="ranking_col" class="col-xs-offset-8 col-xs-4">
-     
-      <div class="table-responsive" >
-        <table class="table table-condensed table-hover" style="margin-bottom: 0px">
-          <thead>   
-            <tr><th colspan='2'> Your Situation</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Global Score</td><td>points</td></tr>
-            <tr><td>Best Answer Here</td><td>points</td></tr>
-            <tr><td>Best Ever Answer</td><td>points</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="table-responsive" >
-        <table class="table table-condensed table-hover" style="margin-bottom: 0px">
-          <thead>   
-            <tr><th colspan='3'> Top 3 Scores Globally</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>1</td><td>Email</td><td>points</td></tr>
-            <tr><td>2</td><td>Email</td><td>points</td></tr>
-            <tr><td>3</td><td>Email</td><td>points</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="table-responsive">
-        <table class="table table-condensed table-hover" style="margin-bottom: 0px">
-          <thead>   
-            <tr><th colspan='3'> Top 3 Answers Here</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>1</td><td>Email</td><td>points</td></tr>
-            <tr><td>2</td><td>Email</td><td>points</td></tr>
-            <tr><td>3</td><td>Email</td><td>points</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="table-responsive">
-        <table class="table table-condensed table-hover" style="margin-bottom: 5px">
-          <thead>   
-            <tr><th colspan='3'> Best 3 Answers Ever</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>1</td><td>Email</td><td>points</td></tr>
-            <tr><td>2</td><td>Email</td><td>points</td></tr>
-            <tr><td>3</td><td>Email</td><td>points</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+  <div id="rankings_zone" class="row"></div>
 
   <div id="map-canvas"></div>
 </div> <!-- end container bootstrap -->
@@ -360,6 +308,60 @@
   </div> 
 </script>
 
+
+<script type="x-tmpl-mustache" id="rankings_template">
+  <div id="ranking_col" class="col-xs-offset-9 col-xs-3">
+    <div class="table-responsive" >
+      <table class="table table-condensed" style="margin-bottom: 0px">
+        <thead>   
+          <tr><th colspan='2'>{{nick}}</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Rank {{ranking}} of {{nUsers}}</td><td>{{totalPoints}}</td></tr>
+          <tr><td>Best Answer Here</td><td>{{rank_here}}</td></tr>
+          <tr><td>Best Ever Answer</td><td>points</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive" >
+      <table class="table table-condensed" style="margin-bottom: 0px">
+        <thead>   
+          <tr><th colspan='3'> Top 3 Scores Globally</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>{{topScores1mail}}</td><td>{{topScores1points}}</td></tr>
+          <tr><td>2</td><td>{{topScores2mail}}</td><td>{{topScores2points}}</td></tr>
+          <tr><td>3</td><td>{{topScores3mail}}</td><td>{{topScores3points}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-condensed" style="margin-bottom: 0px">
+        <thead>   
+          <tr><th colspan='3'> Top 3 Answers Here</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Email</td><td>points</td></tr>
+          <tr><td>2</td><td>Email</td><td>points</td></tr>
+          <tr><td>3</td><td>Email</td><td>points</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-condensed" style="margin-bottom: 5px">
+        <thead>   
+          <tr><th colspan='3'> Best 3 Answers Ever</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Email</td><td>points</td></tr>
+          <tr><td>2</td><td>Email</td><td>points</td></tr>
+          <tr><td>3</td><td>Email</td><td>points</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</script>
 
 
 </html>

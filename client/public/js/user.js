@@ -151,6 +151,27 @@ User = {
       dataType: 'json' 
     }).done(function(response){
       console.log('rankings', response);
+
+      var userRanks = {
+        totalPoints: User.currentUser.points,
+        ranking: response.user_rank,
+        rank_here: 'n/a',
+        topScores1mail: response.top5_score[0][0],
+        topScores2mail: response.top5_score[1][0],
+        topScores3mail: response.top5_score[2][0],
+        topScores1points: response.top5_score[0][1],
+        topScores2points: response.top5_score[1][1],
+        topScores3points: response.top5_score[2][1],
+        topHere: response.top5_here,
+        topAnswers: response.top5_answers,
+        nick: User.currentUser.splitEmail,
+        nUsers: response.n_users
+      };
+
+      View.render( $('#rankings_template'), userRanks, $('#rankings_zone'))
+      $('#rankings_zone').fadeIn('slow', function(){
+        console.log('fadein');
+      });
     })
   }
 
