@@ -21,6 +21,7 @@ Answer = {
   // for the more advanced checks while in Game, see Game.browsingNextSteps
   submit: function(){
     event.preventDefault();
+    console.log('submit answer');
     var answer = $('#answer_input').val();
     // callback function after isValid to start the dictionnary thing
     Answer.isValid(answer, Answer.isInDictionary);

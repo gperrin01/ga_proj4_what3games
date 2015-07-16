@@ -267,21 +267,32 @@ Display = {
       // var words = _.shuffle(x.join('').split('')).join('')
 
       var html = "<p style='text-align: center; margin: 2px 0 3px 0'>" + words + "</p>"
-                + "<form><input id='' type='text' placeholder='Make the longest word'/>"
+                + "<form id='submit_answer'><input id='answer_input' type='text' placeholder='Make the longest word'/>"
                 + "<input type='submit' value='Go' />"
                 + "</form>"
-                
+                + "<p id='answer_validity'></p>";
+
+      // OR RENDER IT ???
 
       User.theThreeWords = words;
       console.log(words);
 
       // show the marker infowindow filled with the 3 words at all time, including when clicking on it
-      // Marker.markerInfo.setContent(words);
       Marker.markerInfo.setContent(html);
       Marker.markerInfo.open(Map.map, marker);
       // ensure click enables to show the words
       Marker.attachInfo(marker, html);
-      // Marker.attachInfo(marker, words);
+
+      // add listener to the submit !!
+      google.maps.event.addListener(Marker.markerInfo, 'domready', function(){
+        $('#submit_answer').on('submit', function(){
+          event.preventDefault();
+          Answer.submit();
+        })
+      });
+
+      
+
     });
   },
 

@@ -67,8 +67,9 @@ Listeners = {
 
     $('#main_row_header').on('submit', '#submit_destination', JourneyChallenge.begin);
 
-    $('#main_row_header').off('submit', '#submit_answer');
-    $('#main_row_header').on('submit', '#submit_answer', Answer.submit);
+    $('#body').off('submit', '#submit_answer');
+    $('#body').on('submit', '#submit_answer', Answer.submit);
+
   },
 
   gameStarted: function(){
@@ -109,7 +110,7 @@ Game = {
     Game.browsingChallenge();
 
     // RENDER VIEW WHERE NOTHING IS GREYED and it says ready to play
-    
+
     // show marker and center map on it + ensure shows info + remvoe any journey shown
     // place marker at Random Loc in central london - muted during devpt so i can play faster and test
     // Display.centerOnUpdatedMarker(new google.maps.LatLng(51.505831 + Math.random()/100, -0.132134857 - Math.random()/100), Marker.init, Map.zoomInit);
@@ -124,8 +125,8 @@ Game = {
     $('#rules_display').text("Browsing Challenge! Get your answer to be able to browse the map again!");
 
     // Submitting an answer works differently during Game: check ntext steps
-    $('#main_row_header').off('submit', '#submit_answer');
-    $('#main_row_header').on('submit', '#submit_answer', function(){
+    $('#body').off('submit', '#submit_answer');
+    $('#body').on('submit', '#submit_answer', function(){
       Game.checkNextStep(Game.goNextStep);
     });
   },
@@ -219,8 +220,8 @@ JourneyChallenge = {
       Map.map.setCenter(JourneyChallenge.stepMarker.position)
 
       // Submitting an answer works differently during JourneyChallenge: check next steps
-      $('#main_row_header').off('submit', '#submit_answer');
-      $('#main_row_header').on('submit', '#submit_answer', function(){
+      $('#body').off('submit', '#submit_answer');
+      $('#body').on('submit', '#submit_answer', function(){
         Game.checkNextStep(JourneyChallenge.moveAlongJourney)
       });
     }
