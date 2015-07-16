@@ -239,21 +239,21 @@
 <!-- when YES logged in -->
 <script type="x-tmpl-mustache" id="location_forms_loggedin_template">
   <div class="col-xs-3 text-left"> 
-    <form id="submit_location" class="form-inline">
-      <div class="form-group">
-        <label class="sr-only" for="address_input">From</label>
-        <input id="address_input" type="text" class="form-control input-sm" value="London, UK">
-      </div>
-      <div class="form-group">
-        <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="">Find</button>
-        <button id="where_am_i" class="btn-xs btn-default"> <span class="glyphicon glyphicon-screenshot"></span> </button>
-      </div>
-    </form>       
-    <form id="submit_destination" class="form">
-        <label class="sr-only" for="destination_input">To</label>
-        <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London">
-     <button type="submit" id="destination_button" class="btn btn-success" value="">Click to Play Until You Reach Destination</button>
-    </form>
+      <form id="submit_location" class="form-inline">
+        <div class="form-group">
+          <label class="sr-only" for="address_input">From</label>
+          <input id="address_input" type="text" class="form-control input-sm" value="London, UK">
+        </div>
+        <div class="form-group">
+          <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="">Find</button>
+          <button id="where_am_i" class="btn-xs btn-default"> <span class="glyphicon glyphicon-screenshot"></span> </button>
+        </div>
+      </form>       
+      <form id="submit_destination" class="form">
+          <label class="sr-only" for="destination_input">To</label>
+          <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London">
+       <button type="submit" id="destination_button" class="btn btn-primary" value="">Create a journey and enter the challenge</button>
+      </form>
   </div> 
 </script>
 
@@ -273,7 +273,7 @@
     <form id="submit_destination" class="form">
         <label class="sr-only" for="destination_input">To</label>
         <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London" disabled>
-     <button type="submit" id="destination_button" class="btn btn-success" disabled>Login Above to Play the Real Challenge</button>
+     <button type="submit" id="destination_button" class="btn btn-primary" disabled>Login Above to Play the Real Challenge</button>
     </form>
   </div> <!-- END LEFT SIDE -->
 </script>
@@ -299,7 +299,7 @@
     <form id="submit_destination" class="form">
         <label class="sr-only" for="destination_input">To</label>
         <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London" disabled>
-     <button type="submit" id="destination_button" class="btn btn-success" disabled>Click to Play Until You Reach Destination</button>
+     <button type="submit" id="destination_button" class="btn btn-primary" disabled>Create a journey and enter the challenge</button>
     </form>
   </div> 
 </script>

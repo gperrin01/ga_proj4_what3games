@@ -126,7 +126,7 @@ Answer = {
     for (var i = 0; i < answer.length; i++) {
       var str = answer.charAt(i);
       if (User.theThreeWords.indexOf(str) === -1) {
-        return 'Try again, "' + str + '" is not present in ' + User.theThreeWords;
+        return str + '" is not present in ' + User.theThreeWords;
         // $('#answer_validity').text('Try again, "' + str + '" is not present in ' + User.theThreeWords)
         // return false;
       }
@@ -143,7 +143,7 @@ Answer = {
       var countInThreeWords = User.theThreeWords.match(new RegExp(str, "g") || [] ).length
       if (countInAnswer > countInThreeWords) {
         var text = (countInThreeWords > 1) ? ' times' : ' time';
-        return 'Try again, "' +str+ '" is only present ' + countInThreeWords + text + ' in ' + User.theThreeWords;
+        return str+ '" is only present ' + countInThreeWords + text + ' in ' + User.theThreeWords;
       }
       // sweet way found: returns an array with all occurences of the regexp
       // need create a new regexps as I cannot hardoce, as in eg for 'o': str.match(/o/g).length

@@ -264,7 +264,7 @@ Display = {
       var star = ' <span class="glyphicon glyphicon-star"></span> ';
 
       var html = "<div id='the_answer'><p id='three_words'>" + star + words + star + "</p>"
-                + "<form id='submit_answer';><input id='answer_input' type='text' autocomplete='off' placeholder='Make the longest word'/>"
+                + "<form id='submit_answer';><input id='answer_input' type='text' autocomplete='off' placeholder='Make the longest word' autofocus/>"
                 + "<input type='submit' value='Go' />"
                 + "</form>"
                 + "<div id='answer_validity' class='text-center'>" 

@@ -225,14 +225,15 @@ JourneyChallenge = {
     else {
       // show final score and the bonus calc
       var bonus = Score.calcBonus(steps.length) - 1;
-      $('#game_msg').html("Nice job!  <span class='glyphicon glyphicon-play'></span>  You earn " 
+      $('#game_msg').html("Destination reached <span class='glyphicon glyphicon-play'></span>  You earn " 
         + JourneyChallenge.score +  " points and " + bonus + " bonus points"); 
       JourneyChallenge.score += bonus;
 
       // update the DB with these bonus points then update the user with them
       User.addBonusPoints(bonus);
       User.currentUser += bonus;
-
+      
+      Listeners.enableDestination(true);
     }
   },
 
