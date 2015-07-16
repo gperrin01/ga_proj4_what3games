@@ -143,7 +143,7 @@ User = {
     console.log('prepare rankings');
     // send the current_user auth token and receive his rankings as well as the global rankings
     // top 5 w most points + top 5 with best ever answer + top 5 best at this lcoation
-    // data will show "  one two three  "
+// data will show "  one two three"
     var data = {words: $('#three_words').text().split(' ').slice(2,5).join(' ')};
     $.ajax({
       url: base_url + "/users/" + User.currentUser.authentication_token + "/ranking",
