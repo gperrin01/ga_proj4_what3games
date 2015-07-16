@@ -205,7 +205,7 @@ JourneyChallenge = {
     console.log('steps', steps);
 
     // Until you reach the final step (end of steps array):
-    if (count < steps.length){
+    if (count < steps.length) {
 
       $('#game_msg').html('Checkpoint ' + count + '/' + (steps.length-1)
         + ' <span class="glyphicon glyphicon-play"></span>  Score: '+ JourneyChallenge.score );
@@ -218,14 +218,17 @@ JourneyChallenge = {
       Map.map.setCenter(JourneyChallenge.stepMarker.position)
 
       // Submitting an answer works differently during JourneyChallenge: check next steps
-      // google.maps.event.clearInstanceListeners(Marker.markerInfo);
-      google.maps.event.addListener(JourneyChallenge.stepMarker, 'domready', function(){
+      google.maps.event.clearListeners(Marker.markerInfo, 'domready');
+
+      google.maps.event.addListener(Marker.markerInfo, 'domready', function(){
         $('#submit_answer').on('submit', function(){
           event.preventDefault();
+          console.log('submitting journey next steps')
           Game.checkNextStep(JourneyChallenge.moveAlongJourney);
         })
       });
     }
+
     else {
       // show final score and the bonus calc
       var bonus = Score.calcBonus(steps.length) - 1;
