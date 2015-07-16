@@ -208,7 +208,7 @@ JourneyChallenge = {
       Marker.showWords(JourneyChallenge.stepMarker);
       JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
       // recenter the map??
-      Map.map.setCenter(JourneyChallenge.stepMarker.position)
+      // Map.map.setCenter(JourneyChallenge.stepMarker.position)
 
       // Submitting an answer works differently during JourneyChallenge: check next steps
       google.maps.event.clearListeners(Marker.infoWindow, 'domready');

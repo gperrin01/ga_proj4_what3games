@@ -22,11 +22,15 @@ Map = {
 
   // Prepare the map iteself
   geo: navigator.geolocation,
-  londonLat: 51.50722,
-  londonLong: -0.12750,
+  // londonLat: 51.50722,
+  londonLat: 51.505831 + Math.random()/100,
+  londonLong: -0.132134857 - Math.random()/100,
+  // londonLong: -0.12750,
   zoomInit: 13,
   zoomShowLocation: 16,
   zoomStepJourney: 16,
+
+  styleMutedBlue : [{"featureType":"all","stylers":[{"saturation":0},{"hue":"#e7ecf0"}]},{"featureType":"road","stylers":[{"saturation":-70}]},{"featureType":"transit","stylers":[{"visibility":"off"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"water","stylers":[{"visibility":"simplified"},{"saturation":-60}]}],
 
   // ******************************************
   // On page load: map centered in London
@@ -50,7 +54,8 @@ Map = {
       },
       panControlOptions: {
         position: google.maps.ControlPosition.BOTTOM_CENTER
-      }
+      }, 
+      styles: Map.styleMutedBlue
     };
     Map.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
