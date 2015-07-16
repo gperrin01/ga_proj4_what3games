@@ -261,11 +261,15 @@ Display = {
       User.theThreeWords = words;
       console.log(words);
 
-      var html = "<p style='text-align: center; margin: 2px 0 3px 0'>" + words + "</p>"
-                + "<form id='submit_answer'><input id='answer_input' type='text' placeholder='Make the longest word'/>"
+      var star = ' <span class="glyphicon glyphicon-star"></span> ';
+
+      var html = "<div id='the_answer'><p id='three_words'>" + star + words + star + "</p>"
+                + "<form id='submit_answer';><input id='answer_input' type='text' autocomplete='off' placeholder='Make the longest word'/>"
                 + "<input type='submit' value='Go' />"
                 + "</form>"
-                + "<p id='answer_validity' class='text-center'></p>";
+                + "<div id='answer_validity' class='text-center'>" 
+                + "<p>Use the above words</p><p>To make the longest anagram"
+                + "</p></div></div>";
 
       // show the marker infowindow filled with the 3 words at all time, including when clicking on it
       Marker.infoWindow.setContent(html);
@@ -315,9 +319,22 @@ Display = {
   updateView: function(message, $view, valid) {
     $view.text(message);
     if (valid) {
+      Display.successStyle(true);
       $('#answer_input').val('');
+    } else {
+      Display.successStyle(false);
     }
   },
+
+  successStyle: function(boolean) {
+    $('#answer_validity').removeClass();
+    if (boolean) {
+      $('#answer_validity').addClass('bg-success text-success')
+    }  else {
+      $('#answer_validity').addClass('bg-danger text-danger');
+    }
+  
+  }
 
 }; // End Display Object
 

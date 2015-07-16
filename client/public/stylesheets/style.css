@@ -15,9 +15,37 @@
   margin-bottom: 15px;
 }
 
+h4 {
+  margin: 0 0 0 0 ;
+}
+
+/* the infowindow */
+#three_words {
+  text-align: center;
+  margin: 2px 0 3px 0;
+  font-size: 16px;
+  font-weight: 400;
+  /*border: 1px solid black;*/
+  border-radius: 100px;
+}
+#submit_answer {
+  text-align: center;
+}
+#answer_input {
+  width: 52%;
+  margin: 1px 5px 1px 0;
+  font-size: 14px;
+}
+#the_answer p {
+  margin: 0 0 0 0;
+}
 #answer_validity {
   margin: 4px 0 0px 0;
-  /*text-align: center;*/
+  font-size: 14px;
+  text-align: center;
+}
+#three_words, #submit_answer, #answer_validity {
+  font-family: 'copperplate';
 }
 
 

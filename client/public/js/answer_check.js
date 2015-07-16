@@ -34,26 +34,21 @@ Answer = {
     var valid;
 
     if (!Answer.isLongEnough(answer)) {
-      message = "Try again, less than three characters is too easy!";
+      message = "Make it longer than three characters";
       valid = false;
-    }
-    else if (!Answer.isNotOneOfThree(answer)) {
-      message = 'Try again, choosing a part of the three words is too easy!';
+    } else if (!Answer.isNotOneOfThree(answer)) {
+      message = 'You cannot choosing one of the three words';
       valid = false;
-    }
-    else if (!Answer.isNotBasicPlural(answer)) {
-      message = 'Try again, pluralizing one of the words is too easy!';
+    } else if (!Answer.isNotBasicPlural(answer)) {
+      message = 'A simple plural is too easy!';
       valid = false;
-    }
-    else if (!Answer.isNotBasicSingular(answer)) {
-      message = 'Try again, taking the singular of one of the words is too easy!';
+    } else if (!Answer.isNotBasicSingular(answer)) {
+      message = 'A simple singular is too easy!';
       valid = false;
-    }   
-    else if (typeof Answer.hasValidLetters(answer) === "string") {
+    } else if (typeof Answer.hasValidLetters(answer) === "string") {
       message = Answer.hasValidLetters(answer);
       valid = false;
-    }
-    else if (typeof Answer.hasValidNumberOfLetters(answer) === "string") {
+    } else if (typeof Answer.hasValidNumberOfLetters(answer) === "string") {
       message = Answer.hasValidNumberOfLetters(answer);
       valid = false;
     }
@@ -80,7 +75,7 @@ Answer = {
     $.get("https://dictionary.yandex.net/api/v1/dicservice.json/lookup?", data, function(result){
 
       if (result.def.length === 0) {
-        Display.updateView("Try again, this word is not in our dictionary!", $view, false);
+        Display.updateView("Not yet in our dictionary!", $view, false);
         // this is the callbackForInDico enabling the Game to know the result is FALSE
         if (callbackForInDico) {callbackForInDico(false);}
       }
