@@ -60,8 +60,30 @@ class User < ActiveRecord::Base
     self.answers.length
   end
 
-  def global_ranking
+  def ranking_global
     User.all.sort { |a,b| b.calc_score <=> a.calc_score }.index(self) + 1
+  end
+  def top5_score_global
+    top = User.all.sort { |a,b| b.calc_score <=> a.calc_score }.take(5)
+    # get the emails and points [["gperrin01@gmail.com", 300], ["jeremy@jeremy.com", 1]]
+    top_five_points = top.map {|user| [user.email, user.points] }
+  end
+
+  def top5_answers_global
+    top = Answer.all.sort { |a,b| b.points <=> a.points }.take(5)
+    # same as above but get the email of the users as well
+    top_5_answers_global = top.map {|answer| [User.find(answer.user_id).email, answer.points] }
+  end
+
+  def top5_answers location_id
+    top = Answer.where(location_id: location_id).sort { |a,b| b.points <=> a.points }.take(5)
+    # same as above retun user and answer
+    top_5_answers_here = top.map {|answer| [User.find(answer.user_id).email, answer.points] }
+  end
+  def ranking_here location_id
+    top = Answer.where(location_id: location_id).sort { |a,b| b.points <=> a.points }
+    top.length > 0 ? top.index(self) +1 : 'no answer here yet'
+    # Answer.where(location_id: location_id).sort { |a,b| b.points <=> a.points }.index(self) + 1
   end
 
 

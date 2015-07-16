@@ -14,7 +14,9 @@ Rails.application.routes.draw do
 
   post 'answers', to: 'answers#create'
 
+  # should i put these 2 onto DEVISE??
   put 'users/:authentication_token', to: 'users#add_points'
+  get 'users/:authentication_token/ranking', to: 'users#get_rankings'
 
   root 'home#index'
 
