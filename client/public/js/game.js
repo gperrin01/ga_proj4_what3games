@@ -56,22 +56,20 @@ Listeners = {
     Listeners.enableDestination(true);
 
     // EVENT DELEGATION !!
-    $('#game_msg').text("Freely Browse the Map, or Play to Enter the Challenges");
-
-    // $('#main_row_header').off('click', '#where_am_i');
+    // $('#location_forms').off('click', '#where_am_i');
     // $('#where_am_i').off('click');
-    $('#main_row_header').on('click', '#where_am_i', Map.setToWhereAmI)
+    $('#location_forms').on('click', '#where_am_i', Map.setToWhereAmI)
 
-    // $('#main_row_header').off('submit', '#submit_location');
-    $('#main_row_header').on('submit', '#submit_location', Map.setToLocation);
+    // $('#location_forms').off('submit', '#submit_location');
+    $('#location_forms').on('submit', '#submit_location', Map.setToLocation);
 
-    $('#main_row_header').on('submit', '#submit_destination', JourneyChallenge.begin);
+    $('#location_forms').on('submit', '#submit_destination', JourneyChallenge.begin);
   },
 
   gameStarted: function(){
     Listeners.enableMovingOnMap(false)
     // finally let the stop button end the game
-    // $('#main_row_header').on('click', '#stop_button', Game.stop);
+    // $('#location_forms').on('click', '#stop_button', Game.stop);
   }, 
 
   // prevent clicks on the map or finding a new location
@@ -151,14 +149,14 @@ Game = {
       Listeners.enableMovingOnMap(true);
 
       // Then once a move on the map is made, freeze everything again for the next challenge
-      $('#main_row_header').off('submit', '#submit_location')
-      $('#main_row_header').off('submit', '#where_am_i')
-      $('#main_row_header').on('submit', '#submit_location', function(){
+      $('#location_forms').off('submit', '#submit_location')
+      $('#location_forms').off('submit', '#where_am_i')
+      $('#location_forms').on('submit', '#submit_location', function(){
         event.preventDefault();
         Map.setToLocation();
         Game.browsingChallenge();
       });
-      $('#main_row_header').on('click','#where_am_i', function(){
+      $('#location_forms').on('click','#where_am_i', function(){
         event.preventDefault();
         Map.setToWhereAmI();
         Game.browsingChallenge();

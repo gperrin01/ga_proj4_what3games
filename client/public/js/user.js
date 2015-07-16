@@ -33,11 +33,13 @@ User = {
         User.currentUser.splitEmail = User.currentUser.email.split('@')[0];
         View.render( $("#navbar_isloggedin_template"), User.currentUser, $('#main-navbar'), 'slideDown' );
         View.render( $("#main_area_loggedin_template"), User.currentUser, $('#main_row_header'), 'slideDown' );
+        View.render( $("#location_forms_loggedin_template"), User.currentUser, $('#location_forms'), 'slideDown' );
       });
     } else {
       // REDNER NAV and Main area for NO LOGGED user
       View.render( $("#navbar_no_login_template"), null, $('#main-navbar') );
       View.render( $("#main_area_notlogged_template"), User.currentUser, $('#main_row_header'), 'slideDown' )
+      View.render( $("#location_forms_not_loggedin_template"), User.currentUser, $('#location_forms'), 'slideDown' )
     }
   },
 

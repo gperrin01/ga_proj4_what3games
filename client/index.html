@@ -36,9 +36,13 @@
 
 <div class="container-fluid">
 
-  <div id="main_row_header" class="row main_row">
-  </div> <!-- END Main Row -->
+  <!-- Line above map with Game message and Score -->
+  <div id="main_row_header" class="row"></div> 
 
+  <!-- Line moved above the map with location and destination -->
+  <div id="location_forms" class="row"></div>
+
+  
   <div id="map-canvas"></div>
 
 </div> <!-- end container bootstrap -->
@@ -196,16 +200,44 @@
 
 
 <!-- **********************
-***  SCRIPTS MAIN HEADER AND PLAY AREA
+***  SCRIPTS MAIN HEADER WITH MESSAGES
  ********************** -->
+<!-- If YES logged in -->
+<script type="x-tmpl-mustache" id="main_area_loggedin_template">
+  <div class="col-xs-6 col-xs-offset-3">   
+    <h4 class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Click Play or Enter a Destination to Start the Challenge</span> <span class="glyphicon glyphicon-star"></span></h4>
+  </div> 
+  <div class="col-xs-3 text-right">
+    <form class="form-inline">
+      <div class="form-group">
+        <button id="ranking" class="btn btn-primary btn"><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings</button>
+      </div>
+    </form>
+  </div>
+</script>
+
+<!-- If NOT logged in -->
+<script type="x-tmpl-mustache" id="main_area_not_loggedin_template">
+  <div class="col-xs-6 col-xs-offset-3">   
+    <h4 class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Browse the Map to Test Yourself or Login to Enter the Challenge/span> <span class="glyphicon glyphicon-star"></span></h4>
+  </div> 
+  <div class="col-xs-3 text-right">
+    <form class="form-inline">
+      <div class="form-group">
+        <button id="ranking" class="btn btn-primary btn" disabled><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings</button>
+      </div>
+    </form>
+  </div>
+</script>
+
 
 <!-- **********************
- Script main area when User IS logged in 
+ *** SCRIPTS FORMS FOR LOCATIONS AND DESTINATIONS
   ********************** -->
 
- <!-- Big row: LEFT location/destination, MIDDLE Answer RIGHT stop button -->
-<script type="x-tmpl-mustache" id="main_area_loggedin_template">
-  <div class="col-xs-3 text-left">  <!-- LEFT SIDE --> 
+<!-- when YES logged in -->
+<script type="x-tmpl-mustache" id="location_forms_loggedin_template">
+  <div class="col-xs-3 text-left"> 
     <form id="submit_location" class="form-inline">
       <div class="form-group">
         <label class="sr-only" for="address_input">From</label>
@@ -216,28 +248,17 @@
         <button id="where_am_i" class="btn-xs btn-default"> <span class="glyphicon glyphicon-screenshot"></span> </button>
       </div>
     </form>       
-
     <form id="submit_destination" class="form">
         <label class="sr-only" for="destination_input">To</label>
         <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London">
      <button type="submit" id="destination_button" class="btn btn-success" value="">Click to Play Until You Reach Destination</button>
     </form>
-  </div> <!-- END LEFT SIDE -->
-
-
-  <div class="col-xs-5 text-center">  <!-- MIDDLE SIDE --> 
-    <div class="row">
-      <h4 id="" class=""><span class="glyphicon glyphicon-star"></span> <span id="game_msg"></span> <span class="glyphicon glyphicon-star"></span></h4>
-    </div>
-  </div>  <!-- END MIDDLE SIDE --> 
+  </div> 
 </script>
 
-
-<!-- Script main area when User IS NOT logged in -->
-
- <!-- Big row: LEFT location/destination, MIDDLE Answer RIGHT stop button -->
-<script type="x-tmpl-mustache" id="main_area_notlogged_template">
-  <div class="col-xs-3 text-left">  <!-- LEFT SIDE --> 
+<!-- User IS NOT logged in -->
+<script type="x-tmpl-mustache" id="location_forms_not_loggedin_template">
+  <div class="col-xs-3 text-left">  
     <form id="submit_location" class="form-inline">
       <div class="form-group">
         <label class="sr-only" for="address_input">From</label>
@@ -254,12 +275,6 @@
      <button type="submit" id="destination_button" class="btn btn-success" disabled>Login Above to Play the Real Challenge</button>
     </form>
   </div> <!-- END LEFT SIDE -->
-
-  <div class="col-xs-5 text-center">  <!-- MIDDLE SIDE --> 
-    <div class="row">
-      <h4 id="" class=""><span class="glyphicon glyphicon-star"></span> <span id="game_msg"></span> <span class="glyphicon glyphicon-star"></span></h4>
-    </div>
-  </div>  <!-- END MIDDLE SIDE --> 
 </script>
 
 
