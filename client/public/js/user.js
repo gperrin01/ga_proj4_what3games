@@ -140,54 +140,62 @@ User = {
   rankings: function() {
     event.preventDefault();
 
-    console.log('prepare rankings');
-    // send the current_user auth token and receive his rankings as well as the global rankings
-    // top 5 w most points + top 5 with best ever answer + top 5 best at this lcoation
-// data will show "  one two three"
-    var data = {words: $('#three_words').text().split(' ').slice(2,5).join(' ')};
-    $.ajax({
-      url: base_url + "/users/" + User.currentUser.authentication_token + "/ranking",
-      data: data,
-      dataType: 'json' 
-    }).done(function(response){
-      console.log('rankings', response);
+    // if rankings are shown, hide them, otherwise show and update them
+    if ($('#ranking_col').hasClass('out')) {
 
-      var userRanks = {
-        totalPoints: User.currentUser.points,
-        ranking: response.user_rank,
-        rank_here: response.user_rank_here,
-        nick: User.currentUser.splitEmail,
-        nUsers: response.n_users,
-        myBest: response.my_best
-      };
-        // top3 scores
-        userRanks.topScores1mail = response.top3_score.length > 0 ? response.top3_score[0][0] : 'n/a';
-        userRanks.topScores1points = response.top3_score.length > 0 ? response.top3_score[0][1] : 'n/a';
-        userRanks.topScores2mail = response.top3_score.length > 1 ? response.top3_score[1][0] : 'n/a';
-        userRanks.topScores2points = response.top3_score.length > 1 ? response.top3_score[1][1] : 'n/a';
-        userRanks.topScores3mail = response.top3_score.length > 2 ? response.top3_score[2][0] : 'n/a';
-        userRanks.topScores3points = response.top3_score.length > 2 ? response.top3_score[2][1] : 'n/a';
-        // top3 answers
-        userRanks.topAnswers1mail = response.top3_answers.length > 0 ? response.top3_answers[0][0] : 'n/a';
-        userRanks.topAnswers1points = response.top3_answers.length > 0 ? response.top3_answers[0][1] : 'n/a';
-        userRanks.topAnswers2mail = response.top3_answers.length > 1 ? response.top3_answers[1][0] : 'n/a';
-        userRanks.topAnswers2points = response.top3_answers.length > 1 ? response.top3_answers[1][1] : 'n/a';
-        userRanks.topAnswers3mail = response.top3_answers.length > 2 ? response.top3_answers[2][0] : 'n/a';
-        userRanks.topAnswers3points = response.top3_answers.length > 2 ? response.top3_answers[2][1] : 'n/a';
-        // top3 answers here
-        userRanks.topHere1mail = response.top3_here.length > 0 ? response.top3_here[0][0] : 'n/a';
-        userRanks.topHere1points = response.top3_here.length > 0 ? response.top3_here[0][1] : 'n/a';
-        userRanks.topHere2mail = response.top3_here.length > 1 ? response.top3_here[1][0] : 'n/a';
-        userRanks.topHere2points = response.top3_here.length > 1 ? response.top3_here[1][1] : 'n/a';
-        userRanks.topHere3mail = response.top3_here.length > 2 ? response.top3_here[2][0] : 'n/a';
-        userRanks.topHere3points = response.top3_here.length > 2 ? response.top3_here[2][1] : 'n/a'
+      console.log('prepare rankings');
+      // send the current_user auth token and receive his rankings as well as the global rankings
+      // top 5 w most points + top 5 with best ever answer + top 5 best at this lcoation
+  // data will show "  one two three"
+      var data = {words: $('#three_words').text().split(' ').slice(2,5).join(' ')};
+      $.ajax({
+        url: base_url + "/users/" + User.currentUser.authentication_token + "/ranking",
+        data: data,
+        dataType: 'json' 
+      }).done(function(response){
+        console.log('rankings', response);
 
-        // View.renderRankings(response);
+        var userRanks = {
+          totalPoints: User.currentUser.points,
+          ranking: response.user_rank,
+          rank_here: response.user_rank_here,
+          nick: User.currentUser.splitEmail,
+          nUsers: response.n_users,
+          myBest: response.my_best
+        };
+          // top3 scores
+          userRanks.topScores1mail = response.top3_score.length > 0 ? response.top3_score[0][0] : 'n/a';
+          userRanks.topScores1points = response.top3_score.length > 0 ? response.top3_score[0][1] : 'n/a';
+          userRanks.topScores2mail = response.top3_score.length > 1 ? response.top3_score[1][0] : 'n/a';
+          userRanks.topScores2points = response.top3_score.length > 1 ? response.top3_score[1][1] : 'n/a';
+          userRanks.topScores3mail = response.top3_score.length > 2 ? response.top3_score[2][0] : 'n/a';
+          userRanks.topScores3points = response.top3_score.length > 2 ? response.top3_score[2][1] : 'n/a';
+          // top3 answers
+          userRanks.topAnswers1mail = response.top3_answers.length > 0 ? response.top3_answers[0][0] : 'n/a';
+          userRanks.topAnswers1points = response.top3_answers.length > 0 ? response.top3_answers[0][1] : 'n/a';
+          userRanks.topAnswers2mail = response.top3_answers.length > 1 ? response.top3_answers[1][0] : 'n/a';
+          userRanks.topAnswers2points = response.top3_answers.length > 1 ? response.top3_answers[1][1] : 'n/a';
+          userRanks.topAnswers3mail = response.top3_answers.length > 2 ? response.top3_answers[2][0] : 'n/a';
+          userRanks.topAnswers3points = response.top3_answers.length > 2 ? response.top3_answers[2][1] : 'n/a';
+          // top3 answers here
+          userRanks.topHere1mail = response.top3_here.length > 0 ? response.top3_here[0][0] : 'n/a';
+          userRanks.topHere1points = response.top3_here.length > 0 ? response.top3_here[0][1] : 'n/a';
+          userRanks.topHere2mail = response.top3_here.length > 1 ? response.top3_here[1][0] : 'n/a';
+          userRanks.topHere2points = response.top3_here.length > 1 ? response.top3_here[1][1] : 'n/a';
+          userRanks.topHere3mail = response.top3_here.length > 2 ? response.top3_here[2][0] : 'n/a';
+          userRanks.topHere3points = response.top3_here.length > 2 ? response.top3_here[2][1] : 'n/a'
 
-      View.render( $('#rankings_template'), userRanks, $('#rankings_zone'))
-      // $('#rankings_zone').fadeIn('slow', function(){
-      //   console.log('fadein');
+          // View.renderRankings(response);
+
+        View.render( $('#rankings_template'), userRanks, $('#rankings_zone'));
+
+        $('#ranking_col').removeClass('out').addClass('fade in');
       });
+    }
+    else {
+      console.log('should hide');
+      $('#ranking_col').removeClass('in').addClass('fade out');
+    }
   }
 
 }  // End User Object
