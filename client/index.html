@@ -39,7 +39,58 @@
   <!-- Line moved above the map with location and destination -->
   <div id="location_forms" class="row"></div>
 
-  <div id="rankings_zone" class="row"></div>
+  <div id="rankings_zone" class="row">
+      <div id="ranking_col" class="col-xs-offset-9 col-xs-3">
+    <div class="table-responsive" >
+      <table class="table table-condensed" style="margin-bottom: 0px">
+        <thead>   
+          <tr><th colspan='2'>{{nick}}</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Rank {{ranking}} of {{nUsers}}</td><td>{{totalPoints}}</td></tr>
+          <tr><td>Best Answer Here</td><td>{{rank_here}}</td></tr>
+          <tr><td>Best Ever Answer</td><td>points</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive" >
+      <table class="table table-condensed" style="margin-bottom: 0px">
+        <thead>   
+          <tr><th colspan='3'> Top 3 Scores Globally</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>{{topScores1mail}}</td><td>{{topScores1points}}</td></tr>
+          <tr><td>2</td><td>{{topScores2mail}}</td><td>{{topScores2points}}</td></tr>
+          <tr><td>3</td><td>{{topScores3mail}}</td><td>{{topScores3points}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-condensed" style="margin-bottom: 0px">
+        <thead>   
+          <tr><th colspan='3'> Top 3 Answers Here</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Email</td><td>points</td></tr>
+          <tr><td>2</td><td>Email</td><td>points</td></tr>
+          <tr><td>3</td><td>Email</td><td>points</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-condensed" style="margin-bottom: 5px">
+        <thead>   
+          <tr><th colspan='3'> Best 3 Answers Ever</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Email</td><td>points</td></tr>
+          <tr><td>2</td><td>Email</td><td>points</td></tr>
+          <tr><td>3</td><td>Email</td><td>points</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
 
   <div id="map-canvas"></div>
 </div> <!-- end container bootstrap -->
@@ -316,10 +367,10 @@
         <thead>   
           <tr><th colspan='2'>{{nick}}</th></tr>
         </thead>
-        <tbody>
-          <tr><td>Rank {{ranking}} of {{nUsers}}</td><td>{{totalPoints}}</td></tr>
+        <tbody id="user_ranks">
+          <tr><td>Rank {{ranking}} of {{nUsers}}</td><td>Score: {{totalPoints}}</td></tr>
           <tr><td>Best Answer Here</td><td>{{rank_here}}</td></tr>
-          <tr><td>Best Ever Answer</td><td>points</td></tr>
+          <tr><td>Best Ever Answer</td><td>{{my_best}}</td></tr>
         </tbody>
       </table>
     </div>
@@ -328,7 +379,7 @@
         <thead>   
           <tr><th colspan='3'> Top 3 Scores Globally</th></tr>
         </thead>
-        <tbody>
+        <tbody id="top_scores">
           <tr><td>1</td><td>{{topScores1mail}}</td><td>{{topScores1points}}</td></tr>
           <tr><td>2</td><td>{{topScores2mail}}</td><td>{{topScores2points}}</td></tr>
           <tr><td>3</td><td>{{topScores3mail}}</td><td>{{topScores3points}}</td></tr>
@@ -338,24 +389,24 @@
     <div class="table-responsive">
       <table class="table table-condensed" style="margin-bottom: 0px">
         <thead>   
-          <tr><th colspan='3'> Top 3 Answers Here</th></tr>
+          <tr><th colspan='3'>Best 3 Answers Ever</th></tr>
         </thead>
-        <tbody>
-          <tr><td>1</td><td>Email</td><td>points</td></tr>
-          <tr><td>2</td><td>Email</td><td>points</td></tr>
-          <tr><td>3</td><td>Email</td><td>points</td></tr>
+        <tbody id="top_answers">
+          <tr><td>1</td><td>{{topAnswers1mail}}</td><td>{{topAnswers1points}}</td></tr>
+          <tr><td>2</td><td>{{topAnswers2mail}}</td><td>{{topAnswers2points}}</td></tr>
+          <tr><td>3</td><td>{{topAnswers3mail}}</td><td>{{topAnswers3points}}</td></tr>
         </tbody>
       </table>
     </div>
     <div class="table-responsive">
       <table class="table table-condensed" style="margin-bottom: 5px">
         <thead>   
-          <tr><th colspan='3'> Best 3 Answers Ever</th></tr>
+          <tr><th colspan='3'> Top 3 Answers Here</th></tr>
         </thead>
-        <tbody>
-          <tr><td>1</td><td>Email</td><td>points</td></tr>
-          <tr><td>2</td><td>Email</td><td>points</td></tr>
-          <tr><td>3</td><td>Email</td><td>points</td></tr>
+        <tbody id="top_answers_here">
+          <tr><td>1</td><td>{{topHere1mail}}</td><td>{{topHere1points}}</td></tr>
+          <tr><td>2</td><td>{{topHere2mail}}</td><td>{{topHere2points}}</td></tr>
+          <tr><td>3</td><td>{{topHere3mail}}</td><td>{{topHere3points}}</td></tr>
         </tbody>
       </table>
     </div>
@@ -363,5 +414,8 @@
 
 </script>
 
+<script type="x-tmpl-mustache" id="rankings_table_template">
+<tr><td>{{}}</td><td>{{[0]}}</td><td>{{[1]}}</td></tr>
+</script>
 
 </html>

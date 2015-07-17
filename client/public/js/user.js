@@ -155,24 +155,39 @@ User = {
       var userRanks = {
         totalPoints: User.currentUser.points,
         ranking: response.user_rank,
-        rank_here: 'n/a',
-        topScores1mail: response.top5_score[0][0],
-        topScores2mail: response.top5_score[1][0],
-        topScores3mail: response.top5_score[2][0],
-        topScores1points: response.top5_score[0][1],
-        topScores2points: response.top5_score[1][1],
-        topScores3points: response.top5_score[2][1],
-        topHere: response.top5_here,
-        topAnswers: response.top5_answers,
+        rank_here: response.user_rank_here,
         nick: User.currentUser.splitEmail,
-        nUsers: response.n_users
+        nUsers: response.n_users,
+        myBest: response.my_best
       };
+        // top3 scores
+        userRanks.topScores1mail = response.top3_score.length > 0 ? response.top3_score[0][0] : 'n/a';
+        userRanks.topScores1points = response.top3_score.length > 0 ? response.top3_score[0][1] : 'n/a';
+        userRanks.topScores2mail = response.top3_score.length > 1 ? response.top3_score[1][0] : 'n/a';
+        userRanks.topScores2points = response.top3_score.length > 1 ? response.top3_score[1][1] : 'n/a';
+        userRanks.topScores3mail = response.top3_score.length > 2 ? response.top3_score[2][0] : 'n/a';
+        userRanks.topScores3points = response.top3_score.length > 2 ? response.top3_score[2][1] : 'n/a';
+        // top3 answers
+        userRanks.topAnswers1mail = response.top3_answers.length > 0 ? response.top3_answers[0][0] : 'n/a';
+        userRanks.topAnswers1points = response.top3_answers.length > 0 ? response.top3_answers[0][1] : 'n/a';
+        userRanks.topAnswers2mail = response.top3_answers.length > 1 ? response.top3_answers[1][0] : 'n/a';
+        userRanks.topAnswers2points = response.top3_answers.length > 1 ? response.top3_answers[1][1] : 'n/a';
+        userRanks.topAnswers3mail = response.top3_answers.length > 2 ? response.top3_answers[2][0] : 'n/a';
+        userRanks.topAnswers3points = response.top3_answers.length > 2 ? response.top3_answers[2][1] : 'n/a';
+        // top3 answers here
+        userRanks.topHere1mail = response.top3_here.length > 0 ? response.top3_here[0][0] : 'n/a';
+        userRanks.topHere1points = response.top3_here.length > 0 ? response.top3_here[0][1] : 'n/a';
+        userRanks.topHere2mail = response.top3_here.length > 1 ? response.top3_here[1][0] : 'n/a';
+        userRanks.topHere2points = response.top3_here.length > 1 ? response.top3_here[1][1] : 'n/a';
+        userRanks.topHere3mail = response.top3_here.length > 2 ? response.top3_here[2][0] : 'n/a';
+        userRanks.topHere3points = response.top3_here.length > 2 ? response.top3_here[2][1] : 'n/a'
+
+        // View.renderRankings(response);
 
       View.render( $('#rankings_template'), userRanks, $('#rankings_zone'))
-      $('#rankings_zone').fadeIn('slow', function(){
-        console.log('fadein');
+      // $('#rankings_zone').fadeIn('slow', function(){
+      //   console.log('fadein');
       });
-    })
   }
 
 }  // End User Object
@@ -195,6 +210,24 @@ View = {
       parentElement.hide();
       parentElement.slideDown('slow');
     }
+  },
+
+  append:  function(templateElement, object, parentElement, animation) {
+    // parentElement.empty();
+    var template = templateElement.html();
+    Mustache.parse(template);
+    var rendered = Mustache.render(template, object);
+    parentElement.append(rendered);
+  },
+
+  renderRankings: function(userResponse) {
+  //   // Iterate through response and append to the table bodies
+
+  //   for (var i=0; i <= 2 && i < userResponse.top5_score.length; i++){
+  //     $('#top_answers').empty();
+  //     View.render( $('#top_answers'), userResponse.top5_score[i], $('#rankings_table_template') )
+  //   }
+  // }
   }
 }
 
