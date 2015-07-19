@@ -126,7 +126,7 @@ Game = {
     var answer = $('#answer_input').val();
     Answer.isValid(answer, Answer.isInDictionary, callbackForInDico);
   },
-
+  
   goNextStep: function(valid, answer){
     // If TRUE, do all the below, 
     // else the isValid function display the error message and we try again

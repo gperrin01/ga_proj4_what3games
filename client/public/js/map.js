@@ -302,6 +302,7 @@ Display = {
     })
   },
 
+
   // Update marker position to new location + show marker + center map + ensure zoom close
   centerOnUpdatedMarker: function(ggl_coords, marker, zoom) {
     Display.clearJourney();
