@@ -129,7 +129,7 @@ Game = {
   
   goNextStep: function(valid, answer){
     // If TRUE, do all the below, 
-    // else the isValid function display the error message and we try again
+    // else the isValid function displays the error message and we try again
     if (valid) {
 
       // UPDATE DATABASE with your answer and score at that location
@@ -159,16 +159,6 @@ Game = {
 
       Listeners.dragForNextChallenge =  google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
     }
-  },
-
-
-// IS THIS USED ANYMORE ???
-  stop: function(){
-    // back to as if the page was loaded
-    Listeners.justBrowsing();
-    // show marker and center map on it + remvoe any journey shown
-    View.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
-    // DO NOT TRACK SCORE
   }
 
 };  // End Game Object
