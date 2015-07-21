@@ -239,9 +239,10 @@ JourneyChallenge = {
 
       // enable only destination and location fields
       Listeners.enableDestination(true);
-      $('#where_am_i').attr('disabled', true);
-      $('#geocode_button').attr('disabled', true);
-      $('#address_input').attr('disabled', true);    }
+      $('#where_am_i').attr('disabled', false);
+      $('#geocode_button').attr('disabled', false);
+      $('#address_input').attr('disabled', false);    
+    }
   },
 
   moveAlongJourney: function(valid, answer){
