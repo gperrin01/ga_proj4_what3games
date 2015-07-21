@@ -1,18 +1,421 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Document</title>
-    <link rel="stylesheet" href="public/stylesheets/joke.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script type="text/javascript" src="public/js/joke.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What 3 Games</title>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <!--  Bootstrap, requires jQuery, then Styling -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="public/stylesheets/style.css">
+
+ <!--  <link rel="shortcut icon" type="image/png" href="jasmine/lib/jasmine-2.3.4/jasmine_favicon.png">
+  <link rel="stylesheet" type="text/css" href="jasmine/lib/jasmine-2.3.4/jasmine.css">
+  <script type="text/javascript" src="jasmine/lib/jasmine-2.3.4/jasmine.js"></script>
+  <script type="text/javascript" src="jasmine/lib/jasmine-2.3.4/jasmine-html.js"></script>
+  <script type="text/javascript" src="jasmine/lib/jasmine-2.3.4/boot.js"></script>   -->
+  
+  <script type="text/javascript" src="others/other.js"></script>
+  <script type="text/javascript" src="public/js/underscore.js"></script>
+  <script src="http://maps.googleapis.com/maps/api/js?region=GB"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.2/js.cookie.min.js"></script>
+  <script src="public/js/map.js"></script>
+  <script src="public/js/game.js"></script>
+  <script src="public/js/answer_check.js"></script>
+  <script src="public/js/user.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.1/mustache.min.js"></script>
 </head>
+
 <body>
 
-<div id="container"></div>
+<nav id="main-navbar" class="navbar navbar-default"></nav>
 
-<footer><a href="./index2.html">What 3 Games (beta)</a></footer>
+<div class="container-fluid">
+
+  <!-- Line above map with Game message and Score -->
+  <div id="main_row_header" class="row"></div> 
+  <!-- Line moved above the map with location and destination -->
+  <div id="location_forms" class="row"></div>
+
+  <div id="rankings_zone" class="row">
+      <div id="ranking_col" class="col-xs-offset-9 col-xs-3 fade out">
+    <div class="table-responsive" >
+      <table class="table table-condensed" style="margin-bottom: 0px">
+        <thead>   
+          <tr><th colspan='2'>{{nick}}</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Rank {{ranking}} of {{nUsers}}</td><td>{{totalPoints}}</td></tr>
+          <tr><td>Best Answer Here</td><td>{{rank_here}}</td></tr>
+          <tr><td>Best Ever Answer</td><td>points</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive" >
+      <table class="table table-condensed" style="margin-bottom: 0px">
+        <thead>   
+          <tr><th colspan='3'> Top 3 Scores Globally</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>{{topScores1mail}}</td><td>{{topScores1points}}</td></tr>
+          <tr><td>2</td><td>{{topScores2mail}}</td><td>{{topScores2points}}</td></tr>
+          <tr><td>3</td><td>{{topScores3mail}}</td><td>{{topScores3points}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-condensed" style="margin-bottom: 0px">
+        <thead>   
+          <tr><th colspan='3'> Top 3 Answers Here</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Email</td><td>points</td></tr>
+          <tr><td>2</td><td>Email</td><td>points</td></tr>
+          <tr><td>3</td><td>Email</td><td>points</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-condensed" style="margin-bottom: 5px">
+        <thead>   
+          <tr><th colspan='3'> Best 3 Answers Ever</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Email</td><td>points</td></tr>
+          <tr><td>2</td><td>Email</td><td>points</td></tr>
+          <tr><td>3</td><td>Email</td><td>points</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+
+  <div id="map-canvas"></div>
+</div> <!-- end container bootstrap -->
+
   
 </body>
+
+<!-- **********************
+***  SCRIPTS FOR NAV BAR
+ ********************** -->
+
+<!-- Script for Navbar WHEN NOBODY LOGGED IN -->
+<script type="x-tmpl-mustache" id="navbar_no_login_template">
+  <div id="main_navbar_container" class="container-fluid">
+     <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="a" class="navbar-brand" href="#">Words of the World</a>
+    </div>
+
+    <div id="other_a_holder" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li id="browse-li"class="active"><a href="#" >Browse <span class="sr-only">(current)</span></a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login to Play<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li class="login_link"><a href="#">Log in</a></li>
+            <li class="signup_link"><a href="#">Sign up</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Rules</a></li>
+        <li><a href="#">About</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login | Signup <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li class="login_link"><a href="#">Log in</a></li>
+            <li class="signup_link"><a href="#">Sign up</a></li>
+          </ul>
+        </li>
+      </ul>  <!-- /.navbar-right -->
+    </div>   <!-- /.navbar-collapse -->
+
+  </div>   <!-- /.container-fluid -->
+</script>
+<!-- End script nav bar nobody logged in -->
+
+<!-- Script for NavBar WHEN USER IS LOGGED IN -->
+<script type="x-tmpl-mustache" id="navbar_isloggedin_template">
+  <div id="main_navbar_container" class="container-fluid">
+     <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="a" class="navbar-brand" href="#">Words of the World</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li id="browse-li" class="active"><a href="#" >Browse <span class="sr-only">(current)</span></a></li>
+        <li id="play-li"><a href="#">Play</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Rules</a></li>
+        <li><a href="#">About</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ splitEmail }}<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">My account</a></li>
+            <li><a href="#">I <span class="glyphicon glyphicon-heart"></span> this app</a></li>
+            <li role="separator" class="divider"></li>
+            <li id="logout"><a href="#">Logout</a></li>
+          </ul>
+        </li>
+      </ul>  <!-- /.navbar-right -->
+    </div>   <!-- /.navbar-collapse -->
+
+  </div>   <!-- /.container-fluid -->
+</script>
+
+<!-- END of SCRIPT FOR THE NAV BAR WHEN User LOGGED IN -->
+<!-- END of SCRIPT FOR THE NAV BAR  -->
+
+<!-- **********************
+***  SCRIPTS FOR LOGIN FORMS
+ ********************** -->
+
+<script type="x-tmpl-mustache" id="login_form_template">
+  <form id="login" class="form-horizontal col-xs-4 col-xs-offset-4">
+    <div class="form-group"> 
+      <label class="col-xs-4 control-label" for="login-email">Email</label>
+      <div class="col-xs-8">
+        <input type="email" class="form-control" id="login-email" name="email" placeholder="Email">
+      </div>
+    </div>
+    <div class="form-group"> 
+      <label class="col-xs-4 control-label" for="login-password">Password</label>
+      <div class="col-xs-8">
+        <input type="password" class="form-control" id="login-password" name="password" placeholder="Password">
+      </div>
+    </div>
+    <div class="form-group">
+      <button class="col-xs-offset-4 col-xs-8 submit_button btn btn-primary" type="submit">Log in</button>
+    </div>
+  </form>
+</script>
+
+<script type="x-tmpl-mustache" id="signup_form_template">
+  <form id="signup" class="col-xs-4 col-xs-offset-4">
+    <div class="form-group">
+      <label for="signup-email">Enter your email</label>
+      <input class="form-control" type="email" id="signup-email" name="email" placeholder="Email">
+    </div>
+    <div class="form-group">
+      <label for="signup-password">Enter your password <small>(8 characters minimum)</small></label>
+      <input class="form-control" type="password" id="signup-password" name="password" placeholder="Password">
+    </div>
+    <div class="form-group">
+      <label for="signup-password-confirm">Confirm your password <small>(8 characters minimum)</small></label>
+      <input class="form-control" type="password" id="signup-password-confirm" name="password-confirm" placeholder="Confirm password">
+    </div>
+      <div class="form-group">
+        <button class="col-xs-12 submit_button btn btn-primary" type="submit">Sign-up</button>
+      </div>
+  </form>
+</script>
+
+<!-- END of Scripts for signup and login -->
+
+
+<!-- **********************
+***  SCRIPTS MAIN HEADER WITH MESSAGES
+ ********************** -->
+<!-- If YES logged in -->
+<script type="x-tmpl-mustache" id="main_area_loggedin_template">
+  <div class="col-xs-6 col-xs-offset-3">   
+    <h4 id="up" class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Our world is a treasure. So are our words.</span> <span class="glyphicon glyphicon-star"></span>
+    </h4>
+   <h4 id="down" class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Explore the map and enter the challenge.</span> <span class="glyphicon glyphicon-star"></span>
+    </h4>
+  </div> 
+  <div class="col-xs-3 text-right">
+    <form class="form-inline">
+      <div id="ranking_div" class="form-group">
+        <button id="ranking" class="btn btn-primary btn"><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings</button>
+      </div>
+    </form>
+  </div>
+</script>
+
+<!-- during JOURNEY CHALLENGE -->
+<script type="x-tmpl-mustache" id="main_area_journeychall_template">
+  <div class="col-xs-6 col-xs-offset-3">   
+    <h4 id="up" class="text-center">
+      <span class="glyphicon glyphicon-star"></span> <span id="game_msg">Make it to Destination and Earn Bonus Points</span> <span class="glyphicon glyphicon-star"></span>
+    </h4>
+    <h4 id="down" class="text-center">
+      <span class="glyphicon glyphicon-star"></span>  Checkpoint: {{count}}/{{steps}} <span class="glyphicon glyphicon-play"></span> Score: {{score}}  <span class="glyphicon glyphicon-star"></span>
+    </h4>
+  </div> 
+  <div class="col-xs-3 text-right">
+    <form class="form-inline">
+      <div id="ranking_div" class="form-group">
+        <button id="ranking" class="btn btn-primary btn"><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings</button>
+      </div>
+    </form>
+  </div>
+</script>
+
+
+<!-- If NOT logged in -->
+<script type="x-tmpl-mustache" id="main_area_not_loggedin_template">
+  <div class="col-xs-6 col-xs-offset-3">   
+    <h4 id="up" class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Our world is a treasure. So are our words.</span> <span class="glyphicon glyphicon-star"></span>
+    </h4>
+   <h4 id="down" class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Log in to explore the map and enter the challenge.</span> <span class="glyphicon glyphicon-star"></span>
+    </h4>
+  </div> 
+  <div class="col-xs-3 text-right">
+    <form class="form-inline">
+      <div id="ranking_div" class="form-group">
+        <button id="ranking" class="btn btn-primary btn" disabled><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings</button>
+      </div>
+    </form>
+  </div>
+</script>
+
+
+<!-- **********************
+ *** SCRIPTS FORMS FOR LOCATIONS AND DESTINATIONS
+  ********************** -->
+
+<!-- when YES logged in -->
+<script type="x-tmpl-mustache" id="location_forms_loggedin_template">
+  <div class="col-xs-3 text-left"> 
+      <form id="submit_location" class="form-inline">
+        <div class="form-group">
+          <label class="sr-only" for="address_input">From</label>
+          <input id="address_input" type="text" class="form-control input-sm" value="London, UK">
+        </div>
+        <div class="form-group">
+          <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="">Find</button>
+          <button id="where_am_i" class="btn-xs btn-default"> <span class="glyphicon glyphicon-screenshot"></span> </button>
+        </div>
+      </form>       
+      <form id="submit_destination" class="form">
+          <label class="sr-only" for="destination_input">To</label>
+          <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London">
+       <button type="submit" id="destination_button" class="btn btn-primary" value="">Create a journey and enter the challenge</button>
+      </form>
+  </div> 
+</script>
+
+<!-- User IS NOT logged in -->
+<script type="x-tmpl-mustache" id="location_forms_not_loggedin_template">
+  <div class="col-xs-3 text-left">  
+    <form id="submit_location" class="form-inline">
+      <div class="form-group">
+        <label class="sr-only" for="address_input">From</label>
+        <input id="address_input" type="text" class="form-control input-sm" value="London, UK">
+      </div>
+      <div class="form-group">
+        <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="">Find</button>
+        <button id="where_am_i" class="btn-xs btn-default"> <span class="glyphicon glyphicon-screenshot"></span> </button>
+      </div>
+    </form>       
+    <form id="submit_destination" class="form">
+        <label class="sr-only" for="destination_input">To</label>
+        <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London" disabled>
+     <button type="submit" id="destination_button" class="btn btn-primary" disabled>Login Above to Play the Real Challenge</button>
+    </form>
+  </div> <!-- END LEFT SIDE -->
+</script>
+
+
+<!-- **********************
+ *** During JOURNEY CHALLENGE
+  ********************** -->
+
+<!-- Disable all forms -->
+<script type="x-tmpl-mustache" id="location_forms_journeychallenge_template">
+  <div class="col-xs-3 text-left"> 
+    <form id="submit_location" class="form-inline">
+      <div class="form-group">
+        <label class="sr-only" for="address_input" disabled>From</label>
+        <input id="address_input" type="text" class="form-control input-sm" value="London, UK" disabled>
+      </div>
+      <div class="form-group">
+        <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="" disabled>Find</button>
+        <button id="where_am_i" class="btn-xs btn-default" disabled> <span class="glyphicon glyphicon-screenshot"></span> </button>
+      </div>
+    </form>       
+    <form id="submit_destination" class="form">
+        <label class="sr-only" for="destination_input">To</label>
+        <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London" disabled>
+     <button type="submit" id="destination_button" class="btn btn-primary" disabled>Create a journey and enter the challenge</button>
+    </form>
+  </div> 
+</script>
+
+
+<script type="x-tmpl-mustache" id="rankings_template">
+  <div id="ranking_col" class="col-xs-offset-9 col-xs-3">
+    <div class="table-responsive" >
+      <table class="table table-condensed" style="margin-bottom: 0px">
+        <thead>   
+          <tr><th colspan='2'>{{nick}}</th></tr>
+        </thead>
+        <tbody id="user_ranks">
+          <tr><td>Rank {{ranking}} of {{nUsers}}</td><td>Score: {{totalPoints}}</td></tr>
+          <tr><td>Best Answer Here</td><td>{{rank_here}}</td></tr>
+          <tr><td>Best Ever Answer</td><td>{{my_best}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive" >
+      <table class="table table-condensed" style="margin-bottom: 0px">
+        <thead>   
+          <tr><th colspan='3'> Top 3 Scores Globally</th></tr>
+        </thead>
+        <tbody id="top_scores">
+          <tr><td>1</td><td>{{topScores1mail}}</td><td>{{topScores1points}}</td></tr>
+          <tr><td>2</td><td>{{topScores2mail}}</td><td>{{topScores2points}}</td></tr>
+          <tr><td>3</td><td>{{topScores3mail}}</td><td>{{topScores3points}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-condensed" style="margin-bottom: 0px">
+        <thead>   
+          <tr><th colspan='3'>Best 3 Answers Ever</th></tr>
+        </thead>
+        <tbody id="top_answers">
+          <tr><td>1</td><td>{{topAnswers1mail}}</td><td>{{topAnswers1points}}</td></tr>
+          <tr><td>2</td><td>{{topAnswers2mail}}</td><td>{{topAnswers2points}}</td></tr>
+          <tr><td>3</td><td>{{topAnswers3mail}}</td><td>{{topAnswers3points}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-condensed" style="margin-bottom: 5px">
+        <thead>   
+          <tr><th colspan='3'> Top 3 Answers Here</th></tr>
+        </thead>
+        <tbody id="top_answers_here">
+          <tr><td>1</td><td>{{topHere1mail}}</td><td>{{topHere1points}}</td></tr>
+          <tr><td>2</td><td>{{topHere2mail}}</td><td>{{topHere2points}}</td></tr>
+          <tr><td>3</td><td>{{topHere3mail}}</td><td>{{topHere3points}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</script>
+
+<script type="x-tmpl-mustache" id="rankings_table_template">
+<tr><td>{{}}</td><td>{{[0]}}</td><td>{{[1]}}</td></tr>
+</script>
+
 </html>

@@ -5,12 +5,12 @@ var Map = Map || {};
 var Journey = Journey || {};
 var Marker = Marker || {};
 var Display = Display || {};
-var Words = Words || {};
+// var Words = Words || {};
 
 
 $(document).ready(function(){
   Map.initialize();
-  Display.initialize();
+  View.initialize();
 })
 
 
@@ -79,7 +79,7 @@ Map = {
     // Instantiate an info window to hold info for the markers 
     Marker.infoWindow = new google.maps.InfoWindow();
     // show the 3 words on the page and on the marker infowindow
-    Display.threeWords(Map.londonLat + ', ' + Map.londonLong, Marker.init);
+    View.threeWords(Map.londonLat + ', ' + Map.londonLong, Marker.init);
   },
 
   // ******************************************
@@ -97,9 +97,9 @@ Map = {
         
         // reposition Marker.init + center map + show location + show words
         var ggl_coords = results[0].geometry.location;
-        Display.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
-        Display.threeWords(ggl_coords.A + ', ' + ggl_coords.F, Marker.init);
-        Display.location(ggl_coords.A + ', ' + ggl_coords.F)
+        View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
+        View.threeWords(ggl_coords.A + ', ' + ggl_coords.F, Marker.init);
+        View.location(ggl_coords.A + ', ' + ggl_coords.F)
 
       } else alert('Geocode was not successful for the following reason: ' + status);
     });
@@ -124,11 +124,11 @@ Map = {
   geoloc_success: function(val) {
     // once location is grabbed: show 3 words + show location + updater marker + center map
     var coords = val.coords.latitude + ', ' + val.coords.longitude;
-    Display.threeWords(coords, Marker.init);
-    Display.location(coords);
+    View.threeWords(coords, Marker.init);
+    View.location(coords);
 
     var ggl_coords = new google.maps.LatLng(val.coords.latitude, val.coords.longitude)
-    Display.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
+    View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
   },
   geoloc_error: function(val) {
     console.log('could not get your current location');
@@ -159,7 +159,7 @@ Journey = {
     console.log('show journey');
     
     // ensure direction display is on and clear out any existing markerArray from previous calculations
-    Display.clearJourney();
+    View.clearJourney();
 
     // create the Google direction request for the route
     var origin = $('#address_input').val();
@@ -221,13 +221,13 @@ Marker = {
   // also update the infoWindow
   drag: function(marker){
     var coords = marker.position.A + ', ' + marker.position.F;
-    Display.threeWords(coords, marker);
-    Display.location(coords);
+    View.threeWords(coords, marker);
+    View.location(coords);
   },
 
   showWords: function(marker){
     var coords = marker.position.A + ', ' + marker.position.F;
-    Display.threeWords(coords, marker);
+    View.threeWords(coords, marker);
   },
 
   // On click on a marker, it will show info (location and 3 words)
@@ -248,114 +248,3 @@ Marker = {
 };  // End Marker Object
 
 
-// ******************************************
-// PAGE DISPLAY PROPERTIES AND FUNCTIONS
-// ******************************************
-
-Display = {
-
-  // Display the 3 words on the infowindow of a marker
-  threeWords: function(coords, marker){
-    var data = {
-      'key': Keys.w3w_api, // var key = process.env.W3W_KEY;
-      'position': coords,
-      'lang': 'en'
-    };
-
-    $.get("https://api.what3words.com/position", data, function(response){
-      var words = response.words.join(' ');
-      User.theThreeWords = words;
-      console.log(words);
-
-      var star = ' <span class="glyphicon glyphicon-star"></span> ';
-
-      var html = "<div id='the_answer'><p id='three_words'>" + star + words + star + "</p>"
-                + "<form id='submit_answer';><input id='answer_input' type='text' autocomplete='off' placeholder='Make the longest word' autofocus/>"
-                + "<input type='submit' value='Go' />"
-                + "</form>"
-                + "<div id='answer_validity' class='text-center'>" 
-                + "<p>Use the above words</p><p>To make the longest anagram"
-                + "</p></div></div>";
-
-      // show the marker infowindow filled with the 3 words at all time, including when clicking on it
-      Marker.infoWindow.setContent(html);
-      Marker.infoWindow.open(Map.map, marker);
-      // ensure click enables to show the words
-      Marker.attachInfo(marker, html);
-
-      // add listener to the submit !!
-      google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
-        $('#submit_answer').on('submit', function(){
-          event.preventDefault();
-          Answer.submit();
-        })
-      });
-    });
-  },
-
-  // Display the location (based on coordinates) on the input box
-  location: function(coords) {
-    $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coords, 
-      function(result) {
-        var text = result.results[0].address_components[0].long_name + ' ' + result.results[0].address_components[1].long_name;
-        $('#address_input').val(text);
-    })
-  },
-
-
-  // Update marker position to new location + show marker + center map + ensure zoom close
-  centerOnUpdatedMarker: function(ggl_coords, marker, zoom) {
-    Display.clearJourney();
-    marker.setMap(Map.map);
-    marker.setPosition(ggl_coords);
-    Map.map.setCenter(ggl_coords);
-    Map.map.setZoom(zoom);
-
-    // finally, clear map of any pins and directions, as we now search for one direction
-    Marker.clearStepArray();
-    Journey.directionsDisplay.setMap(null);
-  },
-
-  clearJourney: function() {
-    Journey.directionsDisplay.setMap(Map.map);
-    Marker.clearStepArray();
-    Marker.init.setMap(null);
-  },
-
-  // updates view with the appropriate message &&&
-  updateView: function(message, $view, valid) {
-    $view.text(message);
-    if (valid) {
-      Display.successStyle(true);
-      $('#answer_input').val('');
-    } else {
-      Display.successStyle(false);
-    }
-  },
-
-  successStyle: function(boolean) {
-    $('#answer_validity').removeClass();
-    if (boolean) {
-      $('#answer_validity').addClass('bg-success text-success')
-    }  else {
-      $('#answer_validity').addClass('bg-danger text-danger');
-    } 
-  },
-
-  initialize: function(){
-    $('#main-navbar').on('click', 'li', function(){
-      $('#main-navbar li').removeClass('active');
-      $(this).addClass('active');
-      console.log('active')
-    })
-  }
-
-}; // End Display Object
-
-
-// ******************************************
-// Storing the word on the page
-// ******************************************
-
-
-    

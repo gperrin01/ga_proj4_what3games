@@ -1,5 +1,4 @@
 var User = User || {};
-var View = View || {};
 
 // ******************************************
 // Prepare for Signin, Login, Logout
@@ -200,43 +199,5 @@ User = {
 
 }  // End User Object
 
-// ******************************************
-// Views
-// ******************************************
-
-View = {
-  // render = fully change parent element, 
-  // append = add to parent element
-  render: function(templateElement, object, parentElement, animation) {
-    // parentElement.empty();
-    var template = templateElement.html();
-    Mustache.parse(template);
-    var rendered = Mustache.render(template, object);
-    parentElement.html(rendered);
-
-    if (animation === 'slideDown'){
-      parentElement.hide();
-      parentElement.slideDown('slow');
-    }
-  },
-
-  append:  function(templateElement, object, parentElement, animation) {
-    // parentElement.empty();
-    var template = templateElement.html();
-    Mustache.parse(template);
-    var rendered = Mustache.render(template, object);
-    parentElement.append(rendered);
-  },
-
-  renderRankings: function(userResponse) {
-  //   // Iterate through response and append to the table bodies
-
-  //   for (var i=0; i <= 2 && i < userResponse.top5_score.length; i++){
-  //     $('#top_answers').empty();
-  //     View.render( $('#top_answers'), userResponse.top5_score[i], $('#rankings_table_template') )
-  //   }
-  // }
-  }
-}
 
 
