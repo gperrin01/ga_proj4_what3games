@@ -164,25 +164,25 @@ User = {
           myBest: response.my_best
         };
           // top3 scores
-          userRanks.topScores1mail = response.top3_score.length > 0 ? response.top3_score[0][0] : 'n/a';
+          userRanks.topScores1mail = response.top3_score.length > 0 ? response.top3_score[0][0].split('@')[0] : 'n/a';
           userRanks.topScores1points = response.top3_score.length > 0 ? response.top3_score[0][1] : 'n/a';
-          userRanks.topScores2mail = response.top3_score.length > 1 ? response.top3_score[1][0] : 'n/a';
+          userRanks.topScores2mail = response.top3_score.length > 1 ? response.top3_score[1][0].split('@')[0] : 'n/a';
           userRanks.topScores2points = response.top3_score.length > 1 ? response.top3_score[1][1] : 'n/a';
-          userRanks.topScores3mail = response.top3_score.length > 2 ? response.top3_score[2][0] : 'n/a';
+          userRanks.topScores3mail = response.top3_score.length > 2 ? response.top3_score[2][0].split('@')[0] : 'n/a';
           userRanks.topScores3points = response.top3_score.length > 2 ? response.top3_score[2][1] : 'n/a';
           // top3 answers
-          userRanks.topAnswers1mail = response.top3_answers.length > 0 ? response.top3_answers[0][0] : 'n/a';
+          userRanks.topAnswers1mail = response.top3_answers.length > 0 ? response.top3_answers[0][0].split('@')[0] : 'n/a';
           userRanks.topAnswers1points = response.top3_answers.length > 0 ? response.top3_answers[0][1] : 'n/a';
-          userRanks.topAnswers2mail = response.top3_answers.length > 1 ? response.top3_answers[1][0] : 'n/a';
+          userRanks.topAnswers2mail = response.top3_answers.length > 1 ? response.top3_answers[1][0].split('@')[0]: 'n/a';
           userRanks.topAnswers2points = response.top3_answers.length > 1 ? response.top3_answers[1][1] : 'n/a';
-          userRanks.topAnswers3mail = response.top3_answers.length > 2 ? response.top3_answers[2][0] : 'n/a';
+          userRanks.topAnswers3mail = response.top3_answers.length > 2 ? response.top3_answers[2][0].split('@')[0]: 'n/a';
           userRanks.topAnswers3points = response.top3_answers.length > 2 ? response.top3_answers[2][1] : 'n/a';
           // top3 answers here
-          userRanks.topHere1mail = response.top3_here.length > 0 ? response.top3_here[0][0] : 'n/a';
+          userRanks.topHere1mail = response.top3_here.length > 0 ? response.top3_here[0][0].split('@')[0] : 'n/a';
           userRanks.topHere1points = response.top3_here.length > 0 ? response.top3_here[0][1] : 'n/a';
-          userRanks.topHere2mail = response.top3_here.length > 1 ? response.top3_here[1][0] : 'n/a';
+          userRanks.topHere2mail = response.top3_here.length > 1 ? response.top3_here[1][0].split('@')[0]: 'n/a';
           userRanks.topHere2points = response.top3_here.length > 1 ? response.top3_here[1][1] : 'n/a';
-          userRanks.topHere3mail = response.top3_here.length > 2 ? response.top3_here[2][0] : 'n/a';
+          userRanks.topHere3mail = response.top3_here.length > 2 ? response.top3_here[2][0].split('@')[0]: 'n/a';
           userRanks.topHere3points = response.top3_here.length > 2 ? response.top3_here[2][1] : 'n/a'
 
           // View.renderRankings(response);
