@@ -156,7 +156,7 @@ User = {
         console.log('rankings', response);
 
         var userRanks = {
-          totalPoints: User.currentUser.points,
+          totalPoints: response.user_points,
           ranking: response.user_rank,
           rank_here: response.user_rank_here,
           nick: User.currentUser.splitEmail,

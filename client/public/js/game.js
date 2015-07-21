@@ -135,7 +135,9 @@ Game = {
       // UPDATE DATABASE with your answer and score at that location
       var points = Score.calc(answer);
       User.updateDbWithAnswer(answer, points, User.theThreeWords)
-      User.currentUser.points += points
+
+      // no need since i upaate DB at each answer?
+      // User.currentUser.points += points
 
       // If good Answer, congrats +1, + allows you to drag pin and find location
       Listeners.enableMovingOnMap(true);
@@ -200,6 +202,7 @@ JourneyChallenge = {
     // Until you reach the final step (end of steps array):
     if (count < steps.length) {
 
+      // Tells you where you are: checkpoint stage and points accumulated
       var msg = {count: count, steps: steps.length-1, score: JourneyChallenge.score};
       View.render($('#main_area_journeychall_template'), msg, $('#main_row_header') );
 
@@ -211,6 +214,7 @@ JourneyChallenge = {
       }, 900);
       Marker.showWords(JourneyChallenge.stepMarker);
       JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
+
       // recenter the map??
       // Map.map.setCenter(JourneyChallenge.stepMarker.position)
 
@@ -228,14 +232,19 @@ JourneyChallenge = {
 
     else {
       // show final score and the bonus calc
-      var bonus = Score.calcBonus(steps.length) - 1;
+      var bonus = Score.calcBonus(steps.length);
       $('#game_msg').html("Destination reached <span class='glyphicon glyphicon-play'></span>  You earn " 
         + JourneyChallenge.score +  " points and " + bonus + " bonus points"); 
-      JourneyChallenge.score += bonus;
+      $('#down').empty();
+
+
+      // JourneyChallenge.score += bonus;
 
       // update the DB with these bonus points then update the user with them
       User.addBonusPoints(bonus);
-      User.currentUser += bonus;
+
+      // no need since i upaate DB at each answer?
+      // User.currentUser += bonus;
 
       // enable only destination and location fields
       Listeners.enableDestination(true);
@@ -250,7 +259,10 @@ JourneyChallenge = {
       // UPDATE DATABASE with your answer and score at that location
       var points = Score.calc(answer);
       User.updateDbWithAnswer(answer, points, User.theThreeWords)
-      User.currentUser.points += points;
+
+      // no need since i upaate DB at each answer?
+      // User.currentUser.points += points;
+
       JourneyChallenge.score += points;
 
       // show the marker as "done"
@@ -262,10 +274,6 @@ JourneyChallenge = {
       JourneyChallenge.play(JourneyChallenge.myJourney);
     };
   },
-
-  end: function(){
-
-  }
 
 
 } // End JourneyChallenge Object
@@ -289,7 +297,7 @@ Score = {
     // else  return 0; // 3 is easy, no reward but allowing you to keep playing
   },
   calcBonus: function(num_steps){
-    return num_steps;
+    return num_steps - 1;
   }
 }
 

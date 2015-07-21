@@ -10,6 +10,7 @@ class UsersController < ApplicationController
     location_id = Location.where(three_words: params[:words]).first
 
     response['user_rank'] = current_user.ranking_global
+    response['user_points'] = current_user.points
     response['n_users'] = User.all.length
     response['user_rank_here'] = current_user.ranking_here(location_id)
     response['my_best'] = current_user.my_best_answer
