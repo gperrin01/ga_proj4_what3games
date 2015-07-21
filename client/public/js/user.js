@@ -148,6 +148,7 @@ User = {
   // data will show "  one two three"
       var data = {words: $('#three_words').text().split(' ').slice(2,5).join(' ')};
       $.ajax({
+        type: 'GET',
         url: base_url + "/users/" + User.currentUser.authentication_token + "/ranking",
         data: data,
         dataType: 'json' 
