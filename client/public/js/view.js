@@ -1,5 +1,10 @@
 var View = View || {};
 
+$(document).ready(function(){
+  View.initialize();
+  $('#main_row_header').on('click', '#ranking', View.toggleRankings);
+}); 
+
 // ******************************************
 // PAGE DISPLAY PROPERTIES AND FUNCTIONS
 // ******************************************
@@ -123,13 +128,64 @@ View = {
     parentElement.append(rendered);
   },
 
-  renderRankings: function(userResponse) {
-  //   // Iterate through response and append to the table bodies
+  // show Rankings on 'click', then ensure any click on body will hide Rankings
+  toggleRankings: function() {
+    event.preventDefault();
 
-  //   for (var i=0; i <= 2 && i < userResponse.top5_score.length; i++){
-  //     $('#top_answers').empty();
-  //     View.render( $('#top_answers'), userResponse.top5_score[i], $('#rankings_table_template') )
-  //   }
-  // }
+    $('#ranking_col').removeClass('out').addClass('fade in');
+
+    console.log('prepare rankings');
+    // send the current_user auth token and receive his rankings as well as the global rankings
+    // top 5 w most points + top 5 with best ever answer + top 5 best at this lcoation
+    // data will show "  one two three"
+    var data = {words: $('#three_words').text().split(' ').slice(2,5).join(' ')};
+    $.ajax({
+      type: 'GET',
+      url: base_url + "/users/" + User.currentUser.authentication_token + "/ranking",
+      data: data,
+      dataType: 'json' 
+    }).done(function(response){
+      console.log('rankings', response);
+
+      var userRanks = {
+        totalPoints: response.user_points,
+        ranking: response.user_rank,
+        rank_here: response.user_rank_here,
+        nick: User.currentUser.splitEmail,
+        nUsers: response.n_users,
+        myBest: response.my_best
+      };
+      // top3 scores
+      userRanks.topScores1mail = response.top3_score.length > 0 ? response.top3_score[0][0].split('@')[0] : 'n/a';
+      userRanks.topScores1points = response.top3_score.length > 0 ? response.top3_score[0][1] : 'n/a';
+      userRanks.topScores2mail = response.top3_score.length > 1 ? response.top3_score[1][0].split('@')[0] : 'n/a';
+      userRanks.topScores2points = response.top3_score.length > 1 ? response.top3_score[1][1] : 'n/a';
+      userRanks.topScores3mail = response.top3_score.length > 2 ? response.top3_score[2][0].split('@')[0] : 'n/a';
+      userRanks.topScores3points = response.top3_score.length > 2 ? response.top3_score[2][1] : 'n/a';
+      // top3 answers
+      userRanks.topAnswers1mail = response.top3_answers.length > 0 ? response.top3_answers[0][0].split('@')[0] : 'n/a';
+      userRanks.topAnswers1points = response.top3_answers.length > 0 ? response.top3_answers[0][1] : 'n/a';
+      userRanks.topAnswers2mail = response.top3_answers.length > 1 ? response.top3_answers[1][0].split('@')[0]: 'n/a';
+      userRanks.topAnswers2points = response.top3_answers.length > 1 ? response.top3_answers[1][1] : 'n/a';
+      userRanks.topAnswers3mail = response.top3_answers.length > 2 ? response.top3_answers[2][0].split('@')[0]: 'n/a';
+      userRanks.topAnswers3points = response.top3_answers.length > 2 ? response.top3_answers[2][1] : 'n/a';
+      // top3 answers here
+      userRanks.topHere1mail = response.top3_here.length > 0 ? response.top3_here[0][0].split('@')[0] : 'n/a';
+      userRanks.topHere1points = response.top3_here.length > 0 ? response.top3_here[0][1] : 'n/a';
+      userRanks.topHere2mail = response.top3_here.length > 1 ? response.top3_here[1][0].split('@')[0]: 'n/a';
+      userRanks.topHere2points = response.top3_here.length > 1 ? response.top3_here[1][1] : 'n/a';
+      userRanks.topHere3mail = response.top3_here.length > 2 ? response.top3_here[2][0].split('@')[0]: 'n/a';
+      userRanks.topHere3points = response.top3_here.length > 2 ? response.top3_here[2][1] : 'n/a'
+
+      // Now render the Ranking view
+      View.render( $('#rankings_template'), userRanks, $('#rankings_zone'));
+
+      // Ensure clicking on the body will hide the rankings, and that this click is only listened to once
+      $('body').one('click', function(){
+        $('#ranking_col').removeClass('in').addClass('fade out');
+      });
+
+    });
   }
+
 }

@@ -10,7 +10,6 @@ var View = View || {};
 
 $(document).ready(function(){
   Map.initialize();
-  View.initialize();
 })
 
 
