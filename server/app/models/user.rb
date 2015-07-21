@@ -82,11 +82,15 @@ class User < ActiveRecord::Base
   def top3_answers location_id
     top = Answer.where(location_id: location_id).sort { |a,b| b.points <=> a.points }.take(3)
     # same as above retun user and answer
-    top_3_answers_here = top.map {|answer| [User.find(answer.user_id).email, answer.points] }
+    top_3_answers_here = top.map do |answer|
+      user = User.where(id: answer.user_id)
+      user.length > 0 ? [User.find(answer.user_id).email, answer.points] : ['user no longer exists', answer.points]
+    end
   end
+
   def ranking_here location_id
     top = Answer.where(location_id: location_id).sort { |a,b| b.points <=> a.points }
-    top.length > 0 ? top.index(self) +1 : 'n/a'
+    top.length > 0 ? top.index{|answer| answer.user_id === self.id} + 1 : 'n/a'
     # Answer.where(location_id: location_id).sort { |a,b| b.points <=> a.points }.index(self) + 1
   end
 
