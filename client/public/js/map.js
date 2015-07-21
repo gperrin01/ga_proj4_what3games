@@ -4,7 +4,7 @@
 var Map = Map || {};
 var Journey = Journey || {};
 var Marker = Marker || {};
-var Display = Display || {};
+var View = View || {};
 // var Words = Words || {};
 
 
@@ -22,10 +22,10 @@ Map = {
 
   // Prepare the map iteself
   geo: navigator.geolocation,
-  // londonLat: 51.50722,
-  londonLat: 51.505831 + Math.random()/100,
-  londonLong: -0.132134857 - Math.random()/100,
-  // londonLong: -0.12750,
+  londonLat: 51.50722,
+  // londonLat: 51.505831 + Math.random()/100,
+  // londonLong: -0.132134857 - Math.random()/100,
+  londonLong: -0.12750,
   zoomInit: 13,
   zoomShowLocation: 16,
   zoomStepJourney: 16,
