@@ -237,8 +237,11 @@ JourneyChallenge = {
       User.addBonusPoints(bonus);
       User.currentUser += bonus;
 
+      // enable only destination and location fields
       Listeners.enableDestination(true);
-    }
+      $('#where_am_i').attr('disabled', true);
+      $('#geocode_button').attr('disabled', true);
+      $('#address_input').attr('disabled', true);    }
   },
 
   moveAlongJourney: function(valid, answer){
