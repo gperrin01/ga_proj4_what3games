@@ -233,7 +233,7 @@ JourneyChallenge = {
     if (valid) {
       // UPDATE DATABASE with your answer and score at that location
       var points = Score.calc(answer);
-      User.updateDbWithAnswer(answer, points, User.theThreeWords)
+      User.updateDbWithAnswer(answer, points, User.theThreeWords);
 
       JourneyChallenge.score += points;
 
@@ -241,11 +241,15 @@ JourneyChallenge = {
       JourneyChallenge.stepMarker.setIcon(Marker.succes_icon);
       JourneyChallenge.stepMarker.setAnimation(null);
 
-      // increment the count of sucesfsul steps and play again!
+      // increment the count of sucesfsul steps and play again once clicked anywhere on the body
       JourneyChallenge.countSteps++;
-      JourneyChallenge.play(JourneyChallenge.myJourney);
+      $('body').one('click', function(){
+         JourneyChallenge.play(JourneyChallenge.myJourney);
+      })
+
+      // JourneyChallenge.play(JourneyChallenge.myJourney);
     };
-  },
+  }
 
 
 } // End JourneyChallenge Object
