@@ -39,6 +39,11 @@ $(document).ready(function(){
     Map.initialize();
   })
 
+  $("#main-navbar").on('click', '#explore-li', function(){
+    console.log('explore');
+    Game.beginExploration();    
+  })
+
   // // not sure i will keep this 'freeze and play' game
   // $('#main-navbar').on('click', '#play-li', function(){
   //   console.log('play');
@@ -93,9 +98,21 @@ Listeners = {
 // THE GAME (and simple challenge)
 //***********************************
 
-// // not sure i will keep this 'freeze and play' game
 
-// Game = {
+Game = {
+
+  beginExploration: function() {
+
+    // show main message for exploration, prevent clicking on destination
+    View.render( $('#main_area_explore_template'), User.currentUser, $('#main_row_header'), 'slideDown' );
+    Listeners.enableDestination(false);
+
+    // reset the array storing the right answers
+    Game.countAnswers = [];
+
+  }
+
+// // not sure i will keep this 'freeze and play' game
 
 //   initialize: function(){
 //     Game.browsingChallenge();
@@ -156,7 +173,7 @@ Listeners = {
 //     }
 //   }
 
-// };  // End Game Object
+};  // End Game Object
 
 //***********************************
 // THE JOURNEY CHALLENGE
@@ -188,7 +205,7 @@ JourneyChallenge = {
     if (count < steps.length) {
 
       // Tells you where you are: checkpoint stage and points accumulated
-      var msg = {count: count, steps: steps.length-1, score: JourneyChallenge.score};
+      var msg = {count: count, steps: steps.length-1, score: JourneyChallenge.score, points: User.currentUser.points};
       View.render($('#main_area_journeychall_template'), msg, $('#main_row_header') );
 
       // highlight the marker for that step: 3words and special icon
@@ -219,7 +236,7 @@ JourneyChallenge = {
     }
 
     else {
-      // show final score and the bonus calc
+      // show final score and the bonus calc 
       var bonus = Score.calcBonus(steps.length);
       $('#game_msg').html("Destination reached <span class='glyphicon glyphicon-play'></span>  You earn " 
         + JourneyChallenge.score +  " points and " + bonus + " bonus points"); 

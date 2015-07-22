@@ -28,15 +28,15 @@ User = {
         User.currentUser = response;
         // RENDER NAV and Main area FOR LOGIN
         User.currentUser.splitEmail = User.currentUser.email.split('@')[0];
-        View.render( $("#navbar_isloggedin_template"), User.currentUser, $('#main-navbar'), 'slideDown' );
+        View.render( $("#navbar_isloggedin_template"), User.currentUser, $('#main-navbar') );
         View.render( $("#main_area_loggedin_template"), User.currentUser, $('#main_row_header'), 'slideDown' );
-        View.render( $("#location_forms_loggedin_template"), User.currentUser, $('#location_forms'), 'slideDown' );
+        View.render( $("#location_forms_loggedin_template"), User.currentUser, $('#location_forms') );
       });
     } else {
       // REDNER NAV and Main area for NO LOGGED user
       View.render( $("#navbar_no_login_template"), null, $('#main-navbar') );
       View.render( $("#main_area_not_loggedin_template"), null, $('#main_row_header'), 'slideDown' )
-      View.render( $("#location_forms_not_loggedin_template"), null, $('#location_forms'), 'slideDown' )
+      View.render( $("#location_forms_not_loggedin_template"), null, $('#location_forms') )
     }
   },
 
@@ -121,6 +121,10 @@ User = {
       console.log('updated points');
       var best_here = response.best_answer;
       var you_here = response.your_answer;
+
+      // finally update the badge near the ranking
+      User.currentUser.points += points
+      $('#ranking .badge').text(User.currentUser.points)
     })
   },
 
@@ -132,6 +136,10 @@ User = {
       dataType: 'json'
     }).done(function(response){
       console.log('bonus points');
+
+      // finally update the badge near the ranking
+      User.currentUser.points += bonus
+      $('#ranking .badge').text(User.currentUser.points)
     })
   }
 

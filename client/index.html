@@ -37,6 +37,7 @@
 
   <!-- Line above map with Game message and Score -->
   <div id="main_row_header" class="row"></div> 
+
   <!-- Line moved above the map with location and destination -->
   <div id="location_forms" class="row"></div>
 
@@ -236,15 +237,15 @@
 <!-- If YES logged in -->
 <script type="x-tmpl-mustache" id="main_area_loggedin_template">
   <div class="col-xs-6 col-xs-offset-3">   
-    <h4 id="up" class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Our world is a treasure. So are our words.</span> <span class="glyphicon glyphicon-star"></span>
+    <h4 id="up" class="text-center"><span class="glyphicon glyphicon-globe"></span> <span id="game_msg">Our world is a treasure. So are our words</span> <span class="glyphicon glyphicon-globe"></span>
     </h4>
-   <h4 id="down" class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Explore the map or enter the challenge.</span> <span class="glyphicon glyphicon-star"></span>
+   <h4 id="down" class="text-center"><span class="glyphicon glyphicon-globe"></span> <span id="game_msg">Explore the map or enter the challenge</span> <span class="glyphicon glyphicon-globe"></span>
     </h4>
   </div> 
   <div class="col-xs-3 text-right">
     <form class="form-inline">
       <div id="ranking_div" class="form-group">
-        <button id="ranking" class="btn btn-primary btn"><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings</button>
+        <button id="ranking" class="btn btn-primary btn"><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings <span class="badge">{{points}}</span></button>
       </div>
     </form>
   </div>
@@ -254,16 +255,35 @@
 <script type="x-tmpl-mustache" id="main_area_journeychall_template">
   <div class="col-xs-6 col-xs-offset-3">   
     <h4 id="up" class="text-center">
-      <span class="glyphicon glyphicon-star"></span> <span id="game_msg">Make it to Destination and Earn Bonus Points</span> <span class="glyphicon glyphicon-star"></span>
+      <span class="glyphicon glyphicon-globe"></span> <span id="game_msg">Make it to Destination and Earn Bonus Points</span> <span class="glyphicon glyphicon-globe"></span>
     </h4>
     <h4 id="down" class="text-center">
-      <span class="glyphicon glyphicon-star"></span>  Checkpoint: {{count}}/{{steps}} <span class="glyphicon glyphicon-play"></span> Score: {{score}}  <span class="glyphicon glyphicon-star"></span>
+      <span class="glyphicon glyphicon-globe"></span>  Checkpoint: {{count}}/{{steps}} <span class="glyphicon glyphicon-play"></span> Score: {{score}}  <span class="glyphicon glyphicon-globe"></span>
     </h4>
   </div> 
   <div class="col-xs-3 text-right">
     <form class="form-inline">
       <div id="ranking_div" class="form-group">
-        <button id="ranking" class="btn btn-primary btn"><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings</button>
+        <button id="ranking" class="btn btn-primary btn"><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings <span class="badge">{{points}}</span></button>
+      </div>
+    </form>
+  </div>
+</script>
+
+<!-- during EXPLORE THE WORLD-->
+<script type="x-tmpl-mustache" id="main_area_explore_template">
+  <div class="col-xs-6 col-xs-offset-3">   
+    <h4 id="up" class="text-center">
+      <span class="glyphicon glyphicon-globe"></span> <span id="game_msg">Get three right answers and discover the world</span> <span class="glyphicon glyphicon-globe"></span>
+    </h4>
+    <h4 id="down" class="text-center">
+      <span class="glyphicon glyphicon-globe"></span> <span id='first_answer'> <span class="glyphicon glyphicon-star-empty"> </span> </span> <span id='second_answer'> <span class="glyphicon glyphicon-star-empty"> </span> </span> <span id='third_answer'> <span class="glyphicon glyphicon-star-empty"> </span> </span>  <span class="glyphicon glyphicon-globe"> </span>
+    </h4>
+  </div> 
+  <div class="col-xs-3 text-right">
+    <form class="form-inline">
+      <div id="ranking_div" class="form-group">
+        <button id="ranking" class="btn btn-primary btn"><span class="glyphicon glyphicon-menu-hamburger"></span> Rankings <span class="badge">{{points}}</span></button>
       </div>
     </form>
   </div>
@@ -273,9 +293,9 @@
 <!-- If NOT logged in -->
 <script type="x-tmpl-mustache" id="main_area_not_loggedin_template">
   <div class="col-xs-6 col-xs-offset-3">   
-    <h4 id="up" class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Our world is a treasure. So are our words.</span> <span class="glyphicon glyphicon-star"></span>
+    <h4 id="up" class="text-center"><span class="glyphicon glyphicon-globe"></span> <span id="game_msg">Our world is a treasure. So are our words.</span> <span class="glyphicon glyphicon-globe"></span>
     </h4>
-   <h4 id="down" class="text-center"><span class="glyphicon glyphicon-star"></span> <span id="game_msg">Log in to explore the map and enter the challenge.</span> <span class="glyphicon glyphicon-star"></span>
+   <h4 id="down" class="text-center"><span class="glyphicon glyphicon-globe"></span> <span id="game_msg">Log in to explore the map and enter the challenge.</span> <span class="glyphicon glyphicon-globe"></span>
     </h4>
   </div> 
   <div class="col-xs-3 text-right">
