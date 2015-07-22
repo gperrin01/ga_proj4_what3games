@@ -241,6 +241,9 @@ JourneyChallenge = {
       JourneyChallenge.stepMarker.setIcon(Marker.succes_icon);
       JourneyChallenge.stepMarker.setAnimation(null);
 
+      // Change layout to say click anywhere to continue
+      $('#submit_answer').html("<input type='button' class='btn btn-info' value='Click Anywhere to Continue'>")
+
       // increment the count of sucesfsul steps and play again once clicked anywhere on the body
       JourneyChallenge.countSteps++;
       $('body').one('click', function(){

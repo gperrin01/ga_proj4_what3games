@@ -34,11 +34,11 @@ View = {
 
       var star = ' <span class="glyphicon glyphicon-star"></span> ';
 
-      var html = "<div id='the_answer'><p id='three_words'>" + star + words + star + "</p>"
-                + "<form id='submit_answer';><input id='answer_input' type='text' autocomplete='off' placeholder='Make the longest word' autofocus/>"
+      var html = "<div id='the_answer' class='text-center'><p id='three_words'>" + star + words + star + "</p>"
+                + "<form id='submit_answer'><input id='answer_input' type='text' autocomplete='off' placeholder='Make the longest word' autofocus/>"
                 + "<input type='submit' value='Go' />"
                 + "</form>"
-                + "<div id='answer_validity' class='text-center'>" 
+                + "<div id='answer_validity'>" 
                 + "<p>Use the above words</p><p>To make the longest anagram"
                 + "</p></div></div>";
 
@@ -91,7 +91,8 @@ View = {
     $view.text(message);
     if (valid) {
       View.successStyle(true);
-      $('#answer_input').val('');
+      // $('#answer_input').val('');
+      console.log('success update view');
     } else {
       View.successStyle(false);
     }
