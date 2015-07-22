@@ -116,15 +116,9 @@ Game = {
     google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
       $('#submit_answer').on('submit', function(){
         event.preventDefault();
-        Game.checkNextStep(Game.goNextStep);
+        Answer.submit(Game.goNextStep);
       })
     });
-  },
-
-  checkNextStep: function(callbackForInDico){
-    event.preventDefault();
-    var answer = $('#answer_input').val();
-    Answer.isValid(answer, Answer.isInDictionary, callbackForInDico);
   },
   
   goNextStep: function(valid, answer){
@@ -215,7 +209,7 @@ JourneyChallenge = {
         $('#submit_answer').on('submit', function(){
           event.preventDefault();
           console.log('submitting journey next steps')
-          Game.checkNextStep(JourneyChallenge.moveAlongJourney);
+          Answer.submit(JourneyChallenge.moveAlongJourney);
         })
       });
     }

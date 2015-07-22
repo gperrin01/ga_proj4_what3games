@@ -19,17 +19,17 @@ Answer = {
 
   // this is the basic submit check for freely moving on the map
   // for the more advanced checks while in Game, see Game.browsingNextSteps
-  submit: function(){
+  submit: function(callbackForInDico){
     event.preventDefault();
     console.log('submit answer');
     var answer = $('#answer_input').val();
     // callback function after isValid to start the dictionnary thing
-    Answer.isValid(answer, Answer.isInDictionary);
+    Answer.isValid(answer, callbackForInDico);
   },
 
   // Run all logic tests first & if they pass run the Dictionnary test
   // if Dic test ok, display the value coming from the dictionnary
-  isValid: function(answer, callbackOne, callbackForInDico) {
+  isValid: function(answer, callbackForInDico) {
     var message;
     var valid;
 
@@ -59,7 +59,7 @@ Answer = {
       return View.updateView(message, $view, valid);
     } 
     // else (valid still undefined) run the isInDico WITH CALLBACK
-    else {  return callbackOne(answer, callbackForInDico)  }
+    else {  return Answer.isInDictionary(answer, callbackForInDico)  }
   },
 
   isInDictionary: function(answer, callbackForInDico){
