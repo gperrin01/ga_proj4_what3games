@@ -32,16 +32,18 @@ var Listeners = Listeners || {};
 $(document).ready(function(){
   Listeners.justBrowsing();
 
-  // browse button acts as a reset: back to home page
-  $('#main-navbar').on('click', '#play-li', function(){
-    console.log('play');
-    Game.initialize();
-  });
-  $("#main-navbar").on('click', '#browse-li', function(){
+  // Home button acts as a reset: back to home page
+  $("#main-navbar").on('click', '#home-li', function(){
     console.log('browse');
     User.isLoggedIn();
     Map.initialize();
   })
+
+  // // not sure i will keep this 'freeze and play' game
+  // $('#main-navbar').on('click', '#play-li', function(){
+  //   console.log('play');
+  //   Game.initialize();
+  // });
 });
 
 //***********************************
@@ -91,68 +93,70 @@ Listeners = {
 // THE GAME (and simple challenge)
 //***********************************
 
-Game = {
+// // not sure i will keep this 'freeze and play' game
 
-  initialize: function(){
-    Game.browsingChallenge();
+// Game = {
 
-    // RENDER VIEW WHERE NOTHING IS GREYED and it says ready to play
+//   initialize: function(){
+//     Game.browsingChallenge();
 
-    // show marker and center map on it + ensure shows info + remvoe any journey shown
-    // place marker at Random Loc in central london - muted during devpt so i can play faster and test
-    View.centerOnUpdatedMarker(new google.maps.LatLng(51.505831 + Math.random()/100, -0.132134857 - Math.random()/100), Marker.init, Map.zoomInit);
-    // View.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
-    Marker.drag(Marker.init);
-  },
+//     // RENDER VIEW WHERE NOTHING IS GREYED and it says ready to play
 
-  browsingChallenge: function() {
-    event.preventDefault();
-    Listeners.enableMovingOnMap(false)
-    Listeners.enableDestination(true);
+//     // show marker and center map on it + ensure shows info + remvoe any journey shown
+//     // place marker at Random Loc in central london - muted during devpt so i can play faster and test
+//     View.centerOnUpdatedMarker(new google.maps.LatLng(51.505831 + Math.random()/100, -0.132134857 - Math.random()/100), Marker.init, Map.zoomInit);
+//     // View.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
+//     Marker.drag(Marker.init);
+//   },
 
-    // Submitting an answer works differently during Game: check next steps
-    google.maps.event.clearInstanceListeners(Marker.infoWindow);
+//   browsingChallenge: function() {
+//     event.preventDefault();
+//     Listeners.enableMovingOnMap(false)
+//     Listeners.enableDestination(true);
 
-    google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
-      $('#submit_answer').on('submit', function(){
-        event.preventDefault();
-        Answer.submit(Game.goNextStep);
-      })
-    });
-  },
+//     // Submitting an answer works differently during Game: check next steps
+//     google.maps.event.clearInstanceListeners(Marker.infoWindow);
+
+//     google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
+//       $('#submit_answer').on('submit', function(){
+//         event.preventDefault();
+//         Answer.submit(Game.goNextStep);
+//       })
+//     });
+//   },
   
-  goNextStep: function(valid, answer){
-    // If TRUE, do all the below, 
-    // else the isValid function displays the error message and we try again
-    if (valid) {
+//   goNextStep: function(valid, answer){
+//     // If TRUE, do all the below, 
+//     // else the isValid function displays the error message and we try again
+//     if (valid) {
 
-      // UPDATE DATABASE with your answer and score at that location
-      var points = Score.calc(answer);
-      User.updateDbWithAnswer(answer, points, User.theThreeWords)
+//       // UPDATE DATABASE with your answer and score at that location
+//       var points = Score.calc(answer);
+//       User.updateDbWithAnswer(answer, points, User.theThreeWords)
 
-      // If good Answer, congrats +1, + allows you to drag pin and find location
-      Listeners.enableMovingOnMap(true);
+//       // If good Answer, congrats +1, + allows you to drag pin and find location
+//       Listeners.enableMovingOnMap(true);
 
-      // Then once a move on the map is made, freeze everything again for the next challenge
-      $('#location_forms').off('submit', '#submit_location')
-      $('#location_forms').off('click', '#where_am_i')
+//       // Then once a move on the map is made, freeze everything again for the next challenge
+//       $('#location_forms').off('submit', '#submit_location')
+//       $('#location_forms').off('click', '#where_am_i')
 
-      $('#location_forms').on('submit', '#submit_location', function(){
-        event.preventDefault();
-        Map.setToLocation();
-        Game.browsingChallenge();
-      });
-      $('#location_forms').on('click','#where_am_i', function(){
-        event.preventDefault();
-        Map.setToWhereAmI();
-        Game.browsingChallenge();
-      });
+//       $('#location_forms').on('submit', '#submit_location', function(){
+//         event.preventDefault();
+//         Map.setToLocation();
+//         Game.browsingChallenge();
+//       });
+//       $('#location_forms').on('click','#where_am_i', function(){
+//         event.preventDefault();
+//         Map.setToWhereAmI();
+//         Game.browsingChallenge();
+//       });
 
-      Listeners.dragForNextChallenge =  google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
-    }
-  }
+//       Listeners.dragForNextChallenge =  google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
+//     }
+//   }
 
-};  // End Game Object
+// };  // End Game Object
 
 //***********************************
 // THE JOURNEY CHALLENGE

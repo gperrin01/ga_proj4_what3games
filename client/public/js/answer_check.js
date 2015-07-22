@@ -18,7 +18,7 @@ Answer = {
   },
 
   // this is the basic submit check for freely moving on the map
-  // for the more advanced checks while in Game, see Game.browsingNextSteps
+  // the callback function enables moving through the next steps of a challenge
   submit: function(callbackForInDico){
     event.preventDefault();
     console.log('submit answer');
