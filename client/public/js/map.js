@@ -224,14 +224,15 @@ Marker = {
     View.location(coords);
   },
 
-  showWords: function(marker){
+  showWords: function(marker, gameType){
     var coords = marker.position.A + ', ' + marker.position.F;
-    View.threeWords(coords, marker);
+    View.threeWords(coords, marker, gameType);
   },
 
   // On click on a marker, it will show info (location and 3 words)
   attachInfo: function(marker, text) {
     google.maps.event.addListener(marker, 'click', function() {
+      console.log('click');
       Marker.infoWindow.setContent(text);
       Marker.infoWindow.open(Map.map, marker);
     });

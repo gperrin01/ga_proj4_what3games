@@ -20,7 +20,7 @@ View = {
   },
 
   // Display the 3 words on the infowindow of a marker
-  threeWords: function(coords, marker){
+  threeWords: function(coords, marker, gameType){
     var data = {
       'key': Keys.w3w_api, // var key = process.env.W3W_KEY;
       'position': coords,
@@ -48,13 +48,20 @@ View = {
       // ensure click enables to show the words
       Marker.attachInfo(marker, html);
 
-      // add listener to the submit !!
-      google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
-        $('#submit_answer').on('submit', function(){
-          event.preventDefault();
-          Answer.submit();
-        })
-      });
+      // if gameType is journey, listener should be defined already in the journey
+      // if no gameType, add the Listener here
+      // google.maps.event.removeListener(Listeners.submitJourney);
+
+      if (gameType === undefined){
+        console.log('gameType is not Journey', gameType);
+        Listeners.submitNormal = google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
+          $('#submit_answer').on('submit', function(){
+            event.preventDefault();
+            Answer.submit();
+          })
+        });
+      }
+
     });
   },
 

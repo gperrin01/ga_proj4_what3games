@@ -193,8 +193,11 @@ JourneyChallenge = {
       window.setTimeout(function(){
         JourneyChallenge.stepMarker.setAnimation(google.maps.Animation.BOUNCE);
       }, 900);
-      Marker.showWords(JourneyChallenge.stepMarker);
       JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
+
+      // pass gameType 'journey' to ensure having the right Listeners on the Gmap things
+      // in this case we dont want showWords to add a listener as we do it ourselves below
+      Marker.showWords(JourneyChallenge.stepMarker, 'journey');
 
       // recenter the map??
       // Map.map.setCenter(JourneyChallenge.stepMarker.position)
@@ -250,7 +253,6 @@ JourneyChallenge = {
          JourneyChallenge.play(JourneyChallenge.myJourney);
       })
 
-      // JourneyChallenge.play(JourneyChallenge.myJourney);
     };
   }
 
