@@ -130,9 +130,6 @@ Game = {
       var points = Score.calc(answer);
       User.updateDbWithAnswer(answer, points, User.theThreeWords)
 
-      // no need since i upaate DB at each answer?
-      // User.currentUser.points += points
-
       // If good Answer, congrats +1, + allows you to drag pin and find location
       Listeners.enableMovingOnMap(true);
 
@@ -221,14 +218,8 @@ JourneyChallenge = {
         + JourneyChallenge.score +  " points and " + bonus + " bonus points"); 
       $('#down').empty();
 
-
-      // JourneyChallenge.score += bonus;
-
       // update the DB with these bonus points then update the user with them
       User.addBonusPoints(bonus);
-
-      // no need since i upaate DB at each answer?
-      // User.currentUser += bonus;
 
       // enable only destination and location fields
       Listeners.enableDestination(true);
@@ -243,9 +234,6 @@ JourneyChallenge = {
       // UPDATE DATABASE with your answer and score at that location
       var points = Score.calc(answer);
       User.updateDbWithAnswer(answer, points, User.theThreeWords)
-
-      // no need since i upaate DB at each answer?
-      // User.currentUser.points += points;
 
       JourneyChallenge.score += points;
 
