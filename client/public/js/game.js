@@ -59,7 +59,7 @@ Game = {
   beginExploration: function() {
     console.log('begin beginExploratio');
 
-    // prepare the map and all listeners, according to Game.mode
+    // prepare the map and all listeners, according to Game.mode explore (see View.threeWords)
     Game.mode = 'explore';
     Map.initialize();
 
@@ -69,18 +69,6 @@ Game = {
 
     // reset the array storing the right answers
     Game.countAnswers = [];
-
-    //  specify Action to avoid duplication of event listeners on the submit
-    // Marker.showWords(Marker.init, 'explore');
-
-    // google.maps.event.clearListeners(Marker.infoWindow, 'domready');
-    // google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
-    //   $('#submit_answer').on('submit', function(){
-    //     event.preventDefault();
-    //     console.log('submit explore');
-    //     Answer.submit(Game.exploreNext);
-    //   })
-    // });
   },
 
   exploreNext: function(valid, answer){
@@ -225,7 +213,11 @@ JourneyChallenge = {
 
   begin: function(){
     event.preventDefault();
+
+    // change game mode so that a different event listener will be added to the submit button
+    // see View.threeWords
     Game.mode = 'journey';
+
     // reset the Journey (count of steps and score)
     JourneyChallenge.countSteps = 1;
     JourneyChallenge.score = 0;
@@ -259,23 +251,10 @@ JourneyChallenge = {
       }, 900);
       JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
 
-      // pass gameType 'journey' to ensure having the right Listeners on the Gmap things
-      // in this case we dont want showWords to add a listener as we do it ourselves below
-      Marker.showWords(JourneyChallenge.stepMarker, 'journey');
+      Marker.showWords(JourneyChallenge.stepMarker);
 
       // recenter the map??
       // Map.map.setCenter(JourneyChallenge.stepMarker.position)
-
-      // Submitting an answer works differently during JourneyChallenge: check next steps
-      google.maps.event.clearListeners(Marker.infoWindow, 'domready');
-
-      google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
-        $('#submit_answer').on('submit', function(){
-          event.preventDefault();
-          console.log('submitting journey next steps')
-          Answer.submit(JourneyChallenge.moveAlongJourney);
-        })
-      });
     }
 
     else {

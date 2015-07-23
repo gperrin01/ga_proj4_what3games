@@ -225,9 +225,9 @@ Marker = {
     View.location(coords);
   },
 
-  showWords: function(marker, gameType){
+  showWords: function(marker){
     var coords = marker.position.A + ', ' + marker.position.F;
-    View.threeWords(coords, marker, gameType);
+    View.threeWords(coords, marker);
   },
 
   // On click on a marker, it will show info (location and 3 words)

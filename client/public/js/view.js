@@ -51,24 +51,35 @@ View = {
       console.log('gameType is', Game.mode);
       google.maps.event.clearListeners(Marker.infoWindow, 'domready');
 
-      if (Game.mode === 'browse'){
-        Listeners.submitNormal = google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
+      var mode = {'browse': null, 'explore': Game.exploreNext, 'journey': JourneyChallenge.moveAlongJourney};
+
+      google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
           $('#submit_answer').on('submit', function(){
             event.preventDefault();
-            console.log('normal submit')
-            Answer.submit();
+            console.log('submit', Game.mode)
+            Answer.submit(mode[Game.mode]);
           })
         });
-      } 
-      if (Game.mode === 'explore') {
-        google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
-          $('#submit_answer').on('submit', function(){
-            event.preventDefault();
-            console.log('submit explore');
-            Answer.submit(Game.exploreNext);
-          })
-        });
-      }
+
+      // if (Game.mode === 'browse'){
+      //   Listeners.submitNormal = google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
+      //     $('#submit_answer').on('submit', function(){
+      //       event.preventDefault();
+      //       console.log('normal submit')
+      //       Answer.submit();
+      //     })
+      //   });
+      // } 
+      // if (Game.mode === 'explore') {
+      //   google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
+      //     $('#submit_answer').on('submit', function(){
+      //       event.preventDefault();
+      //       console.log('submit explore');
+      //       Answer.submit(Game.exploreNext);
+      //     })
+      //   });
+      // }
+
     });
   },
 
