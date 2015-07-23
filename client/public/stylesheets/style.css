@@ -23,10 +23,13 @@
 }
 /* END THE NAVBAR 
 */
+
+/*HEADERS*/
+
 #location_forms {
   z-index: 10;
   position: relative;
-  top: -48px;
+  top: -43px;
 }
 
 #map-canvas{
@@ -45,7 +48,15 @@ h4 {
   font-family: 'copperplate';
   font-size: 19px;
   color: rgb(54, 38, 116);;
+}
 
+#down {
+  position: relative;
+  top: 5px;
+}
+
+.glyphicon {
+  vertical-align: middle;
 }
 
 /*RANKINGS*/

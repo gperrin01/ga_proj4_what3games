@@ -15,7 +15,6 @@ View = {
     $('#main-navbar').on('click', 'li', function(){
       $('#main-navbar li').removeClass('active');
       $(this).addClass('active');
-      console.log('active')
     })
   },
 
@@ -50,18 +49,20 @@ View = {
 
       // if gameType is journey, listener should be defined already in the journey
       // if no gameType, add the Listener here
-      // google.maps.event.removeListener(Listeners.submitJourney);
 
       if (gameType === undefined){
-        console.log('gameType is not Journey', gameType);
+        console.log('gameType is', gameType);
         Listeners.submitNormal = google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
           $('#submit_answer').on('submit', function(){
             event.preventDefault();
+            console.log('normal submit')
             Answer.submit();
           })
         });
+      } else {
+        console.log('gameType is', gameType);
+        google.maps.event.removeListener(Listeners.submitNormal);
       }
-
     });
   },
 

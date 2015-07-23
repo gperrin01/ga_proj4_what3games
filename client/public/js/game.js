@@ -40,7 +40,6 @@ $(document).ready(function(){
   })
 
   $("#main-navbar").on('click', '#explore-li', function(){
-    console.log('explore');
     Game.beginExploration();    
   })
 
@@ -51,48 +50,6 @@ $(document).ready(function(){
   // });
 });
 
-//***********************************
-// THE LISTENERS FOR THE GAME AND THE JOURNEY
-//***********************************
-
-Listeners = {
-
-  justBrowsing: function(){
-    console.log('just browsing ');
-    // Turn on the relevant events and cancel the previous ones -  EVENT DELEGATION
-    Listeners.enableMovingOnMap(true);
-    Listeners.enableDestination(true);
-    $('#location_forms').off('submit');
-    $('#location_forms').off('click');
-
-    $('#location_forms').on('click', '#where_am_i', Map.setToWhereAmI)
-    $('#location_forms').on('submit', '#submit_location', Map.setToLocation);
-    $('#location_forms').on('submit', '#submit_destination', JourneyChallenge.begin);
-  },
-
-  // prevent clicks on the map or finding a new location
-  enableMovingOnMap: function(boolean) {
-    console.log('move on map', boolean);
-    $('#where_am_i').attr('disabled', !boolean);
-    $('#geocode_button').attr('disabled', !boolean);
-    $('#address_input').attr('disabled', !boolean);
-
-    // If TRUE, markers CAN be dragged & will not trigger the game
-    if (Marker.init) {Marker.init.setOptions({draggable: boolean});};
-    google.maps.event.removeListener(Listeners.dragForNextChallenge);
-
-    boolean ? $('#game_msg').text("Move on the map for the next challenge!") 
-        : $('#game_msg').text("Get your answer right to browse the map again");
-  },
-
-  enableDestination: function(boolean) {
-    $('#destination_input').attr('disabled', !boolean);
-    $('#destination_button').attr('disabled', !boolean);
-  },
-
-
-} // End Listeners Object
-
 
 //***********************************
 // THE GAME (and simple challenge)
@@ -102,14 +59,47 @@ Listeners = {
 Game = {
 
   beginExploration: function() {
+    console.log('begin beginExploratio');
 
     // show main message for exploration, prevent clicking on destination
     View.render( $('#main_area_explore_template'), User.currentUser, $('#main_row_header'), 'slideDown' );
-    Listeners.enableDestination(false);
+    View.render( $('#location_forms_explore_template'), User.currentUser, $('#location_forms') );
 
     // reset the array storing the right answers
     Game.countAnswers = [];
 
+    //  avoid duplication of event listeners on the submit
+    Marker.showWords(Marker.init, 'explore');
+
+    google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
+      $('#submit_answer').on('submit', function(){
+        event.preventDefault();
+        console.log('submit explore');
+        Answer.submit(Game.exploreNext);
+      })
+    });
+  },
+
+  exploreNext: function(valid, answer){
+    // If TRUE, do all the below, 
+    // else the isValid function displays the error message and we try again
+    if (valid) {
+      console.log('explore next', valid);
+
+      // Do i do that in the explore??
+      // UPDATE DATABASE with your answer and score at that location
+      // var points = Score.calc(answer);
+      // User.updateDbWithAnswer(answer, points, User.theThreeWords)
+
+      // store the word in the array and display on the page
+      Game.countAnswers.push(answer);
+      // var i = Game.countAnswers.length;
+      var num = {0: 'first', 1: 'second', 2: 'third'}[Game.countAnswers.length - 1];
+      $('#'+num+'_answer').text(answer);
+
+      // once you got 3 words, animation? show a button saying click to find out your next destination
+
+    } else console.log('not valid')
   }
 
 // // not sure i will keep this 'freeze and play' game
@@ -188,7 +178,6 @@ JourneyChallenge = {
     JourneyChallenge.score = 0;
 
     Listeners.enableMovingOnMap(false);
-    Listeners.enableDestination(false);
 
     //  Variation around the Journey.show, same vein as for the browsingNextSteps
     Journey.show(null, JourneyChallenge.play);
@@ -206,7 +195,8 @@ JourneyChallenge = {
 
       // Tells you where you are: checkpoint stage and points accumulated
       var msg = {count: count, steps: steps.length-1, score: JourneyChallenge.score, points: User.currentUser.points};
-      View.render($('#main_area_journeychall_template'), msg, $('#main_row_header') );
+      View.render($('#main_area_journeychall_template'), msg, $('#main_row_header'), 'slideDown' );
+      View.render($('#location_forms_journeychallenge_template'), msg, $('#location_forms') );
 
       // highlight the marker for that step: 3words and special icon
       JourneyChallenge.stepMarker = Marker.stepMarkerArray[count];
@@ -238,7 +228,7 @@ JourneyChallenge = {
     else {
       // show final score and the bonus calc 
       var bonus = Score.calcBonus(steps.length);
-      $('#game_msg').html("Destination reached <span class='glyphicon glyphicon-play'></span>  You earn " 
+      $('#game_msg').html("Destination reached <span class='glyphicon glyphicon-star'></span>  You earn " 
         + JourneyChallenge.score +  " points and " + bonus + " bonus points"); 
       $('#down').empty();
 
@@ -279,6 +269,50 @@ JourneyChallenge = {
 
 
 } // End JourneyChallenge Object
+
+
+//***********************************
+// THE LISTENERS FOR THE GAME AND THE JOURNEY
+//***********************************
+
+Listeners = {
+
+  justBrowsing: function(){
+    console.log('just browsing ');
+    // Turn on the relevant events and cancel the previous ones -  EVENT DELEGATION
+    Listeners.enableMovingOnMap(true);
+    Listeners.enableDestination(true);
+    $('#location_forms').off('submit');
+    $('#location_forms').off('click');
+
+    $('#location_forms').on('click', '#where_am_i', Map.setToWhereAmI)
+    $('#location_forms').on('submit', '#submit_location', Map.setToLocation);
+    $('#location_forms').on('submit', '#submit_destination', JourneyChallenge.begin);
+  },
+
+  // prevent clicks on the map or finding a new location
+  enableMovingOnMap: function(boolean) {
+    console.log('move on map', boolean);
+    $('#where_am_i').attr('disabled', !boolean);
+    $('#geocode_button').attr('disabled', !boolean);
+    $('#address_input').attr('disabled', !boolean);
+
+    // If TRUE, markers CAN be dragged & will not trigger the game
+    if (Marker.init) {Marker.init.setOptions({draggable: boolean});};
+    google.maps.event.removeListener(Listeners.dragForNextChallenge);
+
+    boolean ? $('#game_msg').text("Move on the map for the next challenge!") 
+        : $('#game_msg').text("Get your answer right to browse the map again");
+  },
+
+  enableDestination: function(boolean) {
+    $('#destination_input').attr('disabled', !boolean);
+    $('#destination_button').attr('disabled', !boolean);
+  },
+
+
+} // End Listeners Object
+
 
 //***********************************
 // THE SCORE
