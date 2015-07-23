@@ -59,6 +59,8 @@ Game = {
   beginExploration: function() {
     console.log('begin beginExploratio');
 
+    // prepare the map and all listeners, according to Game.mode
+    Game.mode = 'explore';
     Map.initialize();
 
     // show main message for exploration, prevent clicking on destination
@@ -68,16 +70,17 @@ Game = {
     // reset the array storing the right answers
     Game.countAnswers = [];
 
-    //  avoid duplication of event listeners on the submit
-    Marker.showWords(Marker.init, 'explore');
+    //  specify Action to avoid duplication of event listeners on the submit
+    // Marker.showWords(Marker.init, 'explore');
 
-    google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
-      $('#submit_answer').on('submit', function(){
-        event.preventDefault();
-        console.log('submit explore');
-        Answer.submit(Game.exploreNext);
-      })
-    });
+    // google.maps.event.clearListeners(Marker.infoWindow, 'domready');
+    // google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
+    //   $('#submit_answer').on('submit', function(){
+    //     event.preventDefault();
+    //     console.log('submit explore');
+    //     Answer.submit(Game.exploreNext);
+    //   })
+    // });
   },
 
   exploreNext: function(valid, answer){
@@ -93,8 +96,8 @@ Game = {
       $('#'+num+'_answer').text(answer);
 
       // Update scores in Explore? 
-      // var points = Score.calc(answer);
-      // User.updateDbWithAnswer(answer, points, User.theThreeWords)    
+      var points = Score.calc(answer);
+      User.updateDbWithAnswer(answer, points, User.theThreeWords)    
 
       if (Game.countAnswers.length < 3) {
         // msg for you to keep playing
@@ -130,8 +133,23 @@ Game = {
     var data = {'key': Keys.w3w_api, 'string': words};
     $.post('http://api.what3words.com/w3w', data, function(response) {
       console.log(response);
+      View.render( $('#main_area_explore_template'), User.currentUser, $('#main_row_header') );
+
+      // check if the word is recognized or if there is an error
+      if (response.error === '11'){
+        var html = "<input type='button' class='btn btn-info'"
+                + "value='There is no location with that combination. Move on the map to play again'>";
+        $('#submit_answer').html(html);
+      }
+      else if (!!response.error){
+        var html = "<input type='button' class='btn btn-info' value='Click here to play again (Error: " +response.message+ ")'>";
+        $('#submit_answer').html(html);
+      } 
+      else { // if no error, teleport me
       var ggl_coords = {A: response.position[0], F: response.position[1]};
+      console.log('ggl_coords', ggl_coords);
       View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
+      }
     });
   }
 
@@ -207,6 +225,7 @@ JourneyChallenge = {
 
   begin: function(){
     event.preventDefault();
+    Game.mode = 'journey';
     // reset the Journey (count of steps and score)
     JourneyChallenge.countSteps = 1;
     JourneyChallenge.score = 0;
@@ -313,6 +332,7 @@ Listeners = {
 
   justBrowsing: function(){
     console.log('just browsing ');
+    Game.mode = 'browse';
     // Turn on the relevant events and cancel the previous ones -  EVENT DELEGATION
     Listeners.enableMovingOnMap(true);
     Listeners.enableDestination(true);

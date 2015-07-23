@@ -19,7 +19,7 @@ View = {
   },
 
   // Display the 3 words on the infowindow of a marker
-  threeWords: function(coords, marker, gameType){
+  threeWords: function(coords, marker){
     var data = {
       'key': Keys.w3w_api, // var key = process.env.W3W_KEY;
       'position': coords,
@@ -32,7 +32,6 @@ View = {
       console.log(words);
 
       var star = ' <span class="glyphicon glyphicon-star"></span> ';
-
       var html = "<div id='the_answer' class='text-center'><p id='three_words'>" + star + words + star + "</p>"
                 + "<form id='submit_answer'><input id='answer_input' type='text' autocomplete='off' placeholder='Make the longest word' autofocus/>"
                 + "<input type='submit' value='Go' />"
@@ -49,9 +48,10 @@ View = {
 
       // if gameType is journey, listener should be defined already in the journey
       // if no gameType, add the Listener here
+      console.log('gameType is', Game.mode);
+      google.maps.event.clearListeners(Marker.infoWindow, 'domready');
 
-      if (gameType === undefined){
-        console.log('gameType is', gameType);
+      if (Game.mode === 'browse'){
         Listeners.submitNormal = google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
           $('#submit_answer').on('submit', function(){
             event.preventDefault();
@@ -59,9 +59,15 @@ View = {
             Answer.submit();
           })
         });
-      } else {
-        console.log('gameType is', gameType);
-        google.maps.event.removeListener(Listeners.submitNormal);
+      } 
+      if (Game.mode === 'explore') {
+        google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
+          $('#submit_answer').on('submit', function(){
+            event.preventDefault();
+            console.log('submit explore');
+            Answer.submit(Game.exploreNext);
+          })
+        });
       }
     });
   },
@@ -77,6 +83,7 @@ View = {
 
   // Update marker position to new location + show marker + center map + ensure zoom close
   centerOnUpdatedMarker: function(ggl_coords, marker, zoom) {
+    console.log('center on marker');
     View.clearJourney();
     marker.setMap(Map.map);
     marker.setPosition(ggl_coords);

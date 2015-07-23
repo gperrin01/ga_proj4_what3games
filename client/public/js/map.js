@@ -71,7 +71,8 @@ Map = {
       icon: Marker.init_icon,
       title: 'Move me around!'
     });
-    // listener for when marker being dragged
+    // listener for when marker being dragged - avoid duplication
+    google.maps.event.clearListeners(Marker.init, 'dragend');
     google.maps.event.addListener(Marker.init, 'dragend', function(){
       Marker.drag(this);
     });
@@ -231,6 +232,8 @@ Marker = {
 
   // On click on a marker, it will show info (location and 3 words)
   attachInfo: function(marker, text) {
+    // trying to avoid duplication of the same event
+    google.maps.event.clearListeners(marker, 'click');
     google.maps.event.addListener(marker, 'click', function() {
       console.log('click');
       Marker.infoWindow.setContent(text);
