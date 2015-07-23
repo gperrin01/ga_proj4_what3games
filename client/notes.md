@@ -7,6 +7,8 @@ Struggles and Learning points
 *******
 
 CAllback functions to "wait" until the API replied
+Call stack and event loop: case of having mulitple submit evetns firing... when calling an API then saying addListener, it will only add the Listener when the whole stack is freed up. 
+Therefore my attempt to clear the listener could not work as I work clearing something which had not yet been created
 
 Integrating Devise with a non-Rails client: need to better understnad devise. Create specific routes which will be triggered from the client browser. Create my own Registrations and SessionsController, inheriting from the Devise Controllers but building on them
 Learning about JS-cookies to manage auth_token and tell devise it is safe  (explain better!!)
@@ -15,13 +17,6 @@ Tweaking Rspec so that it can simulate a Devise login!
 the power of TDD when building complex methods
   - not sure about what will happen in the code
   - tbh not sure about functionality you want
-
-*******
-QUESTIONS
-*******
-What do i use for the server?????  Is it Rails, plus routes in rails which trigger _Rendering from client folder?
-where do i put my stylesheets and views and stuff?
-Will devise create views and i'm screwed cause my views are not in rails?
 
 
 *******
