@@ -333,6 +333,27 @@
   </div> 
 </script>
 
+<!-- when EXPLORING -->
+<script type="x-tmpl-mustache" id="location_forms_explore_template">
+  <div class="col-xs-3 text-left"> 
+      <form id="submit_location" class="form-inline">
+        <div class="form-group">
+          <label class="sr-only" for="address_input">From</label>
+          <input id="address_input" type="text" class="form-control input-sm" value="London, UK">
+        </div>
+        <div class="form-group">
+          <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="">Find</button>
+          <button id="where_am_i" class="btn-xs btn-default"> <span class="glyphicon glyphicon-screenshot"></span> </button>
+        </div>
+      </form>       
+      <form id="submit_destination" class="form">
+          <label class="sr-only" for="destination_input">To</label>
+          <input id="destination_input" type="text" class="form-control input-sm" value="Go to the Home page to start the journey challenge" disabled>
+       <button type="submit" id="destination_button" class="btn btn-primary" disabled>Go to the Home page to start the journey challenge</button>
+      </form>
+  </div> 
+</script>
+
 <!-- User IS NOT logged in -->
 <script type="x-tmpl-mustache" id="location_forms_not_loggedin_template">
   <div class="col-xs-3 text-left">  
@@ -364,18 +385,18 @@
   <div class="col-xs-3 text-left"> 
     <form id="submit_location" class="form-inline">
       <div class="form-group">
-        <label class="sr-only" for="address_input" disabled>From</label>
-        <input id="address_input" type="text" class="form-control input-sm" value="London, UK" disabled>
+        <label class="sr-only" for="address_input">From</label>
+        <input id="address_input" type="text" class="form-control input-sm" placeholder="Enter a new origin and start again">
       </div>
       <div class="form-group">
-        <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="" disabled>Find</button>
-        <button id="where_am_i" class="btn-xs btn-default" disabled> <span class="glyphicon glyphicon-screenshot"></span> </button>
+        <button type="submit" id="geocode_button" class="btn btn-sm btn-default" value="">Find</button>
+        <button id="where_am_i" class="btn-xs btn-default"> <span class="glyphicon glyphicon-screenshot"></span> </button>
       </div>
     </form>       
     <form id="submit_destination" class="form">
         <label class="sr-only" for="destination_input">To</label>
-        <input id="destination_input" type="text" class="form-control input-sm" value="63 Hanbury street, London" disabled>
-     <button type="submit" id="destination_button" class="btn btn-primary" disabled>Create a journey and enter the challenge</button>
+        <input id="destination_input" type="text" class="form-control input-sm" placeholder="Enter a new destination and start again">
+     <button type="submit" id="destination_button" class="btn btn-primary">Create a new journey</button>
     </form>
   </div> 
 </script>
