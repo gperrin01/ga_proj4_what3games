@@ -39,9 +39,7 @@ $(document).ready(function(){
     Map.initialize();
   })
 
-  $("#main-navbar").on('click', '#explore-li', function(){
-    Game.beginExploration();    
-  })
+  $("#main-navbar").on('click', '#explore-li', Game.beginExploration);
 
   // // not sure i will keep this 'freeze and play' game
   // $('#main-navbar').on('click', '#play-li', function(){
@@ -60,6 +58,8 @@ Game = {
 
   beginExploration: function() {
     console.log('begin beginExploratio');
+
+    Map.initialize();
 
     // show main message for exploration, prevent clicking on destination
     View.render( $('#main_area_explore_template'), User.currentUser, $('#main_row_header'), 'slideDown' );
@@ -86,21 +86,55 @@ Game = {
     if (valid) {
       console.log('explore next', valid);
 
-      // Do i do that in the explore??
-      // UPDATE DATABASE with your answer and score at that location
-      // var points = Score.calc(answer);
-      // User.updateDbWithAnswer(answer, points, User.theThreeWords)
-
       // store the word in the array and display on the page
       Game.countAnswers.push(answer);
-      // var i = Game.countAnswers.length;
       var num = {0: 'first', 1: 'second', 2: 'third'}[Game.countAnswers.length - 1];
+      var next = {0: 'first', 1: 'second', 2: 'third'}[Game.countAnswers.length];
       $('#'+num+'_answer').text(answer);
 
-      // once you got 3 words, animation? show a button saying click to find out your next destination
+      // Update scores in Explore? 
+      // var points = Score.calc(answer);
+      // User.updateDbWithAnswer(answer, points, User.theThreeWords)    
 
-    } else console.log('not valid')
+      if (Game.countAnswers.length < 3) {
+        // msg for you to keep playing
+        $('#submit_answer').html("<input type='button' class='btn btn-info' value='Move the marker to your " +next+ " location!'>");
+      } 
+      else {
+        // once you got 3 words, animation? show a button saying click to find out your next destination
+        var words = Game.countAnswers.join(' ');
+        var words_for_w3w = Game.countAnswers.join('.');
+        var html = "<input type='button' class='btn btn-info'"
+                + "value='Three right answers! Click here to be transported to &#34;" +words+ "&#34;'>"
+        $('#submit_answer').html(html);
+
+        // reset the array so that on next location you start again
+        Game.countAnswers = [];
+
+        // click on the body to be transported!
+        $('#the_answer').one('click', function(){
+          event.preventDefault();
+          Game.teleportTo(words_for_w3w);
+        });
+      }
+    } 
+    else { // If not valid
+      console.log('not valid')
+    } 
+  }, // end exploreNext
+
+  teleportTo: function(words) {
+    console.log('teleport to', words);
+
+    // get W3W to transform the 3 words into coordinates
+    var data = {'key': Keys.w3w_api, 'string': words};
+    $.post('http://api.what3words.com/w3w', data, function(response) {
+      console.log(response);
+      var ggl_coords = {A: response.position[0], F: response.position[1]};
+      View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
+    });
   }
+
 
 // // not sure i will keep this 'freeze and play' game
 
