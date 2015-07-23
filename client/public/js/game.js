@@ -85,7 +85,7 @@ Game = {
 
       // Update scores in Explore? 
       var points = Score.calc(answer);
-      User.updateDbWithAnswer(answer, points, User.theThreeWords)    
+      User.updateDbWithAnswer(answer, points, User.theThreeWords);    
 
       if (Game.countAnswers.length < 3) {
         // msg for you to keep playing
@@ -99,13 +99,10 @@ Game = {
                 + "value='Three right answers! Click here to be transported to &#34;" +words+ "&#34;'>"
         $('#submit_answer').html(html);
 
-        // reset the array so that on next location you start again
-        Game.countAnswers = [];
-
         // click on the body to be transported!
         $('#the_answer').one('click', function(){
           event.preventDefault();
-          Game.teleportTo(words_for_w3w);
+          Game.checkTeleport(words_for_w3w);
         });
       }
     } 
@@ -114,31 +111,52 @@ Game = {
     } 
   }, // end exploreNext
 
-  teleportTo: function(words) {
-    console.log('teleport to', words);
+  checkTeleport: function(words) {
+    console.log('check teleport to', words);
 
     // get W3W to transform the 3 words into coordinates
     var data = {'key': Keys.w3w_api, 'string': words};
     $.post('http://api.what3words.com/w3w', data, function(response) {
       console.log(response);
-      View.render( $('#main_area_explore_template'), User.currentUser, $('#main_row_header') );
 
       // check if the word is recognized or if there is an error
       if (response.error === '11'){
         var html = "<input type='button' class='btn btn-info'"
-                + "value='There is no location with that combination. Move on the map to play again'>";
+                + "value='No location with that combination. Click to be transported to a random part of the world'>";
         $('#submit_answer').html(html);
+
+        // get random coordinates
+        var randomLat = Math.random() * (58 - (-25)) + (-25);  // latitude between +58 and -25
+        var randomLong = Math.random() * (120 - (-120)) + (-120); // long between -120 and 120
+        var ggl_coords = {A: randomLat, F: randomLong };
+        // get there on a click
+        $('#the_answer').one('click', function(){
+          Game.teleportTo(ggl_coords)
+        })
       }
-      else if (!!response.error){
-        var html = "<input type='button' class='btn btn-info' value='Click here to play again (Error: " +response.message+ ")'>";
-        $('#submit_answer').html(html);
-      } 
-      else { // if no error, teleport me
-      var ggl_coords = {A: response.position[0], F: response.position[1]};
-      console.log('ggl_coords', ggl_coords);
-      View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
+      else { // if the combination exists, teleport me and start again
+        var ggl_coords = {A: response.position[0], F: response.position[1]};
+        Game.teleportTo(ggl_coords);
       }
     });
+  },
+
+  teleportTo: function(ggl_coords) {
+    console.log('ggl_coords', ggl_coords);
+    // reset the array storing the right answers
+    Game.countAnswers = [];
+
+    View.render( $('#main_area_explore_template'), User.currentUser, $('#main_row_header') );
+    View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
+
+    // update map on new location 
+    //zoom out
+    // animation
+    // reset the infowindow
+    
+//     ggl_coords Object {A: -5.713289373321459, F: 10.395454913377762}
+// main.js:26 Assertion failed: InvalidValueError: setPosition: not a LatLng or LatLngLiteral: in property lat: not a numberBf @ main.js:26(anonymous function) @ main.js:31View.centerOnUpdatedMarker @ view.js:100Game.teleportTo @ game.js:150(anonymous function) @ game.js:134n.fn.extend.on.d @ jquery.js:4855n.event.dispatch @ jquery.js:4435n.event.add.r.handle @ jquery.js:4121
+// main.js:26 Assertion failed: InvalidValueError: setCenter: not a LatLng or LatLngLiteral: in property lat: not a number
   }
 
 

@@ -25,7 +25,7 @@ View = {
       'position': coords,
       'lang': 'en'
     };
-
+    console.log(coords);
     $.get("https://api.what3words.com/position", data, function(response){
       var words = response.words.join(' ');
       User.theThreeWords = words;
