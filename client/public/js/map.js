@@ -28,6 +28,7 @@ Map = {
   zoomInit: 13,
   zoomShowLocation: 16,
   zoomStepJourney: 16,
+  zoomTeleport: 4,
 
   styleMutedBlue : [{"featureType":"all","stylers":[{"saturation":0},{"hue":"#e7ecf0"}]},{"featureType":"road","stylers":[{"saturation":-70}]},{"featureType":"transit","stylers":[{"visibility":"off"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"water","stylers":[{"visibility":"simplified"},{"saturation":-60}]}],
 
@@ -48,11 +49,11 @@ Map = {
         position: google.maps.ControlPosition.RIGHT_BOTTOM
       },
       zoomControlOptions: {
-        style: google.maps.ZoomControlStyle.SMALL,
-        position: google.maps.ControlPosition.LEFT_BOTTOM
+        // style: google.maps.ZoomControlStyle.SMALL,
+        position: google.maps.ControlPosition.LEFT_CENTER
       },
       panControlOptions: {
-        position: google.maps.ControlPosition.BOTTOM_CENTER
+        position: google.maps.ControlPosition.LEFT_BOTTOM
       }, 
       styles: Map.styleMutedBlue
     };
@@ -97,6 +98,7 @@ Map = {
         
         // reposition Marker.init + center map + show location + show words
         var ggl_coords = results[0].geometry.location;
+        console.log(ggl_coords)
         View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
         View.threeWords(ggl_coords.A + ', ' + ggl_coords.F, Marker.init);
         View.location(ggl_coords.A + ', ' + ggl_coords.F)
@@ -146,7 +148,7 @@ Journey = {
 
   // set the directions API
   directionsService: new google.maps.DirectionsService(),
-  selectedMode: 'WALKING',
+  selectedMode: 'TRANSIT',
   // GOOGLE often returns no_results if i don't specify UK, although i have region=GB in the script
   region: "GB",
 

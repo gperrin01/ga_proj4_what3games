@@ -89,15 +89,13 @@ Game = {
 
       if (Game.countAnswers.length < 3) {
         // msg for you to keep playing
-        $('#submit_answer').html("<input type='button' class='btn btn-info' value='Move the marker to your " +next+ " location!'>");
+        View.submitForm('move marker', next)
       } 
       else {
         // once you got 3 words, animation? show a button saying click to find out your next destination
         var words = Game.countAnswers.join(' ');
         var words_for_w3w = Game.countAnswers.join('.');
-        var html = "<input type='button' class='btn btn-info'"
-                + "value='Three right answers! Click here to be transported to &#34;" +words+ "&#34;'>"
-        $('#submit_answer').html(html);
+        View.submitForm('teleport to', words);
 
         // click on the body to be transported!
         $('#the_answer').one('click', function(){
@@ -121,21 +119,19 @@ Game = {
 
       // check if the word is recognized or if there is an error
       if (response.error === '11'){
-        var html = "<input type='button' class='btn btn-info'"
-                + "value='No location with that combination. Click to be transported to a random part of the world'>";
-        $('#submit_answer').html(html);
+        View.submitForm('no location');
 
         // get random coordinates
         var randomLat = Math.random() * (58 - (-25)) + (-25);  // latitude between +58 and -25
         var randomLong = Math.random() * (120 - (-120)) + (-120); // long between -120 and 120
-        var ggl_coords = {A: randomLat, F: randomLong };
+        var ggl_coords = new google.maps.LatLng(randomLat, randomLong);
         // get there on a click
         $('#the_answer').one('click', function(){
           Game.teleportTo(ggl_coords)
         })
       }
       else { // if the combination exists, teleport me and start again
-        var ggl_coords = {A: response.position[0], F: response.position[1]};
+        var ggl_coords = new google.maps.LatLng(response.position[0], response.position[1]);
         Game.teleportTo(ggl_coords);
       }
     });
@@ -146,80 +142,32 @@ Game = {
     // reset the array storing the right answers
     Game.countAnswers = [];
 
+    // Render views so that you reset the exploration with the map on the new place and the location shown in the form
     View.render( $('#main_area_explore_template'), User.currentUser, $('#main_row_header') );
-    View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
+    View.submitForm('answer');
+    var html = "<p>Use the above words</p><p>To make the longest anagram</p>";
+    $('#answer_validity').html(html);
+    $('#answer_validity').removeClass();
 
-    // update map on new location 
-    //zoom out
-    // animation
-    // reset the infowindow
+    // var i = Map.zoomShowLocation - 2;
+    // while (i > Map.zoomTeleport + 1) {
+    //   setTimeout(function(i) {
+    //     Map.map.setZoom(i);
+    //     i -= 2;
+    //     console.log('zoom', i);
+    //   }, 0);
+    // }
+    // Map.map.setZoom(Map.map.zoomTeleport);
+    View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomTeleport);
+
+    // NOT CHANGING THE 3 WORDS !!
     
-//     ggl_coords Object {A: -5.713289373321459, F: 10.395454913377762}
-// main.js:26 Assertion failed: InvalidValueError: setPosition: not a LatLng or LatLngLiteral: in property lat: not a numberBf @ main.js:26(anonymous function) @ main.js:31View.centerOnUpdatedMarker @ view.js:100Game.teleportTo @ game.js:150(anonymous function) @ game.js:134n.fn.extend.on.d @ jquery.js:4855n.event.dispatch @ jquery.js:4435n.event.add.r.handle @ jquery.js:4121
-// main.js:26 Assertion failed: InvalidValueError: setCenter: not a LatLng or LatLngLiteral: in property lat: not a number
-  }
+    // animation
+    // random drop pin
+    // show location on location form
 
-
-// // not sure i will keep this 'freeze and play' game
-
-//   initialize: function(){
-//     Game.browsingChallenge();
-
-//     // RENDER VIEW WHERE NOTHING IS GREYED and it says ready to play
-
-//     // show marker and center map on it + ensure shows info + remvoe any journey shown
-//     // place marker at Random Loc in central london - muted during devpt so i can play faster and test
-//     View.centerOnUpdatedMarker(new google.maps.LatLng(51.505831 + Math.random()/100, -0.132134857 - Math.random()/100), Marker.init, Map.zoomInit);
-//     // View.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
-//     Marker.drag(Marker.init);
-//   },
-
-//   browsingChallenge: function() {
-//     event.preventDefault();
-//     Listeners.enableMovingOnMap(false)
-//     Listeners.enableDestination(true);
-
-//     // Submitting an answer works differently during Game: check next steps
-//     google.maps.event.clearInstanceListeners(Marker.infoWindow);
-
-//     google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
-//       $('#submit_answer').on('submit', function(){
-//         event.preventDefault();
-//         Answer.submit(Game.goNextStep);
-//       })
-//     });
-//   },
   
-//   goNextStep: function(valid, answer){
-//     // If TRUE, do all the below, 
-//     // else the isValid function displays the error message and we try again
-//     if (valid) {
-
-//       // UPDATE DATABASE with your answer and score at that location
-//       var points = Score.calc(answer);
-//       User.updateDbWithAnswer(answer, points, User.theThreeWords)
-
-//       // If good Answer, congrats +1, + allows you to drag pin and find location
-//       Listeners.enableMovingOnMap(true);
-
-//       // Then once a move on the map is made, freeze everything again for the next challenge
-//       $('#location_forms').off('submit', '#submit_location')
-//       $('#location_forms').off('click', '#where_am_i')
-
-//       $('#location_forms').on('submit', '#submit_location', function(){
-//         event.preventDefault();
-//         Map.setToLocation();
-//         Game.browsingChallenge();
-//       });
-//       $('#location_forms').on('click','#where_am_i', function(){
-//         event.preventDefault();
-//         Map.setToWhereAmI();
-//         Game.browsingChallenge();
-//       });
-
-//       Listeners.dragForNextChallenge =  google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
-//     }
-//   }
+  }
 
 };  // End Game Object
 
@@ -313,7 +261,6 @@ JourneyChallenge = {
       $('body').one('click', function(){
          JourneyChallenge.play(JourneyChallenge.myJourney);
       })
-
     };
   }
 
@@ -392,9 +339,69 @@ Score = {
 
 
 
+/* Code not kept for the moment - not sure I will keep the 'freeze and play again' thin */
 
 
 
+// in Game object
+//   initialize: function(){
+//     Game.browsingChallenge();
+
+//     // RENDER VIEW WHERE NOTHING IS GREYED and it says ready to play
+
+//     // show marker and center map on it + ensure shows info + remvoe any journey shown
+//     // place marker at Random Loc in central london - muted during devpt so i can play faster and test
+//     View.centerOnUpdatedMarker(new google.maps.LatLng(51.505831 + Math.random()/100, -0.132134857 - Math.random()/100), Marker.init, Map.zoomInit);
+//     // View.centerOnUpdatedMarker(Map.latlng, Marker.init, Map.zoomInit);
+//     Marker.drag(Marker.init);
+//   },
+
+//   browsingChallenge: function() {
+//     event.preventDefault();
+//     Listeners.enableMovingOnMap(false)
+//     Listeners.enableDestination(true);
+
+//     // Submitting an answer works differently during Game: check next steps
+//     google.maps.event.clearInstanceListeners(Marker.infoWindow);
+
+//     google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
+//       $('#submit_answer').on('submit', function(){
+//         event.preventDefault();
+//         Answer.submit(Game.goNextStep);
+//       })
+//     });
+//   },
+  
+//   goNextStep: function(valid, answer){
+//     // If TRUE, do all the below, 
+//     // else the isValid function displays the error message and we try again
+//     if (valid) {
+
+//       // UPDATE DATABASE with your answer and score at that location
+//       var points = Score.calc(answer);
+//       User.updateDbWithAnswer(answer, points, User.theThreeWords)
+
+//       // If good Answer, congrats +1, + allows you to drag pin and find location
+//       Listeners.enableMovingOnMap(true);
+
+//       // Then once a move on the map is made, freeze everything again for the next challenge
+//       $('#location_forms').off('submit', '#submit_location')
+//       $('#location_forms').off('click', '#where_am_i')
+
+//       $('#location_forms').on('submit', '#submit_location', function(){
+//         event.preventDefault();
+//         Map.setToLocation();
+//         Game.browsingChallenge();
+//       });
+//       $('#location_forms').on('click','#where_am_i', function(){
+//         event.preventDefault();
+//         Map.setToWhereAmI();
+//         Game.browsingChallenge();
+//       });
+
+//       Listeners.dragForNextChallenge =  google.maps.event.addListener(Marker.init, 'dragend', Game.browsingChallenge);
+//     }
+//   }
 
 
 

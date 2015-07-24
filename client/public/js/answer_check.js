@@ -56,7 +56,7 @@ Answer = {
     // if valid is false, display relevant message and return FALSE to isValid
     if (valid === false) { 
       var $view = $('#answer_validity');
-      return View.updateView(message, $view, valid);
+      return View.answerValidity(message, $view, valid);
     } 
     // else (valid still undefined) run the isInDico WITH CALLBACK
     else {  return Answer.isInDictionary(answer, callbackForInDico)  }
@@ -75,7 +75,7 @@ Answer = {
     $.get("https://dictionary.yandex.net/api/v1/dicservice.json/lookup?", data, function(result){
 
       if (result.def.length === 0) {
-        View.updateView("Not yet in our dictionary!", $view, false);
+        View.answerValidity("Not yet in our dictionary!", $view, false);
         // this is the callbackForInDico enabling the Game to know the result is FALSE
         if (callbackForInDico) {callbackForInDico(false);}
       }
@@ -86,7 +86,7 @@ Answer = {
         var genre = (traduction.gen) ? (', ' + Answer.langTranslate.genre[traduction.gen] + ')' ) : (')');
         tradText += traduction.text + '" (' + traduction.pos + genre;
 
-        View.updateView('Well done! ' + tradText, $view, true)
+        View.answerValidity('Well done! ' + tradText, $view, true)
 
         // this is the callbackForInDico enabling the Game to know the result is TRUE
         if (callbackForInDico) {callbackForInDico(true, answer);}

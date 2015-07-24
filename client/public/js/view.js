@@ -25,7 +25,6 @@ View = {
       'position': coords,
       'lang': 'en'
     };
-    console.log(coords);
     $.get("https://api.what3words.com/position", data, function(response){
       var words = response.words.join(' ');
       User.theThreeWords = words;
@@ -60,26 +59,6 @@ View = {
             Answer.submit(mode[Game.mode]);
           })
         });
-
-      // if (Game.mode === 'browse'){
-      //   Listeners.submitNormal = google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
-      //     $('#submit_answer').on('submit', function(){
-      //       event.preventDefault();
-      //       console.log('normal submit')
-      //       Answer.submit();
-      //     })
-      //   });
-      // } 
-      // if (Game.mode === 'explore') {
-      //   google.maps.event.addListener(Marker.infoWindow, 'domready', function(){
-      //     $('#submit_answer').on('submit', function(){
-      //       event.preventDefault();
-      //       console.log('submit explore');
-      //       Answer.submit(Game.exploreNext);
-      //     })
-      //   });
-      // }
-
     });
   },
 
@@ -95,6 +74,7 @@ View = {
   // Update marker position to new location + show marker + center map + ensure zoom close
   centerOnUpdatedMarker: function(ggl_coords, marker, zoom) {
     console.log('center on marker');
+    console.log('working center on updated marker', ggl_coords)
     View.clearJourney();
     marker.setMap(Map.map);
     marker.setPosition(ggl_coords);
@@ -113,11 +93,10 @@ View = {
   },
 
   // updates view with the appropriate message &&&
-  updateView: function(message, $view, valid) {
+  answerValidity: function(message, $view, valid) {
     $view.text(message);
     if (valid) {
       View.successStyle(true);
-      // $('#answer_input').val('');
       console.log('success update view');
     } else {
       View.successStyle(false);
@@ -130,6 +109,23 @@ View = {
     }  else {
       $('#answer_validity').addClass('bg-danger text-danger');
     } 
+  },
+
+  submitForm: function(type, variable){
+    var html;
+    if (type === 'answer') {
+      html = "<input id='answer_input' type='text' autocomplete='off' placeholder='Make the longest word' autofocus/>"
+                + "<input type='submit' value='Go' />";
+    } else if (type === 'no location') {
+      html = "<input type='button' class='btn btn-info'"  
+                + "value='No location with that combination. Click to be transported to a random part of the world'>";
+    } else if (type === 'move marker') {
+      html = "<input type='button' class='btn btn-info' value='Move the marker to your " +variable+ " location!'>";
+    } else if (type === 'teleport to') {
+      html = "<input type='button' class='btn btn-info'"
+                + "value='Three right answers! Click here to be transported to &#34;" +variable+ "&#34;'>";
+    }
+    $('#submit_answer').html(html);
   },
 
   // render = fully change parent element, 
