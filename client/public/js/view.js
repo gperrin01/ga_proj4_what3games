@@ -63,11 +63,16 @@ View = {
   },
 
   // Display the location (based on coordinates) on the input box
-  location: function(coords) {
+  location: function(coords, optionalTeleport) {
+    console.log('show coords location', coords)
     $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coords, 
       function(result) {
         var text = result.results[0].address_components[0].long_name + ' ' + result.results[0].address_components[1].long_name;
         $('#address_input').val(text);
+
+        if (!!optionalTeleport) {
+          $('')
+        }
     })
   },
 

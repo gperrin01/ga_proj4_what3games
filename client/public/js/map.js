@@ -25,10 +25,12 @@ Map = {
   // londonLat: 51.505831 + Math.random()/100,
   // londonLong: -0.132134857 - Math.random()/100,
   londonLong: -0.12750,
+  // Zoom levels
   zoomInit: 13,
   zoomShowLocation: 16,
   zoomStepJourney: 16,
   zoomTeleport: 4,
+  zoomMin: 2,
 
   styleMutedBlue : [{"featureType":"all","stylers":[{"saturation":0},{"hue":"#e7ecf0"}]},{"featureType":"road","stylers":[{"saturation":-70}]},{"featureType":"transit","stylers":[{"visibility":"off"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"water","stylers":[{"visibility":"simplified"},{"saturation":-60}]}],
 
@@ -248,6 +250,26 @@ Marker = {
     for (i = 0; i < Marker.stepMarkerArray.length; i++) {
       Marker.stepMarkerArray[i].setMap(null);
     }
+  },
+
+  transition: function(marker, origin, destination, steps, delay){
+    var i = 0;
+    var currLat = origin.A;
+    var currLng = origin.F;
+    var deltaLat = (destination.A - origin.A)/steps;
+    var deltaLng = (destination.F - origin.F)/steps;
+    moveMarker();
+
+    function moveMarker(){
+      currLat += deltaLat;
+      currLng += deltaLng;
+      var latlng = new google.maps.LatLng(currLat, currLng);
+      marker.setPosition(latlng);
+      if(i!=steps){
+          i++;
+          setTimeout(moveMarker, delay);
+      }
+    };
   }
 
 };  // End Marker Object

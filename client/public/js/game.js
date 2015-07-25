@@ -87,7 +87,7 @@ Game = {
       var points = Score.calc(answer);
       User.updateDbWithAnswer(answer, points, User.theThreeWords);    
 
-      if (Game.countAnswers.length < 3) {
+      if (Game.countAnswers.length < 0) {
         // msg for you to keep playing
         View.submitForm('move marker', next)
       } 
@@ -98,7 +98,7 @@ Game = {
         View.submitForm('teleport to', words);
 
         // click on the body to be transported!
-        $('#the_answer').one('click keypress', function(){
+        $('body').one('click keypress', function(){
           event.preventDefault();
           Game.checkTeleport(words_for_w3w);
          $(this).off('click keypress');
@@ -127,47 +127,63 @@ Game = {
         var randomLong = Math.random() * (120 - (-120)) + (-120); // long between -120 and 120
         var ggl_coords = new google.maps.LatLng(randomLat, randomLong);
         // get there on a click or keypress
-        $('#the_answer').one('click keypress', function(){
-          Game.teleportTo(ggl_coords)
+        $('body').one('click keypress', function(){
+          Game.teleportFromTo(Marker.init.position, ggl_coords)
           $(this).off('click keypress');
         })
       }
       else { // if the combination exists, teleport me and start again
         var ggl_coords = new google.maps.LatLng(response.position[0], response.position[1]);
-        Game.teleportTo(ggl_coords);
+        Game.teleportFromTo(Marker.init.position, ggl_coords);
       }
     });
   },
 
-  teleportTo: function(ggl_coords) {
-    console.log('ggl_coords', ggl_coords);
+  teleportFromTo: function(origin, ggl_destination) {
+    console.log('ggl_destination', ggl_destination);
+    var coords = ggl_destination.A + ', ' + ggl_destination.F;
     // reset the array storing the right answers
     Game.countAnswers = [];
 
-    // Render views so that you reset the exploration with the map on the new place and the location shown in the form
+    // Render views so that you reset the exploration with the location shown in the form 
     View.render( $('#main_area_explore_template'), User.currentUser, $('#main_row_header') );
-    View.submitForm('answer');
-    var html = "<p>Use the above words</p><p>To make the longest anagram</p>";
-    $('#answer_validity').html(html);
-    $('#answer_validity').removeClass();
+    View.location(coords);
 
-    // var i = Map.zoomShowLocation - 2;
-    // while (i > Map.zoomTeleport + 1) {
-    //   setTimeout(function(i) {
-    //     Map.map.setZoom(i);
-    //     i -= 2;
-    //     console.log('zoom', i);
-    //   }, 0);
-    // }
-    // Map.map.setZoom(Map.map.zoomTeleport);
-    View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomTeleport);
+    // Animaiton for teleport: zoom out then back in onto new location
+    Marker.infoWindow.setMap(null);  // remove infowindow for clarity of view
+    Map.map.setZoom(Map.zoomInit - 4); // zoom: 13 - 4 = 9
+    setTimeout(function(){
+      // First, zoom out and keep the marker on where we are
+      Map.map.setZoom(Map.zoomInit - 8); // zoom: 13 - 8 = 5
+      setTimeout(function(){
+        Map.map.setZoom(Map.zoomMin) // zoom: 2
+        // Then move the marker to the new location 
+        setTimeout(function(){
+          Marker.transition(Marker.init, Marker.init.position, ggl_destination, 100, 10);
 
-    // NOT CHANGING THE 3 WORDS !!
+          // origin and destination are ggl_latlng {A: lat, F: long}
+          // start with steps = 100 and delay 10 ms
 
-    // animation
+          // Slowly zoom in then center the map
+
+
+        }, 1000) // timeout for dropping the updated pin
+      }, 1000) // timeout for last zoom out
+    }, 1000); // timeout for second zoom out
+
+
+
+    // reset the infowindow with 3 words on new location
+    // View.threeWords(coords); // will this ADD an event listener??
+
+
+    // // ensure the infowindow is back to original
+    // View.submitForm('answer');
+    // var html = "<p>Use the above words</p><p>To make the longest anagram</p>";
+    // $('#answer_validity').html(html);
+    // $('#answer_validity').removeClass();
+
     // random drop pin
-    // show location on location form
-
   
   }
 
