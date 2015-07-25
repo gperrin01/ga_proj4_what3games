@@ -148,7 +148,7 @@ Journey = {
 
   // set the directions API
   directionsService: new google.maps.DirectionsService(),
-  selectedMode: 'TRANSIT',
+  selectedMode: 'DRIVING',
   // GOOGLE often returns no_results if i don't specify UK, although i have region=GB in the script
   region: "GB",
 

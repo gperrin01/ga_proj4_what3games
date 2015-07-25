@@ -118,12 +118,12 @@ View = {
                 + "<input type='submit' value='Go' />";
     } else if (type === 'no location') {
       html = "<input type='button' class='btn btn-info'"  
-                + "value='No location with that combination. Click to be transported to a random part of the world'>";
+                + "value='Sadly no such location. Click or press any key to be transported elsewhere in the world'>";
     } else if (type === 'move marker') {
       html = "<input type='button' class='btn btn-info' value='Move the marker to your " +variable+ " location!'>";
     } else if (type === 'teleport to') {
       html = "<input type='button' class='btn btn-info'"
-                + "value='Three right answers! Click here to be transported to &#34;" +variable+ "&#34;'>";
+                + "value='Three right answers! Click or press any key here to be transported to &#34;" +variable+ "&#34;'>";
     }
     $('#submit_answer').html(html);
   },

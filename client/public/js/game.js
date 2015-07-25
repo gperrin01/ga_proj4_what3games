@@ -98,9 +98,10 @@ Game = {
         View.submitForm('teleport to', words);
 
         // click on the body to be transported!
-        $('#the_answer').one('click', function(){
+        $('#the_answer').one('click keypress', function(){
           event.preventDefault();
           Game.checkTeleport(words_for_w3w);
+         $(this).off('click keypress');
         });
       }
     } 
@@ -125,9 +126,10 @@ Game = {
         var randomLat = Math.random() * (58 - (-25)) + (-25);  // latitude between +58 and -25
         var randomLong = Math.random() * (120 - (-120)) + (-120); // long between -120 and 120
         var ggl_coords = new google.maps.LatLng(randomLat, randomLong);
-        // get there on a click
-        $('#the_answer').one('click', function(){
+        // get there on a click or keypress
+        $('#the_answer').one('click keypress', function(){
           Game.teleportTo(ggl_coords)
+          $(this).off('click keypress');
         })
       }
       else { // if the combination exists, teleport me and start again
@@ -161,7 +163,7 @@ Game = {
     View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomTeleport);
 
     // NOT CHANGING THE 3 WORDS !!
-    
+
     // animation
     // random drop pin
     // show location on location form
@@ -256,10 +258,11 @@ JourneyChallenge = {
       // Change layout to say click anywhere to continue
       $('#submit_answer').html("<input type='button' class='btn btn-info' value='Click Anywhere to Continue'>")
 
-      // increment the count of sucesfsul steps and play again once clicked anywhere on the body
+      // increment the count of sucesfsul steps and play again once clicked anywhere on the body or keypress
       JourneyChallenge.countSteps++;
-      $('body').one('click', function(){
+      $('body').one('click keypress', function(){
          JourneyChallenge.play(JourneyChallenge.myJourney);
+         $(this).off('click keypress');
       })
     };
   }
