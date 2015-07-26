@@ -100,7 +100,27 @@ View = {
             google.maps.event.removeListener(z);
             View.smoothZoomIn(map, maxZoom, count + 1);
         });
-        setTimeout(function(){map.setZoom(count)}, 80); 
+        setTimeout(function(){map.setZoom(count)}, 100); 
+        // 80ms is what I found to work well on my system -- it might not work well on all systems
+        // taken from http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
+    }
+  },   
+
+  smoothZoomOut: function(map, minZoom, count) {
+    if (count <= minZoom) {
+        console.log('finished zoom'); 
+        map.setZoom(minZoom);
+        return;
+        }
+    else {
+        z = google.maps.event.addListener(map, 'zoom_changed', function(event){
+            google.maps.event.removeListener(z);
+            View.smoothZoomOut(map, minZoom, count - 2);
+        });
+        setTimeout(function(){
+          console.log('zooming to', count)
+          map.setZoom(count)
+        }, 330); 
         // 80ms is what I found to work well on my system -- it might not work well on all systems
         // taken from http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
     }

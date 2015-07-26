@@ -151,32 +151,51 @@ Game = {
 
     // ANIMATION for teleport: zoom out then back in onto new location
     Marker.infoWindow.setMap(null);  // remove infowindow for clarity of view
-    Map.map.setZoom(Map.zoomInit - 4); // zoom: 13 - 4 = 9
+
+    // find the right timeout delay based on current zoom versus zoomIn
+    // zooms out by 2 with timeout of 330ms - so if currZoom - endZoom = 4 I need 4/2 *330ms + 1000ms + buffer
+    var delay = (Math.ceil((Map.map.getZoom() - Map.zoomMin) / 2) * 330) + 1000;
 
     setTimeout(function(){
-
-      // First, zoom out and keep the marker on where we are
-      Map.map.setZoom(Map.zoomInit - 8); // zoom: 13 - 8 = 5
+      View.smoothZoomOut(Map.map, Map.zoomMin, Map.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
+      // Move the marker to the new location 
       setTimeout(function(){
-        Map.map.setZoom(Map.zoomMin) // zoom: 2
-
-        // Then move the marker to the new location 
+        console.log('start transi');
+        Marker.transition(Marker.init, Marker.init.position, ggl_destination, 100, 10);
+        // Center the map
         setTimeout(function(){
-          Marker.transition(Marker.init, Marker.init.position, ggl_destination, 100, 10);
-
-          // Center the map then smoothly zoom in
+          Map.map.panTo(ggl_destination);
+          // Then smoothly zoom in and show the infowindow with the new 3 words for that location
           setTimeout(function(){
-            Map.map.setCenter(ggl_destination);
             View.smoothZoomIn(Map.map, Map.zoomTeleport, Map.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
             View.threeWords(coords, Marker.init);
+          }, 500);
+        }, 1500);
+      }, delay);
+    }, 100);
 
-          }, 1500)
-        }, 1000) // timeout for dropping the updated pin
-      }, 1000) // timeout for last zoom out
-    }, 1000); // timeout for second zoom out
 
 
-  
+// // this is like the old way when I did not have the smooth zoom
+// // however comments say smoothZoom might eat too much CPU so i leave the old code in case I need to revert back to it
+//     Map.map.setZoom(Map.zoomInit - 4); // zoom: 13 - 4 = 9
+//     setTimeout(function(){
+//       // First, zoom out and keep the marker on where we are
+//       Map.map.setZoom(Map.zoomInit - 8); // zoom: 13 - 8 = 5
+//       setTimeout(function(){
+//         Map.map.setZoom(Map.zoomMin) // zoom: 2
+//         // Then move the marker to the new location 
+//         setTimeout(function(){
+//           Marker.transition(Marker.init, Marker.init.position, ggl_destination, 100, 10);
+//           // Center the map then smoothly zoom in
+//           setTimeout(function(){
+//             Map.map.setCenter(ggl_destination);
+//             View.smoothZoomIn(Map.map, Map.zoomTeleport, Map.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
+//             View.threeWords(coords, Marker.init);
+//           }, 1500)
+//         }, 1000) // timeout for dropping the updated pin
+//       }, 1000) // timeout for last zoom out
+//     }, 1000); // timeout for second zoom out
   }
 
 };  // End Game Object
