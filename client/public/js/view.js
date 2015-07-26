@@ -63,16 +63,22 @@ View = {
   },
 
   // Display the location (based on coordinates) on the input box
-  location: function(coords, optionalTeleport) {
+  location: function(coords) {
     console.log('show coords location', coords)
     $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coords, 
       function(result) {
-        var text = result.results[0].address_components[0].long_name + ' ' + result.results[0].address_components[1].long_name;
-        $('#address_input').val(text);
-
-        if (!!optionalTeleport) {
-          $('')
+        console.log(result)
+        var text;
+        if (result.results.length === 0){
+          text = 'No address here';
         }
+        else if (!! result.results[0].address_components[1]){
+          text = result.results[0].address_components[0].long_name + ' ' + result.results[0].address_components[1].long_name;
+        }
+        else {
+          console.log('that rare else statements');
+        }
+        $('#address_input').val(text);
     })
   },
 
@@ -118,7 +124,6 @@ View = {
             View.smoothZoomOut(map, minZoom, count - 2);
         });
         setTimeout(function(){
-          console.log('zooming to', count)
           map.setZoom(count)
         }, 600); 
         // 80ms is what I found to work well on my system -- it might not work well on all systems
