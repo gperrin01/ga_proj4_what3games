@@ -35,6 +35,7 @@ $(document).ready(function(){
   // Home button acts as a reset: back to home page
   $("#main-navbar").on('click', '#home-li', function(){
     console.log('browse');
+    Game.mode = 'browse';
     User.isLoggedIn();
     Map.initialize();
   })
@@ -87,7 +88,7 @@ Game = {
       var points = Score.calc(answer);
       User.updateDbWithAnswer(answer, points, User.theThreeWords);    
 
-      if (Game.countAnswers.length < 1) {
+      if (Game.countAnswers.length < 3) {
         // msg for you to keep playing
         View.submitForm('move marker', next)
       } 
@@ -123,9 +124,7 @@ Game = {
         View.submitForm('no location');
 
         // get random coordinates
-        var randomLat = Math.random() * (58 - (-25)) + (-25);  // latitude between +58 and -25
-        var randomLong = Math.random() * (120 - (-120)) + (-120); // long between -120 and 120
-        var ggl_coords = new google.maps.LatLng(randomLat, randomLong);
+        var ggl_coords = Map.getRandomCoordinates();
         // get there on a click or keypress
         $('body').one('click keypress', function(){
           Game.teleportFromTo(Marker.init.position, ggl_coords)

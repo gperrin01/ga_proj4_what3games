@@ -21,10 +21,10 @@ Map = {
 
   // Prepare the map iteself
   geo: navigator.geolocation,
-  londonLat: 51.50722,
-  // londonLat: 51.505831 + Math.random()/100,
-  // londonLong: -0.132134857 - Math.random()/100,
-  londonLong: -0.12750,
+  // londonLat: 51.50722,
+  londonLat: 51.505831 + Math.random()/100,
+  londonLong: -0.132134857 - Math.random()/100,
+  // londonLong: -0.12750,
   // Zoom levels
   zoomInit: 13,
   zoomShowLocation: 16,
@@ -40,11 +40,16 @@ Map = {
 
   initialize: function() {
 
+    // if Game.mode is explore, set a different zoom and random coords in the world
+    // no Game.mode means we are in browse or journey and it sticks to london for now
+    var zoom = (Game.mode === 'explore') ? Map.zoomTeleport : Map.zoomInit;
+    Map.latlng = (Game.mode === 'explore') ? Map.getRandomCoordinates() : new google.maps.LatLng(51.505831 + Math.random()/100, -0.132134857 - Math.random()/100);
+    // Map.latlng = (Game.mode === 'explore') ? Map.getRandomCoordinates() : new google.maps.LatLng(Map.londonLat, Map.londonLong);
+
     // prepare the map
     Map.geocoder = new google.maps.Geocoder();
-    Map.latlng = new google.maps.LatLng(Map.londonLat, Map.londonLong);
     var mapOptions = {
-      zoom: Map.zoomInit,
+      zoom: zoom,
       center: Map.latlng,
       scrollwheel: false,
       mapTypeControlOptions: {
@@ -81,10 +86,18 @@ Map = {
     });
     // Instantiate an info window to hold info for the markers 
     Marker.infoWindow = new google.maps.InfoWindow();
-    // show the 3 words on the page and on the marker infowindow
-    View.threeWords(Map.londonLat + ', ' + Map.londonLong, Marker.init);
+    // show the 3 words on the page and on the marker infowindow and display current address
+    var coords = Map.latlng.A + ', ' + Map.latlng.F;
+    View.threeWords(coords, Marker.init);
+    View.location(coords);
   },
 
+  getRandomCoordinates: function() {
+    var randomLat = Math.random() * (58 - (-25)) + (-25);  // latitude between +58 and -25
+    var randomLong = Math.random() * (120 - (-120)) + (-120); // long between -120 and 120
+    return new google.maps.LatLng(randomLat, randomLong);
+  },
+         
   // ******************************************
   // On entering new address: show new pin on the map, center the map, show location, show 3 words
   // ******************************************
