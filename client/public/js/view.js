@@ -120,7 +120,7 @@ View = {
         setTimeout(function(){
           console.log('zooming to', count)
           map.setZoom(count)
-        }, 330); 
+        }, 600); 
         // 80ms is what I found to work well on my system -- it might not work well on all systems
         // taken from http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
     }

@@ -153,8 +153,8 @@ Game = {
     Marker.infoWindow.setMap(null);  // remove infowindow for clarity of view
 
     // find the right timeout delay based on current zoom versus zoomIn
-    // zooms out by 2 with timeout of 330ms - so if currZoom - endZoom = 4 I need 4/2 *330ms + 1000ms + buffer
-    var delay = (Math.ceil((Map.map.getZoom() - Map.zoomMin) / 2) * 330) + 1000;
+    // zooms out by 2 with timeout of 330ms - so if currZoom - endZoom = 4 I need 4/2 *600ms + 1000ms + buffer
+    var delay = (Math.ceil((Map.map.getZoom() - Map.zoomMin) / 2) * 600) + 1000;
 
     setTimeout(function(){
       View.smoothZoomOut(Map.map, Map.zoomMin, Map.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
