@@ -87,7 +87,7 @@ Game = {
       var points = Score.calc(answer);
       User.updateDbWithAnswer(answer, points, User.theThreeWords);    
 
-      if (Game.countAnswers.length < 0) {
+      if (Game.countAnswers.length < 1) {
         // msg for you to keep playing
         View.submitForm('move marker', next)
       } 
@@ -149,41 +149,33 @@ Game = {
     View.render( $('#main_area_explore_template'), User.currentUser, $('#main_row_header') );
     View.location(coords);
 
-    // Animaiton for teleport: zoom out then back in onto new location
+    // ANIMATION for teleport: zoom out then back in onto new location
     Marker.infoWindow.setMap(null);  // remove infowindow for clarity of view
     Map.map.setZoom(Map.zoomInit - 4); // zoom: 13 - 4 = 9
+
     setTimeout(function(){
+
       // First, zoom out and keep the marker on where we are
       Map.map.setZoom(Map.zoomInit - 8); // zoom: 13 - 8 = 5
       setTimeout(function(){
         Map.map.setZoom(Map.zoomMin) // zoom: 2
+
         // Then move the marker to the new location 
         setTimeout(function(){
           Marker.transition(Marker.init, Marker.init.position, ggl_destination, 100, 10);
 
-          // origin and destination are ggl_latlng {A: lat, F: long}
-          // start with steps = 100 and delay 10 ms
+          // Center the map then smoothly zoom in
+          setTimeout(function(){
+            Map.map.setCenter(ggl_destination);
+            View.smoothZoomIn(Map.map, Map.zoomTeleport, Map.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
+            View.threeWords(coords, Marker.init);
 
-          // Slowly zoom in then center the map
-
-
+          }, 1500)
         }, 1000) // timeout for dropping the updated pin
       }, 1000) // timeout for last zoom out
     }, 1000); // timeout for second zoom out
 
 
-
-    // reset the infowindow with 3 words on new location
-    // View.threeWords(coords); // will this ADD an event listener??
-
-
-    // // ensure the infowindow is back to original
-    // View.submitForm('answer');
-    // var html = "<p>Use the above words</p><p>To make the longest anagram</p>";
-    // $('#answer_validity').html(html);
-    // $('#answer_validity').removeClass();
-
-    // random drop pin
   
   }
 

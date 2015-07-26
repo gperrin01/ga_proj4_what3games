@@ -29,7 +29,7 @@ Map = {
   zoomInit: 13,
   zoomShowLocation: 16,
   zoomStepJourney: 16,
-  zoomTeleport: 4,
+  zoomTeleport: 5,
   zoomMin: 2,
 
   styleMutedBlue : [{"featureType":"all","stylers":[{"saturation":0},{"hue":"#e7ecf0"}]},{"featureType":"road","stylers":[{"saturation":-70}]},{"featureType":"transit","stylers":[{"visibility":"off"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"water","stylers":[{"visibility":"simplified"},{"saturation":-60}]}],
@@ -136,7 +136,7 @@ Map = {
   },
   geoloc_error: function(val) {
     console.log('could not get your current location');
-  },
+  }
 
 
 }; // End Map Object
@@ -252,6 +252,9 @@ Marker = {
     }
   },
 
+
+  // divide journey is smaller steps and move marker for one to the other
+  // origin and destination are ggl_latlng {A: lat, F: long} - start with steps = 100 and delay 10 ms
   transition: function(marker, origin, destination, steps, delay){
     var i = 0;
     var currLat = origin.A;

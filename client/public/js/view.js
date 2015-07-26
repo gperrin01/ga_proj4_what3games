@@ -91,6 +91,21 @@ View = {
     Journey.directionsDisplay.setMap(null);
   },
 
+  smoothZoomIn: function(map, maxZoom, count) {
+    if (count >= maxZoom) {
+            return;
+        }
+    else {
+        z = google.maps.event.addListener(map, 'zoom_changed', function(event){
+            google.maps.event.removeListener(z);
+            View.smoothZoomIn(map, maxZoom, count + 1);
+        });
+        setTimeout(function(){map.setZoom(count)}, 80); 
+        // 80ms is what I found to work well on my system -- it might not work well on all systems
+        // taken from http://stackoverflow.com/questions/4752340/how-to-zoom-in-smoothly-on-a-marker-in-google-maps
+    }
+  }, 
+
   clearJourney: function() {
     Journey.directionsDisplay.setMap(Map.map);
     Marker.clearStepArray();
@@ -157,6 +172,7 @@ View = {
   },
 
   // show Rankings on 'click', then ensure any click on body will hide Rankings
+  // i know this is terrible code and needs refactoring! - it was done last minute before the presentation. Since it works I will only come back to it later
   toggleRankings: function() {
     event.preventDefault();
 
