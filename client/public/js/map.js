@@ -52,9 +52,9 @@ Map = {
       zoom: zoom,
       center: Map.latlng,
       scrollwheel: false,
-      mapTypeControlOptions: {
-        position: google.maps.ControlPosition.RIGHT_BOTTOM
-      },
+      // mapTypeControlOptions: {
+      //   position: google.maps.ControlPosition.RIGHT_BOTTOM
+      // },
       zoomControlOptions: {
         // style: google.maps.ZoomControlStyle.SMALL,
         position: google.maps.ControlPosition.LEFT_CENTER
