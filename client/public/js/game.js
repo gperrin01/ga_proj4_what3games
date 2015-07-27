@@ -173,8 +173,6 @@ Game = {
       }, delay);
     }, 100);
 
-
-
 // // this is like the old way when I did not have the smooth zoom
 // // however comments say smoothZoom might eat too much CPU so i leave the old code in case I need to revert back to it
 //     Map.map.setZoom(Map.zoomInit - 4); // zoom: 13 - 4 = 9
