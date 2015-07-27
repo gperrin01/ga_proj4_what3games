@@ -237,14 +237,14 @@ JourneyChallenge = {
       View.render($('#main_area_journeychall_template'), msg, $('#main_row_header'), 'slideDown' );
       View.render($('#location_forms_journeychallenge_template'), msg, $('#location_forms') );
 
-      // highlight the marker for that step: 3words and special icon
+      // highlight the marker for that step: 3words and special icon and transition with bounce at the end
       JourneyChallenge.stepMarker = Marker.stepMarkerArray[count];
-      JourneyChallenge.stepMarker.setAnimation(google.maps.Animation.DROP);
-      window.setTimeout(function(){
-        JourneyChallenge.stepMarker.setAnimation(google.maps.Animation.BOUNCE);
-      }, 900);
-      JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
 
+      var origin = JourneyChallenge.stepMarker.position;
+      var destination = Marker.stepMarkerArray[count + 1].position;
+      Marker.transition(JourneyChallenge.stepMarker, origin, destination, 100, 10, 'bounce');
+
+      JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
       Marker.showWords(JourneyChallenge.stepMarker);
 
       // recenter the map??
@@ -282,7 +282,7 @@ JourneyChallenge = {
       JourneyChallenge.stepMarker.setAnimation(null);
 
       // Change layout to say click anywhere to continue
-      $('#submit_answer').html("<input type='button' class='btn btn-info' value='Click Anywhere to Continue'>")
+      $('#submit_answer').html("<input type='button' class='btn btn-info' value='Click or press any key to Continue'>")
 
       // increment the count of sucesfsul steps and play again once clicked anywhere on the body or keypress
       JourneyChallenge.countSteps++;

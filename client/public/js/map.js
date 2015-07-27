@@ -268,7 +268,7 @@ Marker = {
 
   // divide journey is smaller steps and move marker for one to the other
   // origin and destination are ggl_latlng {A: lat, F: long} - start with steps = 100 and delay 10 ms
-  transition: function(marker, origin, destination, steps, delay){
+  transition: function(marker, origin, destination, steps, delay, animation){
     var i = 0;
     var currLat = origin.A;
     var currLng = origin.F;
@@ -281,9 +281,13 @@ Marker = {
       currLng += deltaLng;
       var latlng = new google.maps.LatLng(currLat, currLng);
       marker.setPosition(latlng);
-      if(i!=steps){
+      if(i !== steps){
           i++;
           setTimeout(moveMarker, delay);
+      } else { 
+        if (animation === 'bounce') {
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
       }
     };
   }
