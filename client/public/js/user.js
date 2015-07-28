@@ -4,7 +4,8 @@ var User = User || {};
 // Prepare for Signin, Login, Logout
 // ******************************************
 
-var base_url = "http://localhost:3000";
+var base_url = "https://stark-brushlands-1089.herokuapp.com";
+// var base_url = "http://localhost:3000";
 
 $(document).ready(function(){
   User.isLoggedIn();
