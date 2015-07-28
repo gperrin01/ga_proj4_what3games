@@ -4,6 +4,10 @@ getting 3 answers gets you to a new place
 Laura
 Likes the idea of bus and journey
 
+Gui F
+wants smoother zoom out on the explore
+thinks bad idea to have 1 game on map view and 1 game on satellite view
+
 Francesca
 Likes satellite view. Likes long journeys. They feel more like discovering
 Feels journey is more fun than exploring randomly
