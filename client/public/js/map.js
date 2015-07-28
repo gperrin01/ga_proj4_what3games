@@ -228,9 +228,9 @@ Marker = {
 
   stepMarkerArray: [],
   init: '',
-  init_icon: 'http://www.agiespana.es/_portal/_widgets/googlemaps/red_marker.png',
-  step_icon: "http://www.thruway.ny.gov/travelers/img/questionmark.png",
-  succes_icon: "http://es.pinkbike.org/245/sprt/i/trailforks/mapicons/poi_12.png",
+  init_icon: 'https://www.agiespana.es/_portal/_widgets/googlemaps/red_marker.png',
+  step_icon: "https://www.thruway.ny.gov/travelers/img/questionmark.png",
+  succes_icon: "https://es.pinkbike.org/245/sprt/i/trailforks/mapicons/poi_12.png",
   destination: '',
   destination_icon: "",
 
