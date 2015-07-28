@@ -4,7 +4,7 @@ var User = User || {};
 // Prepare for Signin, Login, Logout
 // ******************************************
 
-var base_url = "https://localhost:3000";
+var base_url = "http://localhost:3000";
 
 $(document).ready(function(){
   User.isLoggedIn();
