@@ -1,5 +1,9 @@
 What is stopping anyone from doing curl? put requests from terminal to users/their_own_auth_token and add lots of points??
 
+HEROKU
+error with my ajax request as http and not S
+dunno what url to use for
+error with links to icons as their are http and not S
 
 *******
 Struggles and Learning points

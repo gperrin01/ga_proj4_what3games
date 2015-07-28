@@ -66,11 +66,25 @@ With hindisght, the benefits of Rails were not so clear-cut. In my next project 
 
 ## Learning points
 
- Callback
+My biggest learning-point was callback functions and the call-stack / event-loop in general. 
 
-to be continued
+* I realized something was up when I couldnt get my function checking the dictionnary (through an API) to return a simple true or false. I then thought about using promise, but all I could return was neither true or false, but a an object showing an unresolved promise. After A LOT of frustration, I got help from one of the teachers and implemented a callback functions
 
-I also wanted to practice using Devise for authentication. This brought its share of issues since I was not using Rails for my views but I had to let the client-side know whether a user was logged in. 
+* this made sense after watching [this great video] (https://www.youtube.com/watch?v=8aGhZQkoFbQ) about the event loop in javascript: the async call means the result of my function will be returned once the stack is empty... that is after I have run the "return true or false" line of my function... meaning my function will never return anything. Undefined was not not a function but it was all I could get!
+
+* the same video helped me a lot when I had to listen to different google.maps.events depending on what game the user was playing. I kept having events firing multiples times. I realized it was because I was trying to mute events which had not yet been created, therefore instead of muting them I was actually re-creating them when the async function ran once the stack was empty.
+
+* consequently, the first functions in answer_check.js use a callback function, I rewrote View.threeWords in what actually is a cleaner way, and all my problems were solved. Although it is now clearer in my head, it might make the code more complex for a person just jumping in and I would like to know if there is a better way
+
+The power of test-driven development. I have been advised to avoid feature-development as I was using google maps, therefore the scope for TDD in the project became narrower. 
+
+* I used Jasmine for the test of my javascript files, and it is thanks to the failing tests that I realized the API calls were causing issues (see above section on callbacks)
+
+* I used Rspec for testing my user model in Rails. This proved useful as I was doing rather long-winded (for my level :-) ) database queries. Developing test-first also helped me avoid some waste of code, as I wasn't fully sure about what to build at first and changed my mind a few times before being happy with the result.
+
+* see learning points for those related to testing
+
+I also wanted to practice using Devise for authentication. This brought its share of issues since I was not using Rails for my views but I had to let the client-side know whether a user was logged in. Amongst the learning points: 
 
 * Created my own Registrations and SessionsController, inheriting from the Devise Controllers but building on them
 
@@ -91,7 +105,17 @@ After this we had two weeks to prepare for the final event of the course, a "mee
 
 * Demo-ing the app and talking about it also highlighted various bugs and missing functionalities that I fixed and implemented.
 
-# Next steps and improvements
+# Next steps: things to learn, and features to add
+
+Things to practise
+
+On testing, 
+
+* As the project neared the end and I developped the Ranking system on the last night, I felt under time-pressure and chose not to do this last bit with test. It worked all fine, but I should have stuck to TDD.
+
+* to fully test my client-side and handle the API calls and the asynchronous support, I should learn to use some new feautres in Jasmine (done() function and Spy to simulate an API result)
+
+On the app,
 
 * On Journeys 
   * save in the database so that users can really compare their skills
