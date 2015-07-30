@@ -4,7 +4,8 @@ var User = User || {};
 // Prepare for Signin, Login, Logout
 // ******************************************
 
-var base_url = "http://localhost:3000";
+// Link to the Server as deployed on Heroku
+var base_url = "https://obscure-temple-5257.herokuapp.com/";
 
 $(document).ready(function(){
   User.isLoggedIn();
