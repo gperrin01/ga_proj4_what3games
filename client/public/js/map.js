@@ -92,9 +92,9 @@ Map = {
     View.location(coords);
   },
 
-  stringCoords: function(latLng) {
+  stringCoords: function(latlng) {
     // ggl map totaly unexpectedly changed the coords from A-F to G-K !!!
-    if (latlng.A !== 'undefined' && latlng.F !== 'undefined') {
+    if (latlng.A !== undefined && latlng.F !== undefined) {
       return latlng.A + ', ' + latlng.F;
     }
     else {     return latlng.G + ', ' + latlng.K; }
@@ -123,8 +123,9 @@ Map = {
         var ggl_coords = results[0].geometry.location;
         console.log(ggl_coords)
         View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
-        View.threeWords(ggl_coords.A + ', ' + ggl_coords.F, Marker.init);
-        View.location(ggl_coords.A + ', ' + ggl_coords.F)
+        var coords = Map.stringCoords(ggl_coords);
+        View.threeWords(coords);
+        View.location(coords);
 
       } else alert('Geocode was not successful for the following reason: ' + status);
     });
@@ -236,22 +237,22 @@ Marker = {
 
   stepMarkerArray: [],
   init: '',
-  init_icon: 'https://www.agiespana.es/_portal/_widgets/googlemaps/red_marker.png',
-  step_icon: "https://www.thruway.ny.gov/travelers/img/questionmark.png",
-  succes_icon: "https://es.pinkbike.org/245/sprt/i/trailforks/mapicons/poi_12.png",
+  init_icon: '../images/red_marker.png',
+  step_icon: "../images/questionmark.png",
+  succes_icon: "../images/check.png",
   destination: '',
   destination_icon: "",
 
   // when marker is dragged: update location and 3 words
   // also update the infoWindow
   drag: function(marker){
-    var coords = marker.position.A + ', ' + marker.position.F;
+    var coords = Map.stringCoords(marker.position);
     View.threeWords(coords, marker);
     View.location(coords);
   },
 
   showWords: function(marker){
-    var coords = marker.position.A + ', ' + marker.position.F;
+    var coords = Map.stringCoords(marker.position);
     View.threeWords(coords, marker);
   },
 
