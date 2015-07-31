@@ -116,7 +116,7 @@ Game = {
 
     // get W3W to transform the 3 words into coordinates
     var data = {'key': Keys.w3w_api, 'string': words};
-    $.post('http://api.what3words.com/w3w', data, function(response) {
+    $.post('https://api.what3words.com/w3w', data, function(response) {
       console.log(response);
 
       // check if the word is recognized or if there is an error
