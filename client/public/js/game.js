@@ -227,19 +227,20 @@ JourneyChallenge = {
     var steps = route[0].steps;
     console.log('steps', steps);
 
-    // advance marker to the next step (or to destination if last step)
-    // highlight the marker for that step: 3words and special icon and transition with bounce at the end
-    JourneyChallenge.stepMarker = Marker.stepMarkerArray[count];
 
-    var origin = JourneyChallenge.stepMarker.position;
-    var destination = Marker.stepMarkerArray[count + 1].position;
-    Marker.transition(JourneyChallenge.stepMarker, origin, destination, 100, 10, 'bounce');
-    JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
 
     // Re game if not the final step, otherwise end game:
     // note steps has TWO too many as it has one for end and destination marker
 
     if (count <= steps.length - 2) {
+
+      // highlight the marker for that step: 3words and special icon and transition with bounce at the end
+      JourneyChallenge.stepMarker = Marker.stepMarkerArray[count];
+
+      var origin = JourneyChallenge.stepMarker.position;
+      var destination = Marker.stepMarkerArray[count + 1].position;
+      Marker.transition(JourneyChallenge.stepMarker, origin, destination, 100, 10, 'bounce');
+      JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
       // show words for location
       Marker.showWords(JourneyChallenge.stepMarker);
       // Tells you where you are: checkpoint stage and points accumulated
