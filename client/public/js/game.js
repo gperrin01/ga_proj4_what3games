@@ -228,10 +228,11 @@ JourneyChallenge = {
     console.log('steps', steps);
 
     // Until you reach the final step (end of steps array):
-    if (count < steps.length) {
+    // note steps has TWO too many as it has one for end and destination marker
+    if (count <= steps.length - 2) {
 
       // Tells you where you are: checkpoint stage and points accumulated
-      var msg = {count: count, steps: steps.length-1, score: JourneyChallenge.score, points: User.currentUser.points};
+      var msg = {count: count, steps: steps.length - 2, score: JourneyChallenge.score, points: User.currentUser.points};
       View.render($('#main_area_journeychall_template'), msg, $('#main_row_header'), 'slideDown' );
       View.render($('#location_forms_journeychallenge_template'), msg, $('#location_forms') );
 
@@ -251,7 +252,7 @@ JourneyChallenge = {
 
     else {
       // show final score and the bonus calc 
-      var bonus = Score.calcBonus(steps.length);
+      var bonus = Score.calcBonus(steps.length - 2);
       $('#game_msg').html("Destination reached <span class='glyphicon glyphicon-star'></span>  You earn " 
         + JourneyChallenge.score +  " points and " + bonus + " bonus points"); 
       $('#down').empty();
@@ -358,7 +359,7 @@ Score = {
     // else  return 0; // 3 is easy, no reward but allowing you to keep playing
   },
   calcBonus: function(num_steps){
-    return num_steps - 1;
+    return num_steps;
   }
 }
 
