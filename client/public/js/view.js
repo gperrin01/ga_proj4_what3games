@@ -64,7 +64,6 @@ View = {
 
   // Display the location (based on coordinates) on the input box
   location: function(coords) {
-    console.log('show coords location', coords)
     $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coords, 
       function(result) {
         console.log(result)
@@ -84,7 +83,6 @@ View = {
 
   // Update marker position to new location + show marker + center map + ensure zoom close
   centerOnUpdatedMarker: function(ggl_coords, marker, zoom) {
-    console.log('center on marker');
     console.log('working center on updated marker', ggl_coords)
     View.clearJourney();
     marker.setMap(Map.map);
