@@ -87,10 +87,18 @@ Map = {
     // Instantiate an info window to hold info for the markers 
     Marker.infoWindow = new google.maps.InfoWindow();
     // show the 3 words on the page and on the marker infowindow and display current address
-    var coords = Map.latlng.A + ', ' + Map.latlng.F;
+    var coords = Map.stringCoords(Map.latlng);
     View.threeWords(coords, Marker.init);
     View.location(coords);
   },
+
+  stringCoords: function(latLng) {
+    // ggl map totaly unexpectedly changed the coords from A-F to G-K !!!
+    if (latlng.A !== 'undefined' && latlng.F !== 'undefined') {
+      return latlng.A + ', ' + latlng.F;
+    }
+    else {     return latlng.G + ', ' + latlng.K; }
+  }
 
   getRandomCoordinates: function() {
     var randomLat = Math.random() * (58 - (-25)) + (-25);  // latitude between +58 and -25
