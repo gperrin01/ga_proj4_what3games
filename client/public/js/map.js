@@ -149,11 +149,11 @@ Map = {
   // the 2 callback functions from Map.setToWhereAmI
   geoloc_success: function(val) {
     // once location is grabbed: show 3 words + show location + updater marker + center map
-    var coords = val.coords.latitude + ', ' + val.coords.longitude;
+    var ggl_coords = new google.maps.LatLng(val.coords.latitude, val.coords.longitude);
+    var coords = Map.stringCoords(ggl_coords);
+
     View.threeWords(coords, Marker.init);
     View.location(coords);
-
-    var ggl_coords = new google.maps.LatLng(val.coords.latitude, val.coords.longitude)
     View.centerOnUpdatedMarker(ggl_coords, Marker.init, Map.zoomShowLocation);
   },
   geoloc_error: function(val) {
@@ -279,10 +279,18 @@ Marker = {
   // origin and destination are ggl_latlng {A: lat, F: long} - start with steps = 100 and delay 10 ms
   transition: function(marker, origin, destination, steps, delay, callback){
     var i = 0;
-    var currLat = origin.A;
-    var currLng = origin.F;
-    var deltaLat = (destination.A - origin.A)/steps;
-    var deltaLng = (destination.F - origin.F)/steps;
+    // thx to gglmap for changing their coords object!!
+    if (origin.A !== undefined) {
+      var currLat = origin.A;
+      var currLng = origin.F;
+      var deltaLat = (destination.A - origin.A)/steps;
+      var deltaLng = (destination.F - origin.F)/steps;
+    } else{
+      var currLat = origin.G;
+      var currLng = origin.K;
+      var deltaLat = (destination.G - origin.G)/steps;
+      var deltaLng = (destination.K - origin.K)/steps;
+    }
     moveMarker();
 
     function moveMarker(){

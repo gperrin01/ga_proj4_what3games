@@ -140,7 +140,7 @@ Game = {
 
   teleportFromTo: function(origin, ggl_destination) {
     console.log('ggl_destination', ggl_destination);
-    var coords = ggl_destination.A + ', ' + ggl_destination.F;
+    var coords = Map.stringCoords(ggl_destination);
     // reset the array storing the right answers
     Game.countAnswers = [];
 
