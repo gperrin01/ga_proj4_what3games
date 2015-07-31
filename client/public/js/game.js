@@ -227,24 +227,25 @@ JourneyChallenge = {
     var steps = route[0].steps;
     console.log('steps', steps);
 
-    // Until you reach the final step (end of steps array):
-    // note steps has TWO too many as it has one for end and destination marker
-    if (count <= steps.length - 2) {
+    // advance marker to the next step (or to destination if last step)
+    // highlight the marker for that step: 3words and special icon and transition with bounce at the end
+    JourneyChallenge.stepMarker = Marker.stepMarkerArray[count];
 
+    var origin = JourneyChallenge.stepMarker.position;
+    var destination = Marker.stepMarkerArray[count + 1].position;
+    Marker.transition(JourneyChallenge.stepMarker, origin, destination, 100, 10, 'bounce');
+    JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
+
+    // Re game if not the final step, otherwise end game:
+    // note steps has TWO too many as it has one for end and destination marker
+
+    if (count <= steps.length - 2) {
+      // show words for location
+      Marker.showWords(JourneyChallenge.stepMarker);
       // Tells you where you are: checkpoint stage and points accumulated
       var msg = {count: count, steps: steps.length - 2, score: JourneyChallenge.score, points: User.currentUser.points};
       View.render($('#main_area_journeychall_template'), msg, $('#main_row_header'), 'slideDown' );
       View.render($('#location_forms_journeychallenge_template'), msg, $('#location_forms') );
-
-      // highlight the marker for that step: 3words and special icon and transition with bounce at the end
-      JourneyChallenge.stepMarker = Marker.stepMarkerArray[count];
-
-      var origin = JourneyChallenge.stepMarker.position;
-      var destination = Marker.stepMarkerArray[count + 1].position;
-      Marker.transition(JourneyChallenge.stepMarker, origin, destination, 100, 10, 'bounce');
-
-      JourneyChallenge.stepMarker.setIcon(Marker.step_icon);
-      Marker.showWords(JourneyChallenge.stepMarker);
 
       // recenter the map??
       // Map.map.setCenter(JourneyChallenge.stepMarker.position)
