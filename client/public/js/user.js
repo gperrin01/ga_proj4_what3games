@@ -88,8 +88,7 @@ User = {
       $.post(base_url + '/users', data, function(response){
         console.log('you signed up', response);
         alert('Thank you for signing up.\nYou can now log in');
-        // FLASH MESSAGE WELL DONE?
-      })
+        View.render( $('#login_form_template'), null, $('#main_row_header'), 'slideDown' );      })
       .fail(function(err) {
         console.log('error for signup', err);
         alert('An error occured during signup.\n' + err)
