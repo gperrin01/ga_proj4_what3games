@@ -98,7 +98,7 @@ Map = {
       return latlng.A + ', ' + latlng.F;
     }
     else {     return latlng.G + ', ' + latlng.K; }
-  }
+  },
 
   getRandomCoordinates: function() {
     var randomLat = Math.random() * (58 - (-25)) + (-25);  // latitude between +58 and -25
