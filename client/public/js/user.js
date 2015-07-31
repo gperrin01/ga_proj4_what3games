@@ -74,7 +74,7 @@ User = {
     });
 
     // On signup send info for Devise (in Rails) to create the user
-    $('#signup').on('submit', function(event){
+    $('body').on('submit', '#submit', function(event){
       event.preventDefault();
       var data = {
         registration: {
@@ -92,7 +92,7 @@ User = {
       })
       .fail(function(err) {
         console.log('error for signup', err);
-        alert('An error occured during signup.\n', err)
+        alert('An error occured during signup.\n' + err)
       })
     });
   },
