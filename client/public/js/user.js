@@ -139,8 +139,8 @@ User = {
       console.log('bonus points');
 
       // finally update the badge near the ranking
-      User.currentUser.points += bonus
-      $('#ranking .badge').text(User.currentUser.points)
+      User.currentUser.points += points;
+      $('#ranking .badge').text(User.currentUser.points);
     })
   }
 
