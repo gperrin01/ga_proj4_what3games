@@ -74,7 +74,7 @@ User = {
     });
 
     // On signup send info for Devise (in Rails) to create the user
-    $('body').on('submit', '#submit', function(){
+    $('body').on('submit', '#signup', function(){
       event.preventDefault();
       var data = {
         registration: {
