@@ -1,4 +1,5 @@
 This is the final project of my course at General Assembly. 
+[Currently running live on Heroku] (https://stark-brushlands-1089.herokuapp.com/) ; it will take a few seconds to load as the server is hosted on a separate Heroku project
 
 
 # The app and the background
