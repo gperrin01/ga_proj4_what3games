@@ -93,11 +93,7 @@ Map = {
   },
 
   stringCoords: function(latlng) {
-    // ggl map totaly unexpectedly changed the coords from A-F to G-K !!!
-    if (latlng.A !== undefined && latlng.F !== undefined) {
-      return latlng.A + ', ' + latlng.F;
-    }
-    else {     return latlng.G + ', ' + latlng.K; }
+    return latlng.lat() + ', ' + latlng.lng();
   },
 
   getRandomCoordinates: function() {
