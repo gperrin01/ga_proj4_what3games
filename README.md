@@ -6,7 +6,7 @@ This is the final project of my course at General Assembly.
 
 I decided to build a simple, potentially addictive mind game, which would let us discover the world, improve our language skills, and compete agains others, while also using the incredible concept built by What3Words (see below)
 
-I discovered a wonderful website called [What3Words] (http://what3words.com/) , which was sponsoring a hackathon I took part in (2015 AnalogFolk hackathon). They divided the whole world into 57 trillion of tiny 3mx3m squares and assigned to each square a unique combination of 3 words. Since it is unique and very precise, the combination allows each square to be easily located. Beyond the fun aspect, it brings tremendous progress to the 4 billion people who are invisible as their country suffer from inaccurate addressing.
+I discovered a wonderful website called [What3Words] (http://what3words.com/), which was sponsoring a hackathon I took part in (2015 AnalogFolk hackathon). They divided the whole world into 57 trillion of tiny 3mx3m squares and assigned to each square a unique combination of 3 words. Since it is unique and very precise, the combination allows each square to be easily located. Beyond the fun aspect, it brings tremendous progress to the 4 billion people who are invisible as their country suffer from inaccurate addressing.
 
 
 # Rules and features
