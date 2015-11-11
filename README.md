@@ -1,5 +1,10 @@
-This is the final project of my course at General Assembly. 
-[Currently running live on Heroku] (https://words-of-the-world.herokuapp.com/) ; it will take a few seconds to load as the server is hosted on a separate Heroku project
+This is the client-side of my final project of my course at General Assembly. 
+[Currently running live on Heroku] (https://words-of-the-world.herokuapp.com/); it will take a few seconds to load as the server is hosted on a separate Heroku project.
+
+# Installation on your machine
+
+Clone this repo then from the root directory run `bundle` then `ruby client/client_server.rb` (you will need Ruby and Sinatra installed)
+[Clone the repo where the server is (click here)] (https://github.com/gperrin01/proj4_words_world_server) then from the root directory run `bundle` then `rails server` (you will need Rails installed)
 
 
 # The app and the background
